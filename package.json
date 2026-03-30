@@ -1,0 +1,32 @@
+{
+    "name": "ampscript-data",
+    "version": "0.1.1",
+    "description": "Canonical AMPscript function catalog, keywords, and personalization strings for SFMC tooling",
+    "type": "module",
+    "main": "src/index.js",
+    "exports": {
+        ".": "./src/index.js"
+    },
+    "files": ["src"],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/JoernBerkefeld/ampscript-data.git"
+    },
+    "bugs": {
+        "url": "https://github.com/JoernBerkefeld/ampscript-data/issues"
+    },
+    "homepage": "https://github.com/JoernBerkefeld/ampscript-data#readme",
+    "author": "Joern Berkefeld",
+    "keywords": [
+        "ampscript",
+        "sfmc",
+        "salesforce",
+        "marketing-cloud",
+        "email",
+        "personalization"
+    ],
+    "license": "MIT",
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
