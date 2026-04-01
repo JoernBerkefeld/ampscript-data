@@ -26,6 +26,9 @@
         "personalization"
     ],
     "license": "MIT",
+    "scripts": {
+        "test": "echo No tests defined"
+    },
     "engines": {
         "node": ">=18.0.0"
     }
