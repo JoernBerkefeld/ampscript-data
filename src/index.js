@@ -412,7 +412,7 @@ export const FUNCTIONS = [
         description:
             'Generates a secure, encrypted URL to a CloudPages landing page, optionally passing name-value parameters.',
         params: [
-            { name: 'pageId', description: 'CloudPages page ID', type: 'number' },
+            { name: 'pageId', description: 'CloudPages page ID (number or string)' },
             {
                 name: 'paramName',
                 description: 'Query parameter name',
@@ -509,7 +509,7 @@ export const FUNCTIONS = [
         category: 'Content',
         description: 'Retrieves and renders a Content Builder content block by its numeric ID.',
         params: [
-            { name: 'id', description: 'Content block ID', type: 'number' },
+            { name: 'id', description: 'Content block ID (number or string)' },
             {
                 name: 'impressionRegion',
                 description: 'Impression region name',
