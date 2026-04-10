@@ -11,7 +11,7 @@ const INF = Infinity;
 
 // ── Function catalog ─────────────────────────────────────────────────────────
 
-/** @type {Array<{name:string, minArgs:number, maxArgs:number, category:string, description:string, params:Array<{name:string, description:string, type?:string, optional?:boolean}>, returnType?:string, syntax?:string, example?:string}>} */
+/** @type {{name: string, minArgs: number, maxArgs: number, category: string, description: string, params: {name: string, description: string, type?: string, optional?: boolean}[], returnType?: string, syntax?: string, example?: string}[]} */
 export const FUNCTIONS = [
     {
         name: 'Add',
@@ -1384,10 +1384,20 @@ export const FUNCTIONS = [
         minArgs: 2,
         maxArgs: 2,
         category: 'Content',
-        description: 'Returns an HTML img tag for the Portfolio image matching the specified customer key.',
+        description:
+            'Returns an HTML img tag for the Portfolio image matching the specified customer key.',
         params: [
-            { name: 'customerKey', description: 'Customer/external key of the image', type: 'string' },
-            { name: 'fallbackKey', description: 'Customer/external key of the fallback image if the primary is not found', type: 'string' },
+            {
+                name: 'customerKey',
+                description: 'Customer/external key of the image',
+                type: 'string',
+            },
+            {
+                name: 'fallbackKey',
+                description:
+                    'Customer/external key of the fallback image if the primary is not found',
+                type: 'string',
+            },
         ],
         returnType: 'string',
         syntax: 'Image(customerKey, fallbackKey)',
@@ -1461,7 +1471,11 @@ export const FUNCTIONS = [
                 description: 'Output variable for the resulting status message',
                 type: 'string',
             },
-            { name: 'errorCode', description: 'Output variable for the resulting error code', type: 'string' },
+            {
+                name: 'errorCode',
+                description: 'Output variable for the resulting error code',
+                type: 'string',
+            },
             {
                 name: 'createOptions',
                 description: 'Optional CreateOptions API object',
@@ -1484,7 +1498,11 @@ export const FUNCTIONS = [
                 description: 'Output variable for the resulting status message',
                 type: 'string',
             },
-            { name: 'errorCode', description: 'Output variable for the resulting error code', type: 'string' },
+            {
+                name: 'errorCode',
+                description: 'Output variable for the resulting error code',
+                type: 'string',
+            },
             {
                 name: 'deleteOptions',
                 description: 'Optional DeleteOptions API object',
@@ -2352,7 +2370,8 @@ export const FUNCTIONS = [
             { name: 'startIndex', description: '1-based start position', type: 'number' },
             {
                 name: 'length',
-                description: 'Number of characters to extract. If omitted, returns the remainder of the string.',
+                description:
+                    'Number of characters to extract. If omitted, returns the remainder of the string.',
                 type: 'number',
                 optional: true,
             },
@@ -2713,7 +2732,9 @@ const EMAIL_EXCLUDED_FUNCTIONS = new Set([
 
 export function isEmailExcluded(functionName) {
     const lower = functionName.toLowerCase();
-    if (EMAIL_EXCLUDED_FUNCTIONS.has(lower)) return true;
+    if (EMAIL_EXCLUDED_FUNCTIONS.has(lower)) {
+        return true;
+    }
     const entry = functionLookup.get(lower);
     return entry ? EMAIL_EXCLUDED_CATEGORIES.has(entry.category) : false;
 }
