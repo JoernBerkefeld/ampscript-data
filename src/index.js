@@ -1213,22 +1213,6 @@ export const FUNCTIONS = [
         syntax: 'GetSocialPublishURLByName(regionName, socialAccount[, ...])',
     },
     {
-        name: 'GetValue',
-        minArgs: 1,
-        maxArgs: 1,
-        category: 'Utility',
-        description: 'Returns the value of a variable by name at runtime.',
-        params: [
-            {
-                name: 'variableName',
-                description: 'Name of the variable (without @)',
-                type: 'string',
-            },
-        ],
-        returnType: 'string',
-        syntax: 'GetValue(variableName)',
-    },
-    {
         name: 'GUID',
         minArgs: 0,
         maxArgs: 0,
@@ -2263,19 +2247,6 @@ export const FUNCTIONS = [
         ],
         returnType: 'void',
         syntax: 'SetStateMSCRMRecord(entityType, entityId, state, status)',
-    },
-    {
-        name: 'SetValue',
-        minArgs: 2,
-        maxArgs: 2,
-        category: 'Utility',
-        description: 'Sets the value of a subscriber or send-context attribute by name.',
-        params: [
-            { name: 'attributeName', description: 'Attribute name to set', type: 'string' },
-            { name: 'value', description: 'Value to assign' },
-        ],
-        returnType: 'void',
-        syntax: 'SetValue(attributeName, value)',
     },
     {
         name: 'SHA1',
