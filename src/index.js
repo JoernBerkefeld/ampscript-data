@@ -11,10 +11,12 @@ const INF = Infinity;
 
 // ── Function catalog ─────────────────────────────────────────────────────────
 
-/** @type {{name: string, minArgs: number, maxArgs: number, category: string, description: string, params: {name: string, description: string, type?: string, optional?: boolean}[], returnType?: string, syntax?: string, example?: string}[]} */
+/** @type {{name: string, docUrl?: string, guideUrl?: string, minArgs: number, maxArgs: number, category: string, description: string, params: {name: string, description: string, type?: string, optional?: boolean}[], returnType?: string, syntax?: string, example?: string}[]} */
 export const FUNCTIONS = [
     {
         name: 'Add',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-add.html',
+        guideUrl: 'https://ampscript.guide/add/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -29,6 +31,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AddMSCRMListMember',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-add-list-member.html',
+        guideUrl: 'https://ampscript.guide/addmscrmlistmember/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Microsoft Dynamics CRM',
@@ -42,6 +46,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AddObjectArrayItem',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-add-object-array.html',
+        guideUrl: 'https://ampscript.guide/addobjectarrayitem/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Marketing Cloud API',
@@ -56,6 +62,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AttachFile',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-attach-file.html',
+        guideUrl: 'https://ampscript.guide/attachfile/',
         minArgs: 4,
         maxArgs: 8,
         category: 'Content',
@@ -85,6 +93,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AttributeValue',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-attribute-value.html',
+        guideUrl: 'https://ampscript.guide/attributevalue/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -97,6 +107,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEmployeeID',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-employee-id.html',
+        guideUrl: 'https://ampscript.guide/authenticatedemployeeid/',
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
@@ -107,6 +119,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEmployeeNotificationAddress',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-employee-notification-address.html',
+        guideUrl: 'https://ampscript.guide/authenticatedemployeenotificationaddress/',
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
@@ -117,6 +131,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEmployeeUserName',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-employee-username.html',
+        guideUrl: 'https://ampscript.guide/authenticatedemployeeusername/',
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
@@ -127,6 +143,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEnterpriseID',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-enterprise-id.html',
+        guideUrl: 'https://ampscript.guide/authenticatedenterpriseid/',
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
@@ -137,6 +155,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedMemberID',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-member-id.html',
+        guideUrl: 'https://ampscript.guide/authenticatedmemberid/',
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
@@ -147,6 +167,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedMemberName',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-member-name.html',
+        guideUrl: 'https://ampscript.guide/authenticatedmembername/',
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
@@ -157,6 +179,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BarcodeURL',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-barcode-url.html',
+        guideUrl: 'https://ampscript.guide/barcodeurl/',
         minArgs: 9,
         maxArgs: 9,
         category: 'Content',
@@ -178,6 +202,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Base64Decode',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-base64-decode.html',
+        guideUrl: 'https://ampscript.guide/base64decode/',
         minArgs: 1,
         maxArgs: 3,
         category: 'Encryption and Encoding',
@@ -198,6 +224,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Base64Encode',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-base64-encode.html',
+        guideUrl: 'https://ampscript.guide/base64encode/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
@@ -212,6 +240,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BeginImpressionRegion',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-begin-impression-region.html',
+        guideUrl: 'https://ampscript.guide/beginimpressionregion/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Content',
@@ -222,6 +252,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BuildOptionList',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-option-list.html',
+        guideUrl: 'https://ampscript.guide/buildoptionlist/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Content',
@@ -251,6 +283,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BuildRowsetFromJSON',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-json.html',
+        guideUrl: 'https://ampscript.guide/buildrowsetfromjson/',
         minArgs: 2,
         maxArgs: 3,
         category: 'Content',
@@ -274,6 +308,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BuildRowSetFromString',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-string.html',
+        guideUrl: 'https://ampscript.guide/buildrowsetfromstring/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Content',
@@ -288,6 +324,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BuildRowSetFromXML',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-xml.html',
+        guideUrl: 'https://ampscript.guide/buildrowsetfromxml/',
         minArgs: 2,
         maxArgs: 3,
         category: 'Content',
@@ -307,6 +345,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Char',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-char.html',
+        guideUrl: 'https://ampscript.guide/char/',
         minArgs: 1,
         maxArgs: 2,
         category: 'String',
@@ -326,6 +366,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ClaimRow',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-claim-row.html',
+        guideUrl: 'https://ampscript.guide/claimrow/',
         minArgs: 4,
         maxArgs: INF,
         category: 'Data Extension',
@@ -368,6 +410,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ClaimRowValue',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-claim-row-value.html',
+        guideUrl: 'https://ampscript.guide/claimrowvalue/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -406,6 +450,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CloudPagesURL',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-cloud-pages-url.html',
+        guideUrl: 'https://ampscript.guide/cloudpagesurl/',
         minArgs: 1,
         maxArgs: INF,
         category: 'Utility',
@@ -432,6 +478,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Concat',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-concat.html',
+        guideUrl: 'https://ampscript.guide/concat/',
         minArgs: 2,
         maxArgs: INF,
         category: 'String',
@@ -447,6 +495,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentArea',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-area.html',
+        guideUrl: 'https://ampscript.guide/contentarea/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Content',
@@ -478,6 +528,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentAreaByName',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-area-by-name.html',
+        guideUrl: 'https://ampscript.guide/contentareabyname/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Content',
@@ -504,6 +556,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentBlockByID',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-id.html',
+        guideUrl: 'https://ampscript.guide/contentblockbyid/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Content',
@@ -540,6 +594,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentBlockByKey',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-key.html',
+        guideUrl: 'https://ampscript.guide/contentblockbykey/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Content',
@@ -576,6 +632,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentBlockByName',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-name.html',
+        guideUrl: 'https://ampscript.guide/contentblockbyname/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Content',
@@ -613,6 +671,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentImageByID',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-image-by-id.html',
+        guideUrl: 'https://ampscript.guide/contentimagebyid/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Content',
@@ -631,6 +691,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentImageByKey',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-image-by-key.html',
+        guideUrl: 'https://ampscript.guide/contentimagebykey/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Content',
@@ -649,6 +711,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CreateMSCRMRecord',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-create-record.html',
+        guideUrl: 'https://ampscript.guide/createmscrmrecord/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Microsoft Dynamics CRM',
@@ -670,6 +734,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CreateObject',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-create-object.html',
+        guideUrl: 'https://ampscript.guide/createobject/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Marketing Cloud API',
@@ -682,6 +748,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CreateSalesforceObject',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-create-object.html',
+        guideUrl: 'https://ampscript.guide/createsalesforceobject/',
         minArgs: 4,
         maxArgs: INF,
         category: 'Sales and Service Cloud',
@@ -704,6 +772,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CreateSmsConversation',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sms/mc-ampscript-reference-sms-create-sms-conversation.html',
+        guideUrl: 'https://ampscript.guide/createsmsconversation/',
         minArgs: 4,
         maxArgs: 4,
         category: 'MobileConnect',
@@ -719,6 +789,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DataExtensionRowCount',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-de-row-count.html',
+        guideUrl: 'https://ampscript.guide/dataextensionrowcount/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Data Extension',
@@ -736,6 +808,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DateAdd',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-add.html',
+        guideUrl: 'https://ampscript.guide/dateadd/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Date and Time',
@@ -751,6 +825,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DateDiff',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-diff.html',
+        guideUrl: 'https://ampscript.guide/datediff/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Date and Time',
@@ -765,6 +841,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DateParse',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-parse.html',
+        guideUrl: 'https://ampscript.guide/dateparse/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Date and Time',
@@ -783,6 +861,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DatePart',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-part.html',
+        guideUrl: 'https://ampscript.guide/datepart/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Date and Time',
@@ -800,6 +880,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DecryptSymmetric',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-decrypt-symmetric.html',
+        guideUrl: 'https://ampscript.guide/decryptsymmetric/',
         minArgs: 8,
         maxArgs: 8,
         category: 'Encryption and Encoding',
@@ -835,6 +917,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DeleteData',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-delete-data.html',
+        guideUrl: 'https://ampscript.guide/deletedata/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -857,6 +941,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DeleteDE',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-delete-de.html',
+        guideUrl: 'https://ampscript.guide/deletede/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -878,6 +964,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DescribeMSCRMEntities',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-describe-entities.html',
+        guideUrl: 'https://ampscript.guide/describemscrmentities/',
         minArgs: 0,
         maxArgs: 0,
         category: 'Microsoft Dynamics CRM',
@@ -888,6 +976,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DescribeMSCRMEntityAttributes',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-describe-entity-attributes.html',
+        guideUrl: 'https://ampscript.guide/describemscrmentityattributes/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Microsoft Dynamics CRM',
@@ -898,6 +988,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Divide',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-divide.html',
+        guideUrl: 'https://ampscript.guide/divide/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -912,6 +1004,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Domain',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-domain.html',
+        guideUrl: 'https://ampscript.guide/domain/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -923,6 +1017,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Empty',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-empty.html',
+        guideUrl: 'https://ampscript.guide/empty/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -934,6 +1030,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'EncryptSymmetric',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-encrypt-symmetric.html',
+        guideUrl: 'https://ampscript.guide/encryptsymmetric/',
         minArgs: 8,
         maxArgs: 8,
         category: 'Encryption and Encoding',
@@ -969,6 +1067,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'EndImpressionRegion',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-end-impression-region.html',
+        guideUrl: 'https://ampscript.guide/endimpressionregion/',
         minArgs: 0,
         maxArgs: 1,
         category: 'Content',
@@ -986,6 +1086,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'EndSmsConversation',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sms/mc-ampscript-reference-sms-end-sms-conversation.html',
+        guideUrl: 'https://ampscript.guide/endsmsconversation/',
         minArgs: 2,
         maxArgs: 2,
         category: 'MobileConnect',
@@ -999,6 +1101,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ExecuteFilter',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-execute-filter.html',
+        guideUrl: 'https://ampscript.guide/executefilter/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Data Extension',
@@ -1009,6 +1113,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ExecuteFilterOrderedRows',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-execute-filter-ordered-rows.html',
+        guideUrl: 'https://ampscript.guide/executefilterorderedrows/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Data Extension',
@@ -1023,6 +1129,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Field',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-field.html',
+        guideUrl: 'https://ampscript.guide/field/',
         minArgs: 2,
         maxArgs: 3,
         category: 'Data Extension',
@@ -1043,6 +1151,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Format',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-format.html',
+        guideUrl: 'https://ampscript.guide/format/',
         minArgs: 2,
         maxArgs: 4,
         category: 'Utility',
@@ -1063,6 +1173,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'FormatCurrency',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-formatCurrency.html',
+        guideUrl: 'https://ampscript.guide/formatcurrency/',
         minArgs: 2,
         maxArgs: 4,
         category: 'Utility',
@@ -1088,6 +1200,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'FormatDate',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-format-date.html',
+        guideUrl: 'https://ampscript.guide/formatdate/',
         minArgs: 2,
         maxArgs: 4,
         category: 'Date and Time',
@@ -1108,6 +1222,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'FormatNumber',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-formatNumber.html',
+        guideUrl: 'https://ampscript.guide/formatnumber/',
         minArgs: 2,
         maxArgs: 3,
         category: 'Utility',
@@ -1122,6 +1238,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetJWT',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-get-jwt.html',
+        guideUrl: 'https://ampscript.guide/getjwt/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Encryption and Encoding',
@@ -1136,6 +1254,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetJWTByKeyName',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-get-jwt-by-key-name.html',
+        guideUrl: 'https://ampscript.guide/getjwtbykeyname/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Encryption and Encoding',
@@ -1150,6 +1270,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetPortfolioItem',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-get-portfolio-item.html',
+        guideUrl: 'https://ampscript.guide/getportfolioitem/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Content',
@@ -1160,6 +1282,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetPublishedSocialContent',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-social/mc-ampscript-reference-social-get-published-social-content.html',
+        guideUrl: 'https://ampscript.guide/getpublishedsocialcontent/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Social',
@@ -1170,6 +1294,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetSendTime',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-get-send-time.html',
+        guideUrl: 'https://ampscript.guide/getsendtime/',
         minArgs: 0,
         maxArgs: 1,
         category: 'Date and Time',
@@ -1188,6 +1314,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetSocialPublishURL',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-social/mc-ampscript-reference-social-get-social-publish-url.html',
+        guideUrl: 'https://ampscript.guide/getsocialpublishurl/',
         minArgs: 2,
         maxArgs: INF,
         category: 'Social',
@@ -1201,6 +1329,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetSocialPublishURLByName',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-social/mc-ampscript-reference-social-get-social-publish-url-by-name.html',
+        guideUrl: 'https://ampscript.guide/getsocialpublishurlbyname/',
         minArgs: 2,
         maxArgs: INF,
         category: 'Social',
@@ -1214,6 +1344,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GUID',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-guid.html',
+        guideUrl: 'https://ampscript.guide/guid/',
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
@@ -1225,6 +1357,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPGet',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-get.html',
+        guideUrl: 'https://ampscript.guide/httpget/',
         minArgs: 1,
         maxArgs: 4,
         category: 'HTTP',
@@ -1256,6 +1390,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPPost',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-post.html',
+        guideUrl: 'https://ampscript.guide/httppost/',
         minArgs: 3,
         maxArgs: INF,
         category: 'HTTP',
@@ -1289,6 +1425,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPPost2',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-post2.html',
+        guideUrl: 'https://ampscript.guide/httppost2/',
         minArgs: 7,
         maxArgs: INF,
         category: 'HTTP',
@@ -1312,6 +1450,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPPostWithRetry',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-post-with-retry.html',
+        guideUrl: 'https://ampscript.guide/httppostwithretry/',
         minArgs: 7,
         maxArgs: INF,
         category: 'HTTP',
@@ -1338,6 +1478,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPRequestHeader',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-request-header.html',
+        guideUrl: 'https://ampscript.guide/httprequestheader/',
         minArgs: 1,
         maxArgs: 1,
         category: 'HTTP',
@@ -1350,6 +1492,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IIf',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-iif.html',
+        guideUrl: 'https://ampscript.guide/iif/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Utility',
@@ -1365,6 +1509,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Image',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-image.html',
+        guideUrl: 'https://ampscript.guide/image/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Content',
@@ -1388,6 +1534,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IndexOf',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-index-of.html',
+        guideUrl: 'https://ampscript.guide/indexof/',
         minArgs: 2,
         maxArgs: 2,
         category: 'String',
@@ -1402,6 +1550,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InsertData',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-insert-data.html',
+        guideUrl: 'https://ampscript.guide/insertdata/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -1423,6 +1573,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InsertDE',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-insert-de.html',
+        guideUrl: 'https://ampscript.guide/insertde/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -1444,6 +1596,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokeCreate',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-create.html',
+        guideUrl: 'https://ampscript.guide/invokecreate/',
         minArgs: 3,
         maxArgs: 4,
         category: 'Marketing Cloud API',
@@ -1471,6 +1625,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokeDelete',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-delete.html',
+        guideUrl: 'https://ampscript.guide/invokedelete/',
         minArgs: 3,
         maxArgs: 4,
         category: 'Marketing Cloud API',
@@ -1498,6 +1654,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokeExecute',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-execute.html',
+        guideUrl: 'https://ampscript.guide/invokeexecute/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Marketing Cloud API',
@@ -1516,6 +1674,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokePerform',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-perform.html',
+        guideUrl: 'https://ampscript.guide/invokeperform/',
         minArgs: 2,
         maxArgs: 3,
         category: 'Marketing Cloud API',
@@ -1535,6 +1695,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokeRetrieve',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-retrieve.html',
+        guideUrl: 'https://ampscript.guide/invokeretrieve/',
         minArgs: 1,
         maxArgs: 3,
         category: 'Marketing Cloud API',
@@ -1559,6 +1721,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokeUpdate',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-update.html',
+        guideUrl: 'https://ampscript.guide/invokeupdate/',
         minArgs: 1,
         maxArgs: 4,
         category: 'Marketing Cloud API',
@@ -1588,6 +1752,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsCHTMLBrowser',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-is-chtml-browser.html',
+        guideUrl: 'https://ampscript.guide/ischtmlbrowser/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -1599,6 +1765,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsEmailAddress',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-email-address.html',
+        guideUrl: 'https://ampscript.guide/isemailaddress/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -1610,6 +1778,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsNull',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-null.html',
+        guideUrl: 'https://ampscript.guide/isnull/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -1620,6 +1790,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsNullDefault',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-is-null-default.html',
+        guideUrl: 'https://ampscript.guide/isnulldefault/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Utility',
@@ -1634,6 +1806,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsPhoneNumber',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-phone-number.html',
+        guideUrl: 'https://ampscript.guide/isphonenumber/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -1644,6 +1818,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Length',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-length.html',
+        guideUrl: 'https://ampscript.guide/length/',
         minArgs: 1,
         maxArgs: 1,
         category: 'String',
@@ -1655,6 +1831,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LiveContentMicrositeURL',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-live-content-microsite-url.html',
+        guideUrl: 'https://ampscript.guide/livecontentmicrositeurl/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Content',
@@ -1668,6 +1846,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LocalDateToSystemDate',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-local-date-to-system-date.html',
+        guideUrl: 'https://ampscript.guide/localdatetosystemdate/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Date and Time',
@@ -1678,6 +1858,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LongSFID',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-long-sfid.html',
+        guideUrl: 'https://ampscript.guide/longsfid/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Sales and Service Cloud',
@@ -1689,6 +1871,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Lookup',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup.html',
+        guideUrl: 'https://ampscript.guide/lookup/',
         minArgs: 4,
         maxArgs: INF,
         category: 'Data Extension',
@@ -1713,6 +1897,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupOrderedRows',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-ordered-rows.html',
+        guideUrl: 'https://ampscript.guide/lookuporderedrows/',
         minArgs: 5,
         maxArgs: INF,
         category: 'Data Extension',
@@ -1740,6 +1926,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupOrderedRowsCS',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-ordered-rows-cs.html',
+        guideUrl: 'https://ampscript.guide/lookuporderedrowscs/',
         minArgs: 5,
         maxArgs: INF,
         category: 'Data Extension',
@@ -1764,6 +1952,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupRows',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-rows.html',
+        guideUrl: 'https://ampscript.guide/lookuprows/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -1786,6 +1976,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupRowsCS',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-rows-cs.html',
+        guideUrl: 'https://ampscript.guide/lookuprowscs/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -1807,6 +1999,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Lowercase',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-lowercase.html',
+        guideUrl: 'https://ampscript.guide/lowercase/',
         minArgs: 1,
         maxArgs: 1,
         category: 'String',
@@ -1818,6 +2012,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'MD5',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-md5.html',
+        guideUrl: 'https://ampscript.guide/md5/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
@@ -1836,6 +2032,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'MicrositeURL',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-microsite-url.html',
+        guideUrl: 'https://ampscript.guide/micrositeurl/',
         minArgs: 1,
         maxArgs: INF,
         category: 'Utility',
@@ -1860,6 +2058,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Mod',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-mod.html',
+        guideUrl: 'https://ampscript.guide/mod/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -1875,6 +2075,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Multiply',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-multiply.html',
+        guideUrl: 'https://ampscript.guide/multiply/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -1889,6 +2091,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Now',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-now.html',
+        guideUrl: 'https://ampscript.guide/now/',
         minArgs: 0,
         maxArgs: 1,
         category: 'Date and Time',
@@ -1908,6 +2112,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Output',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-output.html',
+        guideUrl: 'https://ampscript.guide/output/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -1919,6 +2125,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'OutputLine',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-output-line.html',
+        guideUrl: 'https://ampscript.guide/outputline/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -1929,6 +2137,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ProperCase',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-propercase.html',
+        guideUrl: 'https://ampscript.guide/propercase/',
         minArgs: 1,
         maxArgs: 1,
         category: 'String',
@@ -1941,6 +2151,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'QueryParameter',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-query-parameter.html',
+        guideUrl: 'https://ampscript.guide/queryparameter/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -1952,6 +2164,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RaiseError',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-raise-error.html',
+        guideUrl: 'https://ampscript.guide/raiseerror/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Utility',
@@ -1989,6 +2203,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Random',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-random.html',
+        guideUrl: 'https://ampscript.guide/random/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -2003,6 +2219,7 @@ export const FUNCTIONS = [
     },
     {
         name: 'RatingStars',
+        guideUrl: 'https://ampscript.guide/ratingstars/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Einstein Email Recommendations',
@@ -2017,6 +2234,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Redirect',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-redirect.html',
+        guideUrl: 'https://ampscript.guide/redirect/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -2027,6 +2246,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RedirectTo',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-redirect-to.html',
+        guideUrl: 'https://ampscript.guide/redirectto/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -2038,6 +2259,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RegExMatch',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-regex-match.html',
+        guideUrl: 'https://ampscript.guide/regexmatch/',
         minArgs: 3,
         maxArgs: INF,
         category: 'String',
@@ -2063,6 +2286,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Replace',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-replace.html',
+        guideUrl: 'https://ampscript.guide/replace/',
         minArgs: 3,
         maxArgs: 3,
         category: 'String',
@@ -2078,6 +2303,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ReplaceList',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-replace-list.html',
+        guideUrl: 'https://ampscript.guide/replacelist/',
         minArgs: 3,
         maxArgs: INF,
         category: 'String',
@@ -2098,6 +2325,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RequestParameter',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-request-parameter.html',
+        guideUrl: 'https://ampscript.guide/requestparameter/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -2109,6 +2338,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveMSCRMRecords',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-retrieve-records.html',
+        guideUrl: 'https://ampscript.guide/retrievemscrmrecords/',
         minArgs: 5,
         maxArgs: 5,
         category: 'Microsoft Dynamics CRM',
@@ -2129,6 +2360,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveMSCRMRecordsFetchXML',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-retrieve-records-fetch-xml.html',
+        guideUrl: 'https://ampscript.guide/retrievemscrmrecordsfetchxml/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Microsoft Dynamics CRM',
@@ -2139,6 +2372,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveSalesforceJobSources',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-retrieve-job-sources.html',
+        guideUrl: 'https://ampscript.guide/retrievesalesforcejobsources/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Sales and Service Cloud',
@@ -2149,6 +2384,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveSalesforceObjects',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-retrieve-objects.html',
+        guideUrl: 'https://ampscript.guide/retrievesalesforceobjects/',
         minArgs: 5,
         maxArgs: INF,
         category: 'Sales and Service Cloud',
@@ -2182,6 +2419,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Row',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-row.html',
+        guideUrl: 'https://ampscript.guide/row/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Data Extension',
@@ -2196,6 +2435,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RowCount',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-row-count.html',
+        guideUrl: 'https://ampscript.guide/rowcount/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Data Extension',
@@ -2207,6 +2448,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SetObjectProperty',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-set-object-property.html',
+        guideUrl: 'https://ampscript.guide/setobjectproperty/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Marketing Cloud API',
@@ -2221,6 +2464,7 @@ export const FUNCTIONS = [
     },
     {
         name: 'SetSmsConversationNextKeyword',
+        guideUrl: 'https://ampscript.guide/setsmsconversationnextkeyword/',
         minArgs: 3,
         maxArgs: 3,
         category: 'MobileConnect',
@@ -2235,6 +2479,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SetStateMSCRMRecord',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-set-state-record.html',
+        guideUrl: 'https://ampscript.guide/setstatemscrmrecord/',
         minArgs: 4,
         maxArgs: 4,
         category: 'Microsoft Dynamics CRM',
@@ -2250,6 +2496,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SHA1',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha1.html',
+        guideUrl: 'https://ampscript.guide/sha1/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
@@ -2268,6 +2516,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SHA256',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha256.html',
+        guideUrl: 'https://ampscript.guide/sha256/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
@@ -2287,6 +2537,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SHA512',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha512.html',
+        guideUrl: 'https://ampscript.guide/sha512/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
@@ -2305,6 +2557,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'StringToDate',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-string-to-date.html',
+        guideUrl: 'https://ampscript.guide/stringtodate/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Date and Time',
@@ -2318,6 +2572,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'StringToHex',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-to-hex.html',
+        guideUrl: 'https://ampscript.guide/stringtohex/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
@@ -2331,6 +2587,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Substring',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-substring.html',
+        guideUrl: 'https://ampscript.guide/substring/',
         minArgs: 2,
         maxArgs: 3,
         category: 'String',
@@ -2353,6 +2611,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Subtract',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-subtract.html',
+        guideUrl: 'https://ampscript.guide/subtract/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -2367,6 +2627,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SystemDateToLocalDate',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-system-date-to-local-date.html',
+        guideUrl: 'https://ampscript.guide/systemdatetolocaldate/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Date and Time',
@@ -2378,6 +2640,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'TransformXML',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-transform-xml.html',
+        guideUrl: 'https://ampscript.guide/transformxml/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Content',
@@ -2391,6 +2655,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'TreatAsContent',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-treat-as-content.html',
+        guideUrl: 'https://ampscript.guide/treatascontent/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Content',
@@ -2408,6 +2674,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'TreatAsContentArea',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-treat-as-content-area.html',
+        guideUrl: 'https://ampscript.guide/treatascontentarea/',
         minArgs: 2,
         maxArgs: 3,
         category: 'Content',
@@ -2428,6 +2696,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Trim',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-trim.html',
+        guideUrl: 'https://ampscript.guide/trim/',
         minArgs: 1,
         maxArgs: 1,
         category: 'String',
@@ -2439,6 +2709,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateData',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-update-data.html',
+        guideUrl: 'https://ampscript.guide/updatedata/',
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
@@ -2457,6 +2729,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateDE',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-update-de.html',
+        guideUrl: 'https://ampscript.guide/updatede/',
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
@@ -2474,6 +2748,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateMSCRMRecords',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-update-records.html',
+        guideUrl: 'https://ampscript.guide/updatemscrmrecords/',
         minArgs: 4,
         maxArgs: 4,
         category: 'Microsoft Dynamics CRM',
@@ -2489,6 +2765,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateSingleSalesforceObject',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-update-single-object.html',
+        guideUrl: 'https://ampscript.guide/updatesinglesalesforceobject/',
         minArgs: 4,
         maxArgs: INF,
         category: 'Sales and Service Cloud',
@@ -2511,6 +2789,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Uppercase',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-uppercase.html',
+        guideUrl: 'https://ampscript.guide/uppercase/',
         minArgs: 1,
         maxArgs: 1,
         category: 'String',
@@ -2522,6 +2802,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertContact',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-contacts/mc-ampscript-reference-contacts-upsert-contact.html',
+        guideUrl: 'https://ampscript.guide/upsertcontact/',
         minArgs: 5,
         maxArgs: INF,
         category: 'MobileConnect',
@@ -2545,6 +2827,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertData',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-upsert-data.html',
+        guideUrl: 'https://ampscript.guide/upsertdata/',
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
@@ -2563,6 +2847,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertDE',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-upsert-de.html',
+        guideUrl: 'https://ampscript.guide/upsertde/',
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
@@ -2580,6 +2866,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertMSCRMRecord',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-upsert-record.html',
+        guideUrl: 'https://ampscript.guide/upsertmscrmrecord/',
         minArgs: 9,
         maxArgs: 9,
         category: 'Microsoft Dynamics CRM',
@@ -2604,6 +2892,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'URLEncode',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-url-encode.html',
+        guideUrl: 'https://ampscript.guide/urlencode/',
         minArgs: 1,
         maxArgs: 3,
         category: 'Encryption and Encoding',
@@ -2624,6 +2914,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'V',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-v.html',
+        guideUrl: 'https://ampscript.guide/v/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -2636,6 +2928,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'WAT',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-wat.html',
+        guideUrl: 'https://ampscript.guide/wat/',
         minArgs: 1,
         maxArgs: INF,
         category: 'Utility',
@@ -2649,6 +2943,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'WATP',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-wat.html',
+        guideUrl: 'https://ampscript.guide/watp/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
@@ -2659,6 +2955,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'WrapLongURL',
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-wrap-long-url.html',
+        guideUrl: 'https://ampscript.guide/wraplongurl/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
