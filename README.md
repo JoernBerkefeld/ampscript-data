@@ -48,6 +48,8 @@ for (const fn of FUNCTIONS) {
     console.log(fn.returnType);  // e.g. 'string'
     console.log(fn.syntax);      // canonical signature string
     console.log(fn.example);     // usage example (where available)
+    console.log(fn.docUrl);      // URL to official Salesforce developer docs
+    console.log(fn.guideUrl);    // URL to ampscript.guide reference page
 }
 ```
 
