@@ -2913,7 +2913,7 @@ export const FUNCTIONS = [
         example: "%%=URLEncode('hello world')=%%",
     },
     {
-        name: 'V',
+        name: 'v',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-v.html',
         guideUrl: 'https://ampscript.guide/v/',
         minArgs: 1,
@@ -2923,8 +2923,8 @@ export const FUNCTIONS = [
             'Short alias for retrieving a variable value inline. Equivalent to %%=v(@var)=%%.',
         params: [{ name: 'variableName', description: 'Variable reference' }],
         returnType: 'string',
-        syntax: 'V(variableName)',
-        example: '%%=V(@myVar)=%%',
+        syntax: 'v(variableName)',
+        example: '%%=v(@myVar)=%%',
     },
     {
         name: 'WAT',
