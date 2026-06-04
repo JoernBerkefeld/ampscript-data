@@ -11,10 +11,12 @@ const INF = Infinity;
 
 // ── Function catalog ─────────────────────────────────────────────────────────
 
-/** @type {{name: string, docUrl?: string, guideUrl?: string, minArgs: number, maxArgs: number, category: string, description: string, params: {name: string, description: string, type?: string, optional?: boolean}[], returnType?: string, syntax?: string, example?: string}[]} */
+/** @type {{name: string, mcnSince: number | null, mcnNotes: string | null, docUrl?: string, guideUrl?: string, minArgs: number, maxArgs: number, category: string, description: string, params: {name: string, description: string, type?: string, optional?: boolean}[], returnType?: string, syntax?: string, example?: string}[]} */
 export const FUNCTIONS = [
     {
         name: 'Add',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-add.html',
         guideUrl: 'https://ampscript.guide/add/',
         minArgs: 2,
@@ -31,6 +33,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AddMSCRMListMember',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-add-list-member.html',
         guideUrl: 'https://ampscript.guide/addmscrmlistmember/',
         minArgs: 2,
@@ -46,6 +50,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AddObjectArrayItem',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-add-object-array.html',
         guideUrl: 'https://ampscript.guide/addobjectarrayitem/',
         minArgs: 3,
@@ -62,6 +68,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AttachFile',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-attach-file.html',
         guideUrl: 'https://ampscript.guide/attachfile/',
         minArgs: 4,
@@ -76,6 +84,8 @@ export const FUNCTIONS = [
             { name: 'isInline', description: 'Display inline', type: 'boolean', optional: true },
             {
                 name: 'contentDisposition',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Disposition header',
                 type: 'string',
                 optional: true,
@@ -83,6 +93,8 @@ export const FUNCTIONS = [
             { name: 'encoding', description: 'Character encoding', type: 'string', optional: true },
             {
                 name: 'contentId',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Content-ID for inline',
                 type: 'string',
                 optional: true,
@@ -93,6 +105,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AttributeValue',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-attribute-value.html',
         guideUrl: 'https://ampscript.guide/attributevalue/',
         minArgs: 1,
@@ -107,6 +121,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEmployeeID',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-employee-id.html',
         guideUrl: 'https://ampscript.guide/authenticatedemployeeid/',
         minArgs: 0,
@@ -119,6 +135,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEmployeeNotificationAddress',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-employee-notification-address.html',
         guideUrl: 'https://ampscript.guide/authenticatedemployeenotificationaddress/',
         minArgs: 0,
@@ -131,6 +149,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEmployeeUserName',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-employee-username.html',
         guideUrl: 'https://ampscript.guide/authenticatedemployeeusername/',
         minArgs: 0,
@@ -143,6 +163,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEnterpriseID',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-enterprise-id.html',
         guideUrl: 'https://ampscript.guide/authenticatedenterpriseid/',
         minArgs: 0,
@@ -155,6 +177,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedMemberID',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-member-id.html',
         guideUrl: 'https://ampscript.guide/authenticatedmemberid/',
         minArgs: 0,
@@ -167,6 +191,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedMemberName',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-member-name.html',
         guideUrl: 'https://ampscript.guide/authenticatedmembername/',
         minArgs: 0,
@@ -179,6 +205,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BarcodeURL',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-barcode-url.html',
         guideUrl: 'https://ampscript.guide/barcodeurl/',
         minArgs: 9,
@@ -202,6 +230,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Base64Decode',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-base64-decode.html',
         guideUrl: 'https://ampscript.guide/base64decode/',
         minArgs: 1,
@@ -213,6 +243,8 @@ export const FUNCTIONS = [
             { name: 'encoding', description: 'Encoding scheme', type: 'string', optional: true },
             {
                 name: 'characterSet',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Character set for output',
                 type: 'string',
                 optional: true,
@@ -224,6 +256,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Base64Encode',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-base64-encode.html',
         guideUrl: 'https://ampscript.guide/base64encode/',
         minArgs: 1,
@@ -240,6 +274,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BeginImpressionRegion',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-begin-impression-region.html',
         guideUrl: 'https://ampscript.guide/beginimpressionregion/',
         minArgs: 1,
@@ -252,6 +288,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BuildOptionList',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-option-list.html',
         guideUrl: 'https://ampscript.guide/buildoptionlist/',
         minArgs: 3,
@@ -262,17 +300,23 @@ export const FUNCTIONS = [
         params: [
             {
                 name: 'dataExtensionName',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Data extension to read from',
                 type: 'string',
             },
             { name: 'selectedValue', description: 'Value to mark as selected', type: 'string' },
             {
                 name: 'displayColumn',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Column for option display text',
                 type: 'string',
             },
             {
                 name: 'valueColumn',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Column for option value attribute',
                 type: 'string',
                 optional: true,
@@ -283,6 +327,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BuildRowsetFromJSON',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-json.html',
         guideUrl: 'https://ampscript.guide/buildrowsetfromjson/',
         minArgs: 2,
@@ -293,11 +339,15 @@ export const FUNCTIONS = [
             { name: 'json', description: 'JSON string to parse', type: 'string' },
             {
                 name: 'jsonPath',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'JSONPath expression for node selection',
                 type: 'string',
             },
             {
                 name: 'uniqueTag',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Unique tag for the rowset',
                 type: 'string',
                 optional: true,
@@ -308,6 +358,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BuildRowSetFromString',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-string.html',
         guideUrl: 'https://ampscript.guide/buildrowsetfromstring/',
         minArgs: 2,
@@ -324,6 +376,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BuildRowSetFromXML',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-xml.html',
         guideUrl: 'https://ampscript.guide/buildrowsetfromxml/',
         minArgs: 2,
@@ -335,6 +389,8 @@ export const FUNCTIONS = [
             { name: 'xpath', description: 'XPath expression', type: 'string' },
             {
                 name: 'isCaseSensitive',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Enable case-sensitive matching',
                 type: 'boolean',
                 optional: true,
@@ -345,6 +401,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Char',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-char.html',
         guideUrl: 'https://ampscript.guide/char/',
         minArgs: 1,
@@ -355,6 +413,8 @@ export const FUNCTIONS = [
             { name: 'asciiCode', description: 'ASCII character code', type: 'number' },
             {
                 name: 'repeatCount',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Number of times to repeat the returned character',
                 type: 'number',
                 optional: true,
@@ -366,6 +426,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ClaimRow',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-claim-row.html',
         guideUrl: 'https://ampscript.guide/claimrow/',
         minArgs: 4,
@@ -376,31 +438,43 @@ export const FUNCTIONS = [
         params: [
             {
                 name: 'dataExtensionName',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Target data extension name',
                 type: 'string',
             },
             {
                 name: 'claimedColumn',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Name of the boolean column that identifies a row as claimed',
                 type: 'string',
             },
             {
                 name: 'columnName',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Name of the column to populate when claiming the row',
                 type: 'string',
             },
             {
                 name: 'columnValue',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Value to write into the column when claiming the row',
             },
             {
                 name: 'additionalColumnName',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional column name to populate',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'additionalColumnValue',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional column value to populate',
                 optional: true,
             },
@@ -410,6 +484,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ClaimRowValue',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-claim-row-value.html',
         guideUrl: 'https://ampscript.guide/claimrowvalue/',
         minArgs: 3,
@@ -419,28 +495,38 @@ export const FUNCTIONS = [
         params: [
             {
                 name: 'dataExtensionName',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Target data extension name',
                 type: 'string',
             },
             { name: 'returnColumn', description: 'Column whose value to return', type: 'string' },
             {
                 name: 'claimedColumn',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Name of the boolean column that identifies a row as claimed',
                 type: 'string',
             },
             {
                 name: 'defaultValue',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Default value to return if no unclaimed rows are available',
                 optional: true,
             },
             {
                 name: 'columnName',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Name of the column to populate when claiming the row',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'columnValue',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Value to write into the column when claiming the row',
                 optional: true,
             },
@@ -450,6 +536,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CloudPagesURL',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-cloud-pages-url.html',
         guideUrl: 'https://ampscript.guide/cloudpagesurl/',
         minArgs: 1,
@@ -461,12 +549,16 @@ export const FUNCTIONS = [
             { name: 'pageId', description: 'CloudPages page ID (number or string)' },
             {
                 name: 'paramName',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Query parameter name',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'paramValue',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Query parameter value',
                 type: 'string',
                 optional: true,
@@ -478,6 +570,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Concat',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-concat.html',
         guideUrl: 'https://ampscript.guide/concat/',
         minArgs: 2,
@@ -495,6 +589,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentArea',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-area.html',
         guideUrl: 'https://ampscript.guide/contentarea/',
         minArgs: 1,
@@ -505,12 +601,16 @@ export const FUNCTIONS = [
             { name: 'contentAreaId', description: 'Content area ID', type: 'number' },
             {
                 name: 'impressionRegion',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Impression region name',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'layout',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Layout option (block or wrap)',
                 type: 'string',
                 optional: true,
@@ -518,6 +618,8 @@ export const FUNCTIONS = [
             { name: 'tag', description: 'Wrapping HTML tag', type: 'string', optional: true },
             {
                 name: 'errorMessage',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Error message if content not found',
                 type: 'string',
                 optional: true,
@@ -528,6 +630,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentAreaByName',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-area-by-name.html',
         guideUrl: 'https://ampscript.guide/contentareabyname/',
         minArgs: 1,
@@ -538,6 +642,8 @@ export const FUNCTIONS = [
             { name: 'name', description: 'Content area folder path and name', type: 'string' },
             {
                 name: 'impressionRegion',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Impression region name',
                 type: 'string',
                 optional: true,
@@ -546,6 +652,8 @@ export const FUNCTIONS = [
             { name: 'tag', description: 'Wrapping HTML tag', type: 'string', optional: true },
             {
                 name: 'errorMessage',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Error message if not found',
                 type: 'string',
                 optional: true,
@@ -556,6 +664,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentBlockByID',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-id.html',
         guideUrl: 'https://ampscript.guide/contentblockbyid/',
         minArgs: 1,
@@ -566,24 +676,32 @@ export const FUNCTIONS = [
             { name: 'id', description: 'Content block ID (number or string)' },
             {
                 name: 'impressionRegion',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Impression region name',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'throwError',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Return error if not found',
                 type: 'boolean',
                 optional: true,
             },
             {
                 name: 'defaultContent',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Fallback content if not found',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'templateBasedLayout',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Layout for template-based content',
                 type: 'string',
                 optional: true,
@@ -594,6 +712,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentBlockByKey',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-key.html',
         guideUrl: 'https://ampscript.guide/contentblockbykey/',
         minArgs: 1,
@@ -604,24 +724,32 @@ export const FUNCTIONS = [
             { name: 'customerKey', description: 'Content block customer key', type: 'string' },
             {
                 name: 'impressionRegion',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Impression region name',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'throwError',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Return error if not found',
                 type: 'boolean',
                 optional: true,
             },
             {
                 name: 'defaultContent',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Fallback content if not found',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'templateBasedLayout',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Layout for template-based content',
                 type: 'string',
                 optional: true,
@@ -632,6 +760,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentBlockByName',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-name.html',
         guideUrl: 'https://ampscript.guide/contentblockbyname/',
         minArgs: 1,
@@ -643,24 +773,32 @@ export const FUNCTIONS = [
             { name: 'name', description: 'Content block folder path and name', type: 'string' },
             {
                 name: 'impressionRegion',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Impression region name',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'throwError',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Return error if not found',
                 type: 'boolean',
                 optional: true,
             },
             {
                 name: 'defaultContent',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Fallback content if not found',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'templateBasedLayout',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Layout for template-based content',
                 type: 'string',
                 optional: true,
@@ -671,6 +809,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentImageByID',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-image-by-id.html',
         guideUrl: 'https://ampscript.guide/contentimagebyid/',
         minArgs: 1,
@@ -681,6 +821,8 @@ export const FUNCTIONS = [
             { name: 'id', description: 'Image asset ID', type: 'number' },
             {
                 name: 'altText',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Alt text for the image',
                 type: 'string',
                 optional: true,
@@ -691,6 +833,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentImageByKey',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-image-by-key.html',
         guideUrl: 'https://ampscript.guide/contentimagebykey/',
         minArgs: 1,
@@ -701,6 +845,8 @@ export const FUNCTIONS = [
             { name: 'customerKey', description: 'Image asset customer key', type: 'string' },
             {
                 name: 'altText',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Alt text for the image',
                 type: 'string',
                 optional: true,
@@ -711,6 +857,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CreateMSCRMRecord',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-create-record.html',
         guideUrl: 'https://ampscript.guide/createmscrmrecord/',
         minArgs: 3,
@@ -723,6 +871,8 @@ export const FUNCTIONS = [
             { name: 'value1', description: 'First field value' },
             {
                 name: 'fieldN',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional field name',
                 type: 'string',
                 optional: true,
@@ -734,6 +884,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CreateObject',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-create-object.html',
         guideUrl: 'https://ampscript.guide/createobject/',
         minArgs: 1,
@@ -748,6 +900,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CreateSalesforceObject',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-create-object.html',
         guideUrl: 'https://ampscript.guide/createsalesforceobject/',
         minArgs: 4,
@@ -761,6 +915,8 @@ export const FUNCTIONS = [
             { name: 'value1', description: 'First field value' },
             {
                 name: 'fieldN',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional field API name',
                 type: 'string',
                 optional: true,
@@ -772,6 +928,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CreateSmsConversation',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sms/mc-ampscript-reference-sms-create-sms-conversation.html',
         guideUrl: 'https://ampscript.guide/createsmsconversation/',
         minArgs: 4,
@@ -789,6 +947,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DataExtensionRowCount',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-de-row-count.html',
         guideUrl: 'https://ampscript.guide/dataextensionrowcount/',
         minArgs: 1,
@@ -798,6 +958,8 @@ export const FUNCTIONS = [
         params: [
             {
                 name: 'dataExtensionName',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Data extension name or external key',
                 type: 'string',
             },
@@ -808,6 +970,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DateAdd',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-add.html',
         guideUrl: 'https://ampscript.guide/dateadd/',
         minArgs: 3,
@@ -825,6 +989,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DateDiff',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-diff.html',
         guideUrl: 'https://ampscript.guide/datediff/',
         minArgs: 3,
@@ -841,6 +1007,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DateParse',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-parse.html',
         guideUrl: 'https://ampscript.guide/dateparse/',
         minArgs: 1,
@@ -851,6 +1019,8 @@ export const FUNCTIONS = [
             { name: 'dateString', description: 'String to parse as a date', type: 'string' },
             {
                 name: 'convertToLocal',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Convert to local time zone',
                 type: 'boolean',
                 optional: true,
@@ -861,6 +1031,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DatePart',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-part.html',
         guideUrl: 'https://ampscript.guide/datepart/',
         minArgs: 2,
@@ -871,6 +1043,8 @@ export const FUNCTIONS = [
             { name: 'date', description: 'Date to extract from', type: 'date' },
             {
                 name: 'datePart',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Part to extract (Y, M, D, H, MI, DOW)',
                 type: 'string',
             },
@@ -880,6 +1054,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DecryptSymmetric',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-decrypt-symmetric.html',
         guideUrl: 'https://ampscript.guide/decryptsymmetric/',
         minArgs: 8,
@@ -891,22 +1067,30 @@ export const FUNCTIONS = [
             { name: 'algorithm', description: 'Encryption algorithm (e.g. AES)', type: 'string' },
             {
                 name: 'passwordExternalKey',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'External key for the password',
                 type: 'string',
             },
             {
                 name: 'password',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Password value or empty to use external key',
                 type: 'string',
             },
             { name: 'saltExternalKey', description: 'External key for the salt', type: 'string' },
             {
                 name: 'salt',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Salt value or empty to use external key',
                 type: 'string',
             },
             {
                 name: 'ivExternalKey',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'External key for the initialization vector',
                 type: 'string',
             },
@@ -917,6 +1101,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DeleteData',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-delete-data.html',
         guideUrl: 'https://ampscript.guide/deletedata/',
         minArgs: 3,
@@ -930,6 +1116,8 @@ export const FUNCTIONS = [
             { name: 'value1', description: 'First filter column value' },
             {
                 name: 'columnN',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional filter column name',
                 type: 'string',
                 optional: true,
@@ -941,6 +1129,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DeleteDE',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-delete-de.html',
         guideUrl: 'https://ampscript.guide/deletede/',
         minArgs: 3,
@@ -953,6 +1143,8 @@ export const FUNCTIONS = [
             { name: 'value1', description: 'First filter column value' },
             {
                 name: 'columnN',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional filter column name',
                 type: 'string',
                 optional: true,
@@ -964,6 +1156,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DescribeMSCRMEntities',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-describe-entities.html',
         guideUrl: 'https://ampscript.guide/describemscrmentities/',
         minArgs: 0,
@@ -976,6 +1170,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DescribeMSCRMEntityAttributes',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-describe-entity-attributes.html',
         guideUrl: 'https://ampscript.guide/describemscrmentityattributes/',
         minArgs: 1,
@@ -988,6 +1184,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Divide',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-divide.html',
         guideUrl: 'https://ampscript.guide/divide/',
         minArgs: 2,
@@ -1004,6 +1202,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Domain',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-domain.html',
         guideUrl: 'https://ampscript.guide/domain/',
         minArgs: 1,
@@ -1017,6 +1217,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Empty',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-empty.html',
         guideUrl: 'https://ampscript.guide/empty/',
         minArgs: 1,
@@ -1030,6 +1232,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'EncryptSymmetric',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-encrypt-symmetric.html',
         guideUrl: 'https://ampscript.guide/encryptsymmetric/',
         minArgs: 8,
@@ -1041,22 +1245,30 @@ export const FUNCTIONS = [
             { name: 'algorithm', description: 'Encryption algorithm (e.g. AES)', type: 'string' },
             {
                 name: 'passwordExternalKey',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'External key for the password',
                 type: 'string',
             },
             {
                 name: 'password',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Password value or empty to use external key',
                 type: 'string',
             },
             { name: 'saltExternalKey', description: 'External key for the salt', type: 'string' },
             {
                 name: 'salt',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Salt value or empty to use external key',
                 type: 'string',
             },
             {
                 name: 'ivExternalKey',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'External key for the initialization vector',
                 type: 'string',
             },
@@ -1067,6 +1279,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'EndImpressionRegion',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-end-impression-region.html',
         guideUrl: 'https://ampscript.guide/endimpressionregion/',
         minArgs: 0,
@@ -1076,6 +1290,8 @@ export const FUNCTIONS = [
         params: [
             {
                 name: 'trackImpression',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Whether to track the impression',
                 type: 'boolean',
                 optional: true,
@@ -1086,6 +1302,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'EndSmsConversation',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sms/mc-ampscript-reference-sms-end-sms-conversation.html',
         guideUrl: 'https://ampscript.guide/endsmsconversation/',
         minArgs: 2,
@@ -1101,6 +1319,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ExecuteFilter',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-execute-filter.html',
         guideUrl: 'https://ampscript.guide/executefilter/',
         minArgs: 1,
@@ -1113,6 +1333,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ExecuteFilterOrderedRows',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-execute-filter-ordered-rows.html',
         guideUrl: 'https://ampscript.guide/executefilterorderedrows/',
         minArgs: 3,
@@ -1129,6 +1351,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Field',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-field.html',
         guideUrl: 'https://ampscript.guide/field/',
         minArgs: 2,
@@ -1140,6 +1364,8 @@ export const FUNCTIONS = [
             { name: 'fieldName', description: 'Column name to retrieve', type: 'string' },
             {
                 name: 'ordinal',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Column ordinal (0-based)',
                 type: 'number',
                 optional: true,
@@ -1151,6 +1377,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Format',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-format.html',
         guideUrl: 'https://ampscript.guide/format/',
         minArgs: 2,
@@ -1162,6 +1390,8 @@ export const FUNCTIONS = [
             { name: 'formatString', description: '.NET format string', type: 'string' },
             {
                 name: 'culture',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Culture code (e.g. en-US)',
                 type: 'string',
                 optional: true,
@@ -1173,6 +1403,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'FormatCurrency',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-formatCurrency.html',
         guideUrl: 'https://ampscript.guide/formatcurrency/',
         minArgs: 2,
@@ -1184,12 +1416,16 @@ export const FUNCTIONS = [
             { name: 'locale', description: 'Locale code (e.g. en-US)', type: 'string' },
             {
                 name: 'decimalPlaces',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Number of decimal places',
                 type: 'number',
                 optional: true,
             },
             {
                 name: 'symbol',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Custom currency symbol',
                 type: 'string',
                 optional: true,
@@ -1200,6 +1436,9 @@ export const FUNCTIONS = [
     },
     {
         name: 'FormatDate',
+        mcnSince: 67,
+        mcnNotes:
+            'In MCN, uses Java SimpleDateFormat format strings instead of .NET. Omitting dateFormat returns the G standard format (e.g. "5/15/2026 1:23:45 PM").',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-format-date.html',
         guideUrl: 'https://ampscript.guide/formatdate/',
         minArgs: 2,
@@ -1210,6 +1449,8 @@ export const FUNCTIONS = [
             { name: 'date', description: 'Date to format', type: 'date' },
             {
                 name: 'format',
+                mcnSince: 67,
+                mcnNotes: null,
                 description: 'Format type or pattern (s, l, iso, custom)',
                 type: 'string',
             },
@@ -1222,6 +1463,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'FormatNumber',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-formatNumber.html',
         guideUrl: 'https://ampscript.guide/formatnumber/',
         minArgs: 2,
@@ -1238,6 +1481,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetJWT',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-get-jwt.html',
         guideUrl: 'https://ampscript.guide/getjwt/',
         minArgs: 3,
@@ -1254,6 +1499,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetJWTByKeyName',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-get-jwt-by-key-name.html',
         guideUrl: 'https://ampscript.guide/getjwtbykeyname/',
         minArgs: 3,
@@ -1270,6 +1517,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetPortfolioItem',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-get-portfolio-item.html',
         guideUrl: 'https://ampscript.guide/getportfolioitem/',
         minArgs: 1,
@@ -1282,6 +1531,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetPublishedSocialContent',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-social/mc-ampscript-reference-social-get-published-social-content.html',
         guideUrl: 'https://ampscript.guide/getpublishedsocialcontent/',
         minArgs: 1,
@@ -1294,6 +1545,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetSendTime',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-get-send-time.html',
         guideUrl: 'https://ampscript.guide/getsendtime/',
         minArgs: 0,
@@ -1304,6 +1557,8 @@ export const FUNCTIONS = [
         params: [
             {
                 name: 'persistFormat',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Persist date format flag',
                 type: 'boolean',
                 optional: true,
@@ -1314,6 +1569,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetSocialPublishURL',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-social/mc-ampscript-reference-social-get-social-publish-url.html',
         guideUrl: 'https://ampscript.guide/getsocialpublishurl/',
         minArgs: 2,
@@ -1329,6 +1586,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetSocialPublishURLByName',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-social/mc-ampscript-reference-social-get-social-publish-url-by-name.html',
         guideUrl: 'https://ampscript.guide/getsocialpublishurlbyname/',
         minArgs: 2,
@@ -1344,6 +1603,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GUID',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-guid.html',
         guideUrl: 'https://ampscript.guide/guid/',
         minArgs: 0,
@@ -1357,6 +1618,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPGet',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-get.html',
         guideUrl: 'https://ampscript.guide/httpget/',
         minArgs: 1,
@@ -1367,18 +1630,24 @@ export const FUNCTIONS = [
             { name: 'url', description: 'Request URL', type: 'string' },
             {
                 name: 'continueOnError',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Continue on error (true/false)',
                 type: 'boolean',
                 optional: true,
             },
             {
                 name: 'headerName',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Request header name',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'headerValue',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Request header value',
                 type: 'string',
                 optional: true,
@@ -1390,6 +1659,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPPost',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-post.html',
         guideUrl: 'https://ampscript.guide/httppost/',
         minArgs: 3,
@@ -1403,18 +1674,24 @@ export const FUNCTIONS = [
             { name: 'payload', description: 'Request body', type: 'string' },
             {
                 name: 'response',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for response body (pass @variable)',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'headerName',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Request header name',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'headerValue',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Request header value',
                 type: 'string',
                 optional: true,
@@ -1425,6 +1702,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPPost2',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-post2.html',
         guideUrl: 'https://ampscript.guide/httppost2/',
         minArgs: 7,
@@ -1439,6 +1718,8 @@ export const FUNCTIONS = [
             { name: 'response', description: 'Output variable for response body', type: 'string' },
             {
                 name: 'responseHeaders',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for response headers',
                 type: 'string',
             },
@@ -1450,6 +1731,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPPostWithRetry',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-post-with-retry.html',
         guideUrl: 'https://ampscript.guide/httppostwithretry/',
         minArgs: 7,
@@ -1463,12 +1746,16 @@ export const FUNCTIONS = [
             { name: 'response', description: 'Output variable for response body', type: 'string' },
             {
                 name: 'responseHeaders',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for response headers',
                 type: 'string',
             },
             { name: 'maxRetries', description: 'Maximum number of retry attempts', type: 'number' },
             {
                 name: 'retryDelay',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Delay between retries in milliseconds',
                 type: 'number',
             },
@@ -1478,6 +1765,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPRequestHeader',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-request-header.html',
         guideUrl: 'https://ampscript.guide/httprequestheader/',
         minArgs: 1,
@@ -1492,6 +1781,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IIf',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-iif.html',
         guideUrl: 'https://ampscript.guide/iif/',
         minArgs: 3,
@@ -1509,6 +1800,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Image',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-image.html',
         guideUrl: 'https://ampscript.guide/image/',
         minArgs: 2,
@@ -1519,11 +1812,15 @@ export const FUNCTIONS = [
         params: [
             {
                 name: 'customerKey',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Customer/external key of the image',
                 type: 'string',
             },
             {
                 name: 'fallbackKey',
+                mcnSince: null,
+                mcnNotes: null,
                 description:
                     'Customer/external key of the fallback image if the primary is not found',
                 type: 'string',
@@ -1534,6 +1831,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IndexOf',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-index-of.html',
         guideUrl: 'https://ampscript.guide/indexof/',
         minArgs: 2,
@@ -1550,6 +1849,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InsertData',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-insert-data.html',
         guideUrl: 'https://ampscript.guide/insertdata/',
         minArgs: 3,
@@ -1562,6 +1863,8 @@ export const FUNCTIONS = [
             { name: 'value1', description: 'First column value' },
             {
                 name: 'columnN',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional column name',
                 type: 'string',
                 optional: true,
@@ -1573,6 +1876,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InsertDE',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-insert-de.html',
         guideUrl: 'https://ampscript.guide/insertde/',
         minArgs: 3,
@@ -1585,6 +1890,8 @@ export const FUNCTIONS = [
             { name: 'value1', description: 'First column value' },
             {
                 name: 'columnN',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional column name',
                 type: 'string',
                 optional: true,
@@ -1596,6 +1903,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokeCreate',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-create.html',
         guideUrl: 'https://ampscript.guide/invokecreate/',
         minArgs: 3,
@@ -1606,16 +1915,22 @@ export const FUNCTIONS = [
             { name: 'apiObject', description: 'API object to create' },
             {
                 name: 'statusMessage',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for the resulting status message',
                 type: 'string',
             },
             {
                 name: 'errorCode',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for the resulting error code',
                 type: 'string',
             },
             {
                 name: 'createOptions',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Optional CreateOptions API object',
                 optional: true,
             },
@@ -1625,6 +1940,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokeDelete',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-delete.html',
         guideUrl: 'https://ampscript.guide/invokedelete/',
         minArgs: 3,
@@ -1635,16 +1952,22 @@ export const FUNCTIONS = [
             { name: 'apiObject', description: 'API object to delete' },
             {
                 name: 'statusMessage',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for the resulting status message',
                 type: 'string',
             },
             {
                 name: 'errorCode',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for the resulting error code',
                 type: 'string',
             },
             {
                 name: 'deleteOptions',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Optional DeleteOptions API object',
                 optional: true,
             },
@@ -1654,6 +1977,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokeExecute',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-execute.html',
         guideUrl: 'https://ampscript.guide/invokeexecute/',
         minArgs: 3,
@@ -1664,6 +1989,8 @@ export const FUNCTIONS = [
             { name: 'apiObject', description: 'API object to execute' },
             {
                 name: 'statusMessage',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for status message',
                 type: 'string',
             },
@@ -1674,6 +2001,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokePerform',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-perform.html',
         guideUrl: 'https://ampscript.guide/invokeperform/',
         minArgs: 2,
@@ -1685,6 +2014,8 @@ export const FUNCTIONS = [
             { name: 'action', description: 'Action to perform (e.g. start, stop)', type: 'string' },
             {
                 name: 'statusMessage',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for the resulting status message',
                 type: 'string',
                 optional: true,
@@ -1695,6 +2026,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokeRetrieve',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-retrieve.html',
         guideUrl: 'https://ampscript.guide/invokeretrieve/',
         minArgs: 1,
@@ -1705,12 +2038,16 @@ export const FUNCTIONS = [
             { name: 'apiObject', description: 'API object defining the retrieve filter' },
             {
                 name: 'statusMessage',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for the resulting status message',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'requestId',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for the resulting RequestID',
                 type: 'string',
                 optional: true,
@@ -1721,6 +2058,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokeUpdate',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-update.html',
         guideUrl: 'https://ampscript.guide/invokeupdate/',
         minArgs: 1,
@@ -1731,18 +2070,24 @@ export const FUNCTIONS = [
             { name: 'apiObject', description: 'API object to update' },
             {
                 name: 'statusMessage',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for the resulting status message',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'errorCode',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for the resulting error code',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'updateOptions',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Optional UpdateOptions API object',
                 optional: true,
             },
@@ -1752,6 +2097,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsCHTMLBrowser',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-is-chtml-browser.html',
         guideUrl: 'https://ampscript.guide/ischtmlbrowser/',
         minArgs: 1,
@@ -1765,6 +2112,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsEmailAddress',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-email-address.html',
         guideUrl: 'https://ampscript.guide/isemailaddress/',
         minArgs: 1,
@@ -1778,6 +2127,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsNull',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-null.html',
         guideUrl: 'https://ampscript.guide/isnull/',
         minArgs: 1,
@@ -1790,6 +2141,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsNullDefault',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-is-null-default.html',
         guideUrl: 'https://ampscript.guide/isnulldefault/',
         minArgs: 2,
@@ -1806,6 +2159,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsPhoneNumber',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-phone-number.html',
         guideUrl: 'https://ampscript.guide/isphonenumber/',
         minArgs: 1,
@@ -1818,6 +2173,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Length',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-length.html',
         guideUrl: 'https://ampscript.guide/length/',
         minArgs: 1,
@@ -1831,6 +2188,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LiveContentMicrositeURL',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-live-content-microsite-url.html',
         guideUrl: 'https://ampscript.guide/livecontentmicrositeurl/',
         minArgs: 2,
@@ -1846,6 +2205,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LocalDateToSystemDate',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-local-date-to-system-date.html',
         guideUrl: 'https://ampscript.guide/localdatetosystemdate/',
         minArgs: 1,
@@ -1858,6 +2219,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LongSFID',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-long-sfid.html',
         guideUrl: 'https://ampscript.guide/longsfid/',
         minArgs: 1,
@@ -1871,6 +2234,9 @@ export const FUNCTIONS = [
     },
     {
         name: 'Lookup',
+        mcnSince: 67,
+        mcnNotes:
+            'In MCN, search arguments must be provided in column/value pairs — an odd count causes an error. All filter keys must fully specify the composite primary key.',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup.html',
         guideUrl: 'https://ampscript.guide/lookup/',
         minArgs: 4,
@@ -1885,6 +2251,8 @@ export const FUNCTIONS = [
             { name: 'lookupValue', description: 'Filter column value' },
             {
                 name: 'additionalColumn',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional filter column',
                 type: 'string',
                 optional: true,
@@ -1897,6 +2265,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupOrderedRows',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-ordered-rows.html',
         guideUrl: 'https://ampscript.guide/lookuporderedrows/',
         minArgs: 5,
@@ -1908,6 +2278,8 @@ export const FUNCTIONS = [
             { name: 'maxRows', description: 'Maximum rows to return', type: 'number' },
             {
                 name: 'sortColumn',
+                mcnSince: null,
+                mcnNotes: null,
                 description: "Sort column and direction (e.g. 'Date DESC')",
                 type: 'string',
             },
@@ -1915,6 +2287,8 @@ export const FUNCTIONS = [
             { name: 'lookupValue', description: 'Filter column value' },
             {
                 name: 'additionalColumn',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional filter column',
                 type: 'string',
                 optional: true,
@@ -1926,6 +2300,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupOrderedRowsCS',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-ordered-rows-cs.html',
         guideUrl: 'https://ampscript.guide/lookuporderedrowscs/',
         minArgs: 5,
@@ -1941,6 +2317,8 @@ export const FUNCTIONS = [
             { name: 'lookupValue', description: 'Filter column value' },
             {
                 name: 'additionalColumn',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional filter column',
                 type: 'string',
                 optional: true,
@@ -1952,6 +2330,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupRows',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-rows.html',
         guideUrl: 'https://ampscript.guide/lookuprows/',
         minArgs: 3,
@@ -1964,6 +2344,8 @@ export const FUNCTIONS = [
             { name: 'lookupValue', description: 'Filter column value' },
             {
                 name: 'additionalColumn',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional filter column',
                 type: 'string',
                 optional: true,
@@ -1976,6 +2358,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupRowsCS',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-rows-cs.html',
         guideUrl: 'https://ampscript.guide/lookuprowscs/',
         minArgs: 3,
@@ -1988,6 +2372,8 @@ export const FUNCTIONS = [
             { name: 'lookupValue', description: 'Filter column value' },
             {
                 name: 'additionalColumn',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional filter column',
                 type: 'string',
                 optional: true,
@@ -1999,6 +2385,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Lowercase',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-lowercase.html',
         guideUrl: 'https://ampscript.guide/lowercase/',
         minArgs: 1,
@@ -2012,6 +2400,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'MD5',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-md5.html',
         guideUrl: 'https://ampscript.guide/md5/',
         minArgs: 1,
@@ -2022,6 +2412,8 @@ export const FUNCTIONS = [
             { name: 'value', description: 'Value to hash', type: 'string' },
             {
                 name: 'encoding',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output encoding (hex, base64)',
                 type: 'string',
                 optional: true,
@@ -2032,6 +2424,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'MicrositeURL',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-microsite-url.html',
         guideUrl: 'https://ampscript.guide/micrositeurl/',
         minArgs: 1,
@@ -2042,12 +2436,16 @@ export const FUNCTIONS = [
             { name: 'pageId', description: 'Microsite page ID', type: 'number' },
             {
                 name: 'paramName',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Query parameter name',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'paramValue',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Query parameter value',
                 type: 'string',
                 optional: true,
@@ -2058,6 +2456,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Mod',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-mod.html',
         guideUrl: 'https://ampscript.guide/mod/',
         minArgs: 2,
@@ -2075,6 +2475,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Multiply',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-multiply.html',
         guideUrl: 'https://ampscript.guide/multiply/',
         minArgs: 2,
@@ -2091,6 +2493,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Now',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-now.html',
         guideUrl: 'https://ampscript.guide/now/',
         minArgs: 0,
@@ -2101,6 +2505,8 @@ export const FUNCTIONS = [
         params: [
             {
                 name: 'persistFormat',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Pass 1 to persist value',
                 type: 'boolean',
                 optional: true,
@@ -2112,6 +2518,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Output',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-output.html',
         guideUrl: 'https://ampscript.guide/output/',
         minArgs: 1,
@@ -2125,6 +2533,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'OutputLine',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-output-line.html',
         guideUrl: 'https://ampscript.guide/outputline/',
         minArgs: 1,
@@ -2137,6 +2547,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ProperCase',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-propercase.html',
         guideUrl: 'https://ampscript.guide/propercase/',
         minArgs: 1,
@@ -2151,6 +2563,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'QueryParameter',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-query-parameter.html',
         guideUrl: 'https://ampscript.guide/queryparameter/',
         minArgs: 1,
@@ -2164,6 +2578,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RaiseError',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-raise-error.html',
         guideUrl: 'https://ampscript.guide/raiseerror/',
         minArgs: 1,
@@ -2175,24 +2591,32 @@ export const FUNCTIONS = [
             { name: 'message', description: 'Error message', type: 'string' },
             {
                 name: 'skipSubscriber',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Skip subscriber without failing the job',
                 type: 'boolean',
                 optional: true,
             },
             {
                 name: 'apiErrorCode',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Custom API error code',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'apiErrorMessage',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Custom API error message',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'statusCode',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'HTTP status code for landing pages',
                 type: 'number',
                 optional: true,
@@ -2203,6 +2627,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Random',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-random.html',
         guideUrl: 'https://ampscript.guide/random/',
         minArgs: 2,
@@ -2219,6 +2645,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RatingStars',
+        mcnSince: null,
+        mcnNotes: null,
         guideUrl: 'https://ampscript.guide/ratingstars/',
         minArgs: 3,
         maxArgs: 3,
@@ -2234,6 +2662,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Redirect',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-redirect.html',
         guideUrl: 'https://ampscript.guide/redirect/',
         minArgs: 1,
@@ -2246,6 +2676,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RedirectTo',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-redirect-to.html',
         guideUrl: 'https://ampscript.guide/redirectto/',
         minArgs: 1,
@@ -2259,6 +2691,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RegExMatch',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-regex-match.html',
         guideUrl: 'https://ampscript.guide/regexmatch/',
         minArgs: 3,
@@ -2271,11 +2705,15 @@ export const FUNCTIONS = [
             { name: 'pattern', description: 'Regular expression pattern', type: 'string' },
             {
                 name: 'match1',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for first capture group',
                 type: 'string',
             },
             {
                 name: 'matchN',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output variable for additional capture groups',
                 type: 'string',
                 optional: true,
@@ -2286,6 +2724,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Replace',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-replace.html',
         guideUrl: 'https://ampscript.guide/replace/',
         minArgs: 3,
@@ -2303,6 +2743,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ReplaceList',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-replace-list.html',
         guideUrl: 'https://ampscript.guide/replacelist/',
         minArgs: 3,
@@ -2315,6 +2757,8 @@ export const FUNCTIONS = [
             { name: 'oldValue1', description: 'First value to replace', type: 'string' },
             {
                 name: 'oldValueN',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional value to replace',
                 type: 'string',
                 optional: true,
@@ -2325,6 +2769,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RequestParameter',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-request-parameter.html',
         guideUrl: 'https://ampscript.guide/requestparameter/',
         minArgs: 1,
@@ -2338,6 +2784,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveMSCRMRecords',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-retrieve-records.html',
         guideUrl: 'https://ampscript.guide/retrievemscrmrecords/',
         minArgs: 5,
@@ -2348,6 +2796,8 @@ export const FUNCTIONS = [
             { name: 'entityType', description: 'CRM entity type name', type: 'string' },
             {
                 name: 'fieldList',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Comma-separated field names to retrieve',
                 type: 'string',
             },
@@ -2360,6 +2810,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveMSCRMRecordsFetchXML',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-retrieve-records-fetch-xml.html',
         guideUrl: 'https://ampscript.guide/retrievemscrmrecordsfetchxml/',
         minArgs: 1,
@@ -2372,6 +2824,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveSalesforceJobSources',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-retrieve-job-sources.html',
         guideUrl: 'https://ampscript.guide/retrievesalesforcejobsources/',
         minArgs: 1,
@@ -2384,6 +2838,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveSalesforceObjects',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-retrieve-objects.html',
         guideUrl: 'https://ampscript.guide/retrievesalesforceobjects/',
         minArgs: 5,
@@ -2398,18 +2854,24 @@ export const FUNCTIONS = [
             { name: 'filterValue', description: 'Filter value' },
             {
                 name: 'additionalFilterField',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional filter field',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'additionalOperator',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional operator',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'additionalFilterValue',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional filter value',
                 optional: true,
             },
@@ -2419,6 +2881,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Row',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-row.html',
         guideUrl: 'https://ampscript.guide/row/',
         minArgs: 2,
@@ -2435,6 +2899,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RowCount',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-row-count.html',
         guideUrl: 'https://ampscript.guide/rowcount/',
         minArgs: 1,
@@ -2448,6 +2914,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SetObjectProperty',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-set-object-property.html',
         guideUrl: 'https://ampscript.guide/setobjectproperty/',
         minArgs: 3,
@@ -2464,6 +2932,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SetSmsConversationNextKeyword',
+        mcnSince: null,
+        mcnNotes: null,
         guideUrl: 'https://ampscript.guide/setsmsconversationnextkeyword/',
         minArgs: 3,
         maxArgs: 3,
@@ -2479,6 +2949,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SetStateMSCRMRecord',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-set-state-record.html',
         guideUrl: 'https://ampscript.guide/setstatemscrmrecord/',
         minArgs: 4,
@@ -2496,6 +2968,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SHA1',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha1.html',
         guideUrl: 'https://ampscript.guide/sha1/',
         minArgs: 1,
@@ -2506,6 +2980,8 @@ export const FUNCTIONS = [
             { name: 'value', description: 'Value to hash', type: 'string' },
             {
                 name: 'encoding',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output encoding (hex, base64)',
                 type: 'string',
                 optional: true,
@@ -2516,6 +2992,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SHA256',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha256.html',
         guideUrl: 'https://ampscript.guide/sha256/',
         minArgs: 1,
@@ -2526,6 +3004,8 @@ export const FUNCTIONS = [
             { name: 'value', description: 'Value to hash', type: 'string' },
             {
                 name: 'encoding',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output encoding (hex, base64)',
                 type: 'string',
                 optional: true,
@@ -2537,6 +3017,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SHA512',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha512.html',
         guideUrl: 'https://ampscript.guide/sha512/',
         minArgs: 1,
@@ -2547,6 +3029,8 @@ export const FUNCTIONS = [
             { name: 'value', description: 'Value to hash', type: 'string' },
             {
                 name: 'encoding',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Output encoding (hex, base64)',
                 type: 'string',
                 optional: true,
@@ -2557,6 +3041,9 @@ export const FUNCTIONS = [
     },
     {
         name: 'StringToDate',
+        mcnSince: 67,
+        mcnNotes:
+            'In MCN, returns a locale-formatted string (G standard format, e.g. "5/15/2026 1:23:45 PM") instead of a dateTime object. Cannot be reliably passed to FormatDate() or other date functions in MCN — use FormatDate() directly instead.',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-string-to-date.html',
         guideUrl: 'https://ampscript.guide/stringtodate/',
         minArgs: 1,
@@ -2572,6 +3059,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'StringToHex',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-to-hex.html',
         guideUrl: 'https://ampscript.guide/stringtohex/',
         minArgs: 1,
@@ -2587,6 +3076,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Substring',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-substring.html',
         guideUrl: 'https://ampscript.guide/substring/',
         minArgs: 2,
@@ -2599,6 +3090,8 @@ export const FUNCTIONS = [
             { name: 'startIndex', description: '1-based start position', type: 'number' },
             {
                 name: 'length',
+                mcnSince: 67,
+                mcnNotes: null,
                 description:
                     'Number of characters to extract. If omitted, returns the remainder of the string.',
                 type: 'number',
@@ -2611,6 +3104,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Subtract',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-subtract.html',
         guideUrl: 'https://ampscript.guide/subtract/',
         minArgs: 2,
@@ -2627,6 +3122,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SystemDateToLocalDate',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-system-date-to-local-date.html',
         guideUrl: 'https://ampscript.guide/systemdatetolocaldate/',
         minArgs: 1,
@@ -2640,6 +3137,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'TransformXML',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-transform-xml.html',
         guideUrl: 'https://ampscript.guide/transformxml/',
         minArgs: 2,
@@ -2655,6 +3154,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'TreatAsContent',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-treat-as-content.html',
         guideUrl: 'https://ampscript.guide/treatascontent/',
         minArgs: 1,
@@ -2665,6 +3166,8 @@ export const FUNCTIONS = [
         params: [
             {
                 name: 'content',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'String containing AMPscript to evaluate',
                 type: 'string',
             },
@@ -2674,6 +3177,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'TreatAsContentArea',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-treat-as-content-area.html',
         guideUrl: 'https://ampscript.guide/treatascontentarea/',
         minArgs: 2,
@@ -2686,6 +3191,8 @@ export const FUNCTIONS = [
             { name: 'content', description: 'HTML/AMPscript content', type: 'string' },
             {
                 name: 'impressionRegion',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Impression region name',
                 type: 'string',
                 optional: true,
@@ -2696,6 +3203,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Trim',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-trim.html',
         guideUrl: 'https://ampscript.guide/trim/',
         minArgs: 1,
@@ -2709,6 +3218,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateData',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-update-data.html',
         guideUrl: 'https://ampscript.guide/updatedata/',
         minArgs: 6,
@@ -2729,6 +3240,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateDE',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-update-de.html',
         guideUrl: 'https://ampscript.guide/updatede/',
         minArgs: 6,
@@ -2748,6 +3261,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateMSCRMRecords',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-update-records.html',
         guideUrl: 'https://ampscript.guide/updatemscrmrecords/',
         minArgs: 4,
@@ -2765,6 +3280,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateSingleSalesforceObject',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-update-single-object.html',
         guideUrl: 'https://ampscript.guide/updatesinglesalesforceobject/',
         minArgs: 4,
@@ -2778,6 +3295,8 @@ export const FUNCTIONS = [
             { name: 'value1', description: 'First field value' },
             {
                 name: 'fieldN',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional field API name',
                 type: 'string',
                 optional: true,
@@ -2789,6 +3308,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Uppercase',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-uppercase.html',
         guideUrl: 'https://ampscript.guide/uppercase/',
         minArgs: 1,
@@ -2802,6 +3323,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertContact',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-contacts/mc-ampscript-reference-contacts-upsert-contact.html',
         guideUrl: 'https://ampscript.guide/upsertcontact/',
         minArgs: 5,
@@ -2816,6 +3339,8 @@ export const FUNCTIONS = [
             { name: 'value1', description: 'First attribute value' },
             {
                 name: 'fieldN',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Additional attribute name',
                 type: 'string',
                 optional: true,
@@ -2827,6 +3352,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertData',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-upsert-data.html',
         guideUrl: 'https://ampscript.guide/upsertdata/',
         minArgs: 6,
@@ -2847,6 +3374,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertDE',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-upsert-de.html',
         guideUrl: 'https://ampscript.guide/upsertde/',
         minArgs: 6,
@@ -2866,6 +3395,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertMSCRMRecord',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-mscrm/mc-ampscript-reference-microsoft-dynamics-crm-upsert-record.html',
         guideUrl: 'https://ampscript.guide/upsertmscrmrecord/',
         minArgs: 9,
@@ -2876,6 +3407,8 @@ export const FUNCTIONS = [
             { name: 'entityType', description: 'CRM entity type name', type: 'string' },
             {
                 name: 'matchField',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Field used to find existing record',
                 type: 'string',
             },
@@ -2892,6 +3425,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'URLEncode',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-url-encode.html',
         guideUrl: 'https://ampscript.guide/urlencode/',
         minArgs: 1,
@@ -2902,6 +3437,8 @@ export const FUNCTIONS = [
             { name: 'url', description: 'String to encode', type: 'string' },
             {
                 name: 'preserveEntities',
+                mcnSince: null,
+                mcnNotes: null,
                 description: 'Preserve HTML entities',
                 type: 'boolean',
                 optional: true,
@@ -2914,6 +3451,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'v',
+        mcnSince: 67,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-v.html',
         guideUrl: 'https://ampscript.guide/v/',
         minArgs: 1,
@@ -2928,6 +3467,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'WAT',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-wat.html',
         guideUrl: 'https://ampscript.guide/wat/',
         minArgs: 1,
@@ -2943,6 +3484,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'WATP',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-wat.html',
         guideUrl: 'https://ampscript.guide/watp/',
         minArgs: 1,
@@ -2955,6 +3498,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'WrapLongURL',
+        mcnSince: null,
+        mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-wrap-long-url.html',
         guideUrl: 'https://ampscript.guide/wraplongurl/',
         minArgs: 1,
@@ -3008,6 +3553,41 @@ export function isEmailExcluded(functionName) {
     return entry ? EMAIL_EXCLUDED_CATEGORIES.has(entry.category) : false;
 }
 
+// ── Marketing Cloud Next (MCN) helpers ───────────────────────────────────────
+
+/**
+ * Returns the API version from which this AMPscript function is supported in
+ * Marketing Cloud Next, or null if it is not supported in MCN.
+ *
+ * @param {string} name - AMPscript function name (case-insensitive).
+ * @returns {number | null} API version number (e.g. 67) or null.
+ */
+export function getMcnApiVersion(name) {
+    return functionLookup.get(name.toLowerCase())?.mcnSince ?? null;
+}
+
+/**
+ * Returns true when the given AMPscript function is supported in Marketing
+ * Cloud Next (i.e. mcnSince is a non-null API version number).
+ *
+ * @param {string} name - AMPscript function name (case-insensitive).
+ * @returns {boolean}
+ */
+export function isMcnSupported(name) {
+    return getMcnApiVersion(name) !== null;
+}
+
+/**
+ * Returns the MCN behavioral difference notes for the given function, or null
+ * if there are no differences or the function is not MCN-supported.
+ *
+ * @param {string} name - AMPscript function name (case-insensitive).
+ * @returns {string | null} Behavioral difference notes, or null.
+ */
+export function getMcnNotes(name) {
+    return functionLookup.get(name.toLowerCase())?.mcnNotes ?? null;
+}
+
 // ── Deprecated functions ─────────────────────────────────────────────────────
 // Functions that have been superseded by newer alternatives. They still work
 // at runtime but should be avoided in new code.
@@ -3015,36 +3595,50 @@ export function isEmailExcluded(functionName) {
 export const DEPRECATED_FUNCTIONS = [
     {
         name: 'LookupValue',
+        mcnSince: null,
+        mcnNotes: null,
         replacement: 'Lookup',
         reason: 'LookupValue was the original name; Lookup is the current standard.',
     },
     {
         name: 'InsertDE',
+        mcnSince: null,
+        mcnNotes: null,
         replacement: 'InsertData',
         reason: 'InsertDE is a legacy alias for InsertData.',
     },
     {
         name: 'UpdateDE',
+        mcnSince: null,
+        mcnNotes: null,
         replacement: 'UpdateData',
         reason: 'UpdateDE is a legacy alias for UpdateData.',
     },
     {
         name: 'UpsertDE',
+        mcnSince: null,
+        mcnNotes: null,
         replacement: 'UpsertData',
         reason: 'UpsertDE is a legacy alias for UpsertData.',
     },
     {
         name: 'DeleteDE',
+        mcnSince: null,
+        mcnNotes: null,
         replacement: 'DeleteData',
         reason: 'DeleteDE is a legacy alias for DeleteData.',
     },
     {
         name: 'ContentArea',
+        mcnSince: null,
+        mcnNotes: null,
         replacement: 'ContentBlockByKey or ContentBlockByName',
         reason: 'ContentArea references classic content areas which are being phased out in favor of Content Builder.',
     },
     {
         name: 'ContentAreaByName',
+        mcnSince: null,
+        mcnNotes: null,
         replacement: 'ContentBlockByName',
         reason: 'ContentAreaByName references classic content areas which are being phased out.',
     },
@@ -3081,6 +3675,8 @@ export const AMPSCRIPT_KEYWORDS = [
 export const PERSONALIZATION_STRINGS = [
     {
         name: '_subscriberKey',
+        mcnSince: null,
+        mcnNotes: null,
         description: 'Unique identifier for the current subscriber or contact',
     },
     { name: 'emailaddr', description: 'Email address associated with the current subscriber' },
@@ -3096,11 +3692,15 @@ export const PERSONALIZATION_STRINGS = [
     { name: '_DataSourceName', description: 'Name of the data source driving the current send' },
     {
         name: '_messageContext',
+        mcnSince: null,
+        mcnNotes: null,
         description: 'Render context indicator: SEND, PREVIEW, VAWP, or FTAF',
     },
     { name: '_isTestSend', description: 'Flag indicating whether this is a test send' },
     {
         name: '_messagetypepreference',
+        mcnSince: null,
+        mcnNotes: null,
         description: 'Subscriber preference for HTML or plain-text messages',
     },
     { name: 'listid', description: 'Numeric identifier of the current send list' },
@@ -3117,6 +3717,8 @@ export const PERSONALIZATION_STRINGS = [
     { name: 'replyname', description: 'Reply-to display name configured for the current send' },
     {
         name: 'replyemailaddress',
+        mcnSince: null,
+        mcnNotes: null,
         description: 'Reply-to email address configured for the current send',
     },
     { name: 'memberid', description: 'Member ID (MID) of the sending business unit' },
@@ -3134,11 +3736,15 @@ export const PERSONALIZATION_STRINGS = [
     { name: 'double_opt_in_url', description: 'URL for double opt-in confirmation' },
     {
         name: '_replycontent',
+        mcnSince: null,
+        mcnNotes: null,
         description: 'Body content of a subscriber reply via Reply Mail Management',
     },
     { name: 'linkname', description: 'Alias or name assigned to the current tracked link' },
     {
         name: '_ImpressionRegionID',
+        mcnSince: null,
+        mcnNotes: null,
         description: 'Numeric identifier of the current impression region',
     },
     { name: '_ImpressionRegionName', description: 'Display name of the current impression region' },
@@ -3163,15 +3769,21 @@ export const PERSONALIZATION_STRINGS = [
     { name: '_ModifiedBy', description: 'User who last modified the MobileConnect contact' },
     {
         name: '_ModifiedDate',
+        mcnSince: null,
+        mcnNotes: null,
         description: 'Timestamp of the last modification to the MobileConnect contact',
     },
     { name: '_Priority', description: 'Message priority for the MobileConnect contact' },
     {
         name: '_Source',
+        mcnSince: null,
+        mcnNotes: null,
         description: 'Origin channel through which the MobileConnect contact was added',
     },
     {
         name: '_SourceObjectID',
+        mcnSince: null,
+        mcnNotes: null,
         description: 'Source object identifier for the MobileConnect contact',
     },
     { name: '_State', description: 'State from MobileConnect contact demographics' },
@@ -3181,6 +3793,8 @@ export const PERSONALIZATION_STRINGS = [
     { name: 'LINE_ADDRESS_ID', description: 'LINE user address identifier for GroupConnect' },
     {
         name: '@@ExecCtx',
+        mcnSince: null,
+        mcnNotes: null,
         description: 'Execution context indicator: returns load or post on web pages',
     },
 ];

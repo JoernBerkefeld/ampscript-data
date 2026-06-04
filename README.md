@@ -28,6 +28,9 @@ import {
     FUNCTION_CANONICAL_MAP,
     deprecatedFunctionLookup,
     isEmailExcluded,
+    isMcnSupported,
+    getMcnApiVersion,
+    getMcnNotes,
 } from 'ampscript-data';
 ```
 
@@ -50,6 +53,8 @@ for (const fn of FUNCTIONS) {
     console.log(fn.example);     // usage example (where available)
     console.log(fn.docUrl);      // URL to official Salesforce developer docs
     console.log(fn.guideUrl);    // URL to ampscript.guide reference page
+    console.log(fn.mcnSince);    // API version when MCN support was added (null = MCE only)
+    console.log(fn.mcnNotes);    // behavioral differences on MCN (null = none)
 }
 ```
 
@@ -115,6 +120,51 @@ Returns `true` if the function is not available in email send contexts:
 import { isEmailExcluded } from 'ampscript-data';
 
 isEmailExcluded('HTTPGet'); // true — not available in email
+```
+
+## Marketing Cloud Next (MCN) compatibility
+
+Each `FunctionEntry` has two MCN fields:
+
+| Field | Type | Description |
+|---|---|---|
+| `mcnSince` | `number \| null` | API version when MCN support was added (e.g. `67`); `null` means MCE only |
+| `mcnNotes` | `string \| null` | Behavioral differences on MCN vs MCE; `null` means no known differences |
+
+Three helper functions are exported for programmatic MCN checks:
+
+### `isMcnSupported`
+
+Returns `true` when the function is available on Marketing Cloud Next:
+
+```js
+import { isMcnSupported } from 'ampscript-data';
+
+isMcnSupported('Lookup');   // true
+isMcnSupported('HTTPGet');  // false
+```
+
+### `getMcnApiVersion`
+
+Returns the API version number (e.g. `67`) when MCN support was added, or `null` for MCE-only functions:
+
+```js
+import { getMcnApiVersion } from 'ampscript-data';
+
+getMcnApiVersion('Lookup');  // 67
+getMcnApiVersion('HTTPGet'); // null
+```
+
+### `getMcnNotes`
+
+Returns a string describing behavioral differences on MCN, or `null` when the function behaves identically across platforms:
+
+```js
+import { getMcnNotes } from 'ampscript-data';
+
+getMcnNotes('FormatDate');    // "In Marketing Cloud Next, this function uses ..."
+getMcnNotes('Lookup');        // "In Marketing Cloud Next, an odd number of search ..."
+getMcnNotes('ProperCase');    // null
 ```
 
 ### `AMPSCRIPT_KEYWORDS`
