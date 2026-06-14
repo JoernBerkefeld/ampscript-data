@@ -99,4 +99,13 @@ export default [
             'prefer-arrow-callback': 'warn',
         },
     },
+    {
+        // src/index.js is a data catalog: the literal "UTF-8" is the documented
+        // AMPscript charSet value, not a Node encoding identifier. Auto-fixing it to
+        // "utf8" would corrupt the completion/validation data, so the rule is disabled here.
+        files: ['src/index.js'],
+        rules: {
+            'unicorn/text-encoding-identifier-case': 'off',
+        },
+    },
 ];
