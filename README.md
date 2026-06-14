@@ -169,10 +169,16 @@ getMcnNotes('ProperCase');    // null
 
 ### `AMPSCRIPT_KEYWORDS`
 
-An array of AMPscript language keywords (`IF`, `FOR`, `SET`, etc.):
+An array of AMPscript language keyword descriptors (`if`, `for`, `set`, etc.). Each entry carries a short description and a completion snippet with `${n:placeholder}` tab stops:
 
 ```js
 import { AMPSCRIPT_KEYWORDS } from 'ampscript-data';
+
+for (const kw of AMPSCRIPT_KEYWORDS) {
+    console.log(kw.name);        // e.g. 'if'
+    console.log(kw.description); // human-readable description
+    console.log(kw.snippet);     // completion body, e.g. 'if ${1:condition} then\n\t${2}\nendif'
+}
 ```
 
 ### `PERSONALIZATION_STRINGS`

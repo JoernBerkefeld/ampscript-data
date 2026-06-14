@@ -105,7 +105,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-attach-file.html',
         guideUrl: 'https://ampscript.guide/attachfile/',
-        minArgs: 4,
+        minArgs: 2,
         maxArgs: 8,
         category: 'Content',
         description: 'Includes a file attachment in the outgoing message.',
@@ -2327,25 +2327,48 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-post2.html',
         guideUrl: 'https://ampscript.guide/httppost2/',
-        minArgs: 7,
+        minArgs: 3,
         maxArgs: INF,
         category: 'HTTP',
         description:
-            'Performs an HTTP POST with access to response headers. Response body and headers stored in output variables.',
+            'Performs an HTTP POST with access to response headers. Response body and headers are stored in output variables.',
         params: [
             { name: 'url', description: 'Request URL', type: 'string' },
             { name: 'contentType', description: 'Content-Type header', type: 'string' },
-            { name: 'payload', description: 'Request body', type: 'string' },
-            { name: 'response', description: 'Output variable for response body', type: 'string' },
+            { name: 'contentToPost', description: 'Request body', type: 'string' },
             {
-                name: 'responseHeaders',
+                name: 'exceptionOnError',
+                description:
+                    'If `true`, raise an exception when the request fails; if `false`, continue after an error',
+                type: 'boolean',
+                optional: true,
+            },
+            {
+                name: 'response',
+                description: 'Output variable for the response body',
+                type: 'string',
+                optional: true,
+            },
+            {
+                name: 'responseRowSet',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Output variable for response headers',
+                description: 'Output variable for the response headers, returned as a rowset',
                 type: 'string',
+                optional: true,
             },
-            { name: 'headerName1', description: 'First request header name', type: 'string' },
-            { name: 'headerValue1', description: 'First request header value', type: 'string' },
+            {
+                name: 'headerName1',
+                description: 'First request header name',
+                type: 'string',
+                optional: true,
+            },
+            {
+                name: 'headerValue1',
+                description: 'First request header value',
+                type: 'string',
+                optional: true,
+            },
             {
                 name: 'headerNameN',
                 description: 'Additional request header name',
@@ -2361,10 +2384,10 @@ export const FUNCTIONS = [
         ],
         returnType: 'number',
         returnDescription: 'The HTTP status code of the POST request.',
-        repeat: [{ startIndex: 5, groupSize: 2, minGroups: 1 }],
-        syntax: 'HTTPPost2(url, contentType, payload, @response, @responseHeaders, headerName1, headerValue1[, headerNameN, headerValueN, ...])',
+        repeat: [{ startIndex: 6, groupSize: 2, minGroups: 0 }],
+        syntax: 'HTTPPost2(url, contentType, contentToPost[, exceptionOnError, @response, @responseRowSet, headerName1, headerValue1, headerNameN, headerValueN, ...])',
         example:
-            "%%=HTTPPost2('https://example.com/api', 'application/json', @payload, @response, @responseHeaders)=%%",
+            "%%=HTTPPost2('https://example.com/api', 'application/json', @payload, true, @response, @responseRows)=%%",
     },
     {
         name: 'HTTPPostWithRetry',
@@ -5069,24 +5092,52 @@ export const deprecatedFunctionLookup = new Map(
 
 // ── Keywords ─────────────────────────────────────────────────────────────────
 
+/**
+ * AMPscript language keyword with completion metadata.
+ *  - `name`         the keyword as written in source
+ *  - `description`  short human-readable explanation
+ *  - `snippet`      completion body with `${n:placeholder}` tab stops
+ *
+ *  @type {{name: string, description: string, snippet: string}[]}
+ */
 export const AMPSCRIPT_KEYWORDS = [
-    'var',
-    'set',
-    'if',
-    'then',
-    'elseif',
-    'else',
-    'endif',
-    'for',
-    'to',
-    'downto',
-    'do',
-    'next',
-    'and',
-    'or',
-    'not',
-    'true',
-    'false',
+    {
+        name: 'var',
+        description: 'Declares one or more variables',
+        snippet: 'var @${1:variableName}',
+    },
+    {
+        name: 'set',
+        description: 'Assigns a value to a variable',
+        snippet: 'set @${1:variableName} = ${2:value}',
+    },
+    {
+        name: 'if',
+        description: 'Begins a conditional block',
+        snippet: 'if ${1:condition} then\n\t${2}\nendif',
+    },
+    { name: 'then', description: 'Follows an if/elseif condition', snippet: 'then' },
+    {
+        name: 'elseif',
+        description: 'Additional condition in an if block',
+        snippet: 'elseif ${1:condition} then',
+    },
+    { name: 'else', description: 'Fallback branch in an if block', snippet: 'else' },
+    { name: 'endif', description: 'Closes an if block', snippet: 'endif' },
+    {
+        name: 'for',
+        description: 'Begins a counting loop',
+        snippet: 'for @${1:i} = ${2:1} to ${3:rowCount} do\n\t${4}\nnext @${1:i}',
+    },
+    { name: 'to', description: 'Ascending direction in a for loop', snippet: 'to' },
+    { name: 'downto', description: 'Descending direction in a for loop', snippet: 'downto' },
+    { name: 'do', description: 'Marks the start of a loop body', snippet: 'do' },
+    { name: 'next', description: 'Ends a for loop iteration', snippet: 'next' },
+    { name: 'and', description: 'Logical AND operator', snippet: 'and' },
+    { name: 'or', description: 'Logical OR operator', snippet: 'or' },
+    { name: 'not', description: 'Logical NOT operator', snippet: 'not' },
+    { name: 'true', description: 'Boolean true constant', snippet: 'true' },
+    { name: 'false', description: 'Boolean false constant', snippet: 'false' },
 ];
 
 // ── Personalization strings ──────────────────────────────────────────────────
