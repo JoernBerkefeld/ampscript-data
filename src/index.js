@@ -795,7 +795,7 @@ export const FUNCTIONS = [
         returnType: 'string',
         returnDescription: 'The concatenation of all supplied values as a single string.',
         repeat: [{ startIndex: 0, groupSize: 1, minGroups: 2 }],
-        syntax: 'Concat(string1, string2[, ...])',
+        syntax: 'Concat(string1, string2[, stringN, ...])',
         example: "%%=Concat('Hello', ' ', 'World')=%%",
     },
     {
