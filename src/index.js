@@ -744,7 +744,11 @@ export const FUNCTIONS = [
         description:
             'Generates a secure, encrypted URL to a CloudPages landing page, optionally passing name-value parameters.',
         params: [
-            { name: 'pageId', description: 'CloudPages page ID (number or string)' },
+            {
+                name: 'pageId',
+                description: 'CloudPages page ID (number or string)',
+                type: 'string|number',
+            },
             {
                 name: 'paramName1',
                 description: 'Query parameter name',
@@ -2681,7 +2685,7 @@ export const FUNCTIONS = [
         category: 'Marketing Cloud API',
         description: 'Calls the SOAP API Create method on the given API object.',
         params: [
-            { name: 'apiObject', description: 'API object to create' },
+            { name: 'apiObject', description: 'API object to create', type: 'object' },
             {
                 name: 'statusMessage',
                 mcnSince: null,
@@ -2701,6 +2705,7 @@ export const FUNCTIONS = [
                 mcnSince: null,
                 mcnNotes: null,
                 description: 'Optional CreateOptions API object',
+                type: 'object',
                 optional: true,
             },
         ],
@@ -2720,7 +2725,7 @@ export const FUNCTIONS = [
         category: 'Marketing Cloud API',
         description: 'Calls the SOAP API Delete method on the given API object.',
         params: [
-            { name: 'apiObject', description: 'API object to delete' },
+            { name: 'apiObject', description: 'API object to delete', type: 'object' },
             {
                 name: 'statusMessage',
                 mcnSince: null,
@@ -2740,6 +2745,7 @@ export const FUNCTIONS = [
                 mcnSince: null,
                 mcnNotes: null,
                 description: 'Optional DeleteOptions API object',
+                type: 'object',
                 optional: true,
             },
         ],
@@ -2760,7 +2766,7 @@ export const FUNCTIONS = [
         description:
             'Calls the SOAP API Execute method on the given API object and returns the API status code.',
         params: [
-            { name: 'apiObject', description: 'The API object to execute' },
+            { name: 'apiObject', description: 'The API object to execute', type: 'object' },
             {
                 name: 'statusMessage',
                 mcnSince: null,
@@ -2793,7 +2799,7 @@ export const FUNCTIONS = [
         category: 'Marketing Cloud API',
         description: 'Calls the SOAP API Perform method on the given API object.',
         params: [
-            { name: 'apiObject', description: 'API object to perform on' },
+            { name: 'apiObject', description: 'API object to perform on', type: 'object' },
             {
                 name: 'actionToPerform',
                 description: 'Action to perform; valid values vary by object type',
@@ -2824,7 +2830,11 @@ export const FUNCTIONS = [
         category: 'Marketing Cloud API',
         description: 'Calls the SOAP API Retrieve method and returns a rowset of results.',
         params: [
-            { name: 'apiObject', description: 'API object defining the retrieve filter' },
+            {
+                name: 'apiObject',
+                description: 'API object defining the retrieve filter',
+                type: 'object',
+            },
             {
                 name: 'statusMessage',
                 mcnSince: null,
@@ -2858,7 +2868,7 @@ export const FUNCTIONS = [
         category: 'Marketing Cloud API',
         description: 'Calls the SOAP API Update method on the given API object.',
         params: [
-            { name: 'apiObject', description: 'API object to update' },
+            { name: 'apiObject', description: 'API object to update', type: 'object' },
             {
                 name: 'statusMessage',
                 mcnSince: null,
@@ -2880,6 +2890,7 @@ export const FUNCTIONS = [
                 mcnSince: null,
                 mcnNotes: null,
                 description: 'Optional UpdateOptions API object',
+                type: 'object',
                 optional: true,
             },
         ],
@@ -3967,7 +3978,7 @@ export const FUNCTIONS = [
         category: 'Data Extension',
         description: 'Returns a specific row from a rowset by its 1-based index.',
         params: [
-            { name: 'rowset', description: 'Rowset to access' },
+            { name: 'rowset', description: 'Rowset to access', type: 'rowset' },
             { name: 'rowIndex', description: '1-based row index', type: 'number' },
         ],
         returnType: 'row',
@@ -3985,7 +3996,7 @@ export const FUNCTIONS = [
         maxArgs: 1,
         category: 'Data Extension',
         description: 'Returns the number of rows in a rowset.',
-        params: [{ name: 'rowset', description: 'Rowset to count' }],
+        params: [{ name: 'rowset', description: 'Rowset to count', type: 'rowset' }],
         returnType: 'number',
         returnDescription: 'The number of rows in the rowset.',
         syntax: 'RowCount(rowset)',
@@ -4002,7 +4013,7 @@ export const FUNCTIONS = [
         category: 'Marketing Cloud API',
         description: 'Sets a property value on a Marketing Cloud API object.',
         params: [
-            { name: 'apiObject', description: 'API object reference' },
+            { name: 'apiObject', description: 'API object reference', type: 'object' },
             {
                 name: 'propertyName',
                 description: 'The name of the property to assign a value to',
