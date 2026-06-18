@@ -3938,7 +3938,7 @@ export const FUNCTIONS = [
                 name: 'queryFieldOperator1',
                 description: 'The comparison operator to use for the filter',
                 type: 'string',
-                enum: ['=', '!=', '<', '<=', '>', '>=', 'like'],
+                enum: ['=', '!=', '<', '<=', '>', '>='],
             },
             { name: 'queryFieldValue1', description: 'The value to filter on' },
             {
@@ -3951,7 +3951,7 @@ export const FUNCTIONS = [
                 name: 'queryFieldOperatorN',
                 description: 'Additional comparison operator',
                 type: 'string',
-                enum: ['=', '!=', '<', '<=', '>', '>=', 'like'],
+                enum: ['=', '!=', '<', '<=', '>', '>='],
                 optional: true,
             },
             {
