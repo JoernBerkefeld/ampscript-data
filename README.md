@@ -55,6 +55,8 @@ for (const fn of FUNCTIONS) {
     console.log(fn.guideUrl);    // URL to ampscript.guide reference page
     console.log(fn.mcnSince);    // API version when MCN support was added (null = MCE only)
     console.log(fn.mcnNotes);    // behavioral differences on MCN (null = none)
+    console.log(fn.handlebarsEquivalent); // MCN Handlebars helper name, or null when none exists
+    console.log(fn.mcnHandlebarsGap);     // true when MCN-supported but no Handlebars helper yet
 }
 ```
 
@@ -130,6 +132,10 @@ Each `FunctionEntry` has two MCN fields:
 |---|---|---|
 | `mcnSince` | `number \| null` | API version when MCN support was added (e.g. `67`); `null` means MCE only |
 | `mcnNotes` | `string \| null` | Behavioral differences on MCN vs MCE; `null` means no known differences |
+| `handlebarsEquivalent` | `string \| null` | Name of the MCN Handlebars helper that replaces this function (e.g. `'add'`); `null` when no direct helper exists |
+| `mcnHandlebarsGap` | `boolean` | `true` when the function is documented as MCN-supported but currently has no working Handlebars helper (runtime gap) |
+
+`handlebarsEquivalent` and `mcnHandlebarsGap` drive AMPscript ↔ Handlebars conversion tooling. When `mcnHandlebarsGap` is `true`, `handlebarsEquivalent` is always `null` — the function cannot yet be expressed in MCN Handlebars and needs a manual rewrite.
 
 Three helper functions are exported for programmatic MCN checks:
 
