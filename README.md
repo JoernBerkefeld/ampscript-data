@@ -20,6 +20,7 @@ npm install ampscript-data
 import {
     FUNCTIONS,
     AMPSCRIPT_KEYWORDS,
+    AMPSCRIPT_GLOBALS,
     PERSONALIZATION_STRINGS,
     DEPRECATED_FUNCTIONS,
     functionLookup,
@@ -187,9 +188,22 @@ for (const kw of AMPSCRIPT_KEYWORDS) {
 }
 ```
 
+### `AMPSCRIPT_GLOBALS`
+
+An array of read-only AMPscript language globals that are not subscriber personalization attributes:
+
+```js
+import { AMPSCRIPT_GLOBALS } from 'ampscript-data';
+
+for (const global of AMPSCRIPT_GLOBALS) {
+    console.log(global.name);        // e.g. '@@ExecCtx'
+    console.log(global.description); // human-readable description
+}
+```
+
 ### `PERSONALIZATION_STRINGS`
 
-An array of AMPscript personalization string descriptors (subscriber attributes, system variables, etc.):
+An array of AMPscript system personalization string descriptors, including subscriber attributes and message-context values:
 
 ```js
 import { PERSONALIZATION_STRINGS } from 'ampscript-data';
