@@ -5186,18 +5186,26 @@ export const FUNCTIONS = [
     },
 ];
 
-/** Case-insensitive lookup: lowercase name -> function entry */
+/**
+ * Case-insensitive lookup: lowercase name -> function entry
+ */
 export const functionLookup = new Map(FUNCTIONS.map((f) => [f.name.toLowerCase(), f]));
 
-/** Set of lowercase function names for quick membership checks */
+/**
+ * Set of lowercase function names for quick membership checks
+ */
 export const functionNames = new Set(FUNCTIONS.map((f) => f.name.toLowerCase()));
 
 // ── Canonical casing map ─────────────────────────────────────────────────────
 
-/** Ordered list of canonical PascalCase function names */
+/**
+ * Ordered list of canonical PascalCase function names
+ */
 export const CANONICAL_FUNCTIONS = FUNCTIONS.map((f) => f.name);
 
-/** Map from lowercase -> canonical PascalCase name */
+/**
+ * Map from lowercase -> canonical PascalCase name
+ */
 export const FUNCTION_CANONICAL_MAP = new Map(
     CANONICAL_FUNCTIONS.map((name) => [name.toLowerCase(), name]),
 );
@@ -5268,7 +5276,9 @@ export function getMcnNotes(name) {
 // lookup below is derived from those flags for consumers that need a quick
 // name -> entry map of deprecated functions.
 
-/** Case-insensitive lookup of deprecated functions: lowercase name -> function entry */
+/**
+ * Case-insensitive lookup of deprecated functions: lowercase name -> function entry
+ */
 export const deprecatedFunctionLookup = new Map(
     FUNCTIONS.filter((f) => f.deprecated).map((f) => [f.name.toLowerCase(), f]),
 );
