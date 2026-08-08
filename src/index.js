@@ -5,9 +5,53 @@
  *   - prettier-plugin-sfmc (casing normalization)
  *   - eslint-plugin-sfmc  (unknown-function detection, arity validation)
  *   - vscode-sfmc-language (completions, hover, diagnostics)
+ *
+ * Optional verification-state fields on a FUNCTIONS entry:
+ *   - isConfirmed?: boolean — true when the entry's behavior was verified against the
+ *       live AMPscript engine. Absent means "never checked".
+ *   - verificationBlocked?: boolean — true when a runtime verification was ATTEMPTED but
+ *       could not complete for a concrete technical/environmental reason (no working
+ *       invocation, missing auth/session context, absent test data). This is a THIRD state,
+ *       distinct from both "verified" (isConfirmed: true) and "never checked" (neither flag
+ *       set). When true, isConfirmed MUST be explicitly false and verificationBlockedReason
+ *       MUST name the blocker category. The concrete, human-readable detail (error text,
+ *       what was tried) belongs in officialDocsNote, not in the enum value.
+ *   - verificationBlockedReason?: string — REQUIRED whenever verificationBlocked is true;
+ *       one of the VERIFICATION_BLOCKED_REASONS enum values. Never set on its own.
+ *   - differsFromOfficialDocs?: boolean — true when the verified runtime behavior contradicts
+ *       the official Salesforce reference. Requires officialDocsNote to spell out the
+ *       difference.
+ *   - officialDocsNote?: string — human-readable evidence: what the official docs claim, what
+ *       the runtime actually did, and what was tried.
  */
 
 const INF = Infinity;
+
+// ── Verification-blocked reasons ─────────────────────────────────────────────
+// Fixed enum of concrete technical/environmental reasons why a runtime verification
+// was ATTEMPTED but could not complete. Set on an entry as `verificationBlockedReason`
+// together with `verificationBlocked: true` and `isConfirmed: false`. The specific
+// evidence (error text, invocation shapes tried) belongs in `officialDocsNote`, not here.
+//
+//   - no-working-invocation  probing found no invocation shape that works; document
+//                         exactly what was tried in officialDocsNote.
+//   - needs-auth-context  requires an authenticated / session / subscriber state that
+//                         the probe context (e.g. a plain CloudPage) cannot supply
+//   - no-test-data        requires pre-existing data or an integration that is not
+//                         provisioned on the BU
+//   - classic-only-no-assets  only works with classic (legacy) assets and none exist
+//                         on the BU to test against
+//   - destructive-unsafe  cannot be exercised without unacceptable side effects
+/**
+@type {readonly string[]}
+ */
+export const VERIFICATION_BLOCKED_REASONS = Object.freeze([
+    'no-working-invocation',
+    'needs-auth-context',
+    'no-test-data',
+    'classic-only-no-assets',
+    'destructive-unsafe',
+]);
 
 // ── Function catalog ─────────────────────────────────────────────────────────
 
@@ -25,7 +69,16 @@ const INF = Infinity;
  * Param naming convention for variadic functions: the first required occurrence of a
  * group member is `<base>1` and the repeating occurrence is `<base>N` (with `optional`).
  *
-  @type {{name: string, mcnSince: number | null, mcnNotes: string | null, handlebarsEquivalent?: string | null, mcnHandlebarsGap?: boolean, docUrl?: string, guideUrl?: string, minArgs: number, maxArgs: number, category: string, description: string, params: {name: string, description: string, type?: string, enum?: (string | number)[], optional?: boolean, default?: string | number | boolean}[], returnType?: string, returnDescription?: string, returnEnum?: (string | number)[], syntax?: string, example?: string, repeat?: {startIndex: number, groupSize: number, minGroups: number, countParam?: string}[], deprecated?: boolean, deprecatedReplacement?: string, deprecatedReason?: string}[]} */
+ * `validArities` (OPTIONAL): exact set of permitted argument counts for a DISCONTINUOUS
+ * OVERLOAD, where a contiguous `minArgs..maxArgs` range would wrongly accept intermediate
+ * counts. When present, a call is valid only when its argument count is within
+ * [minArgs, maxArgs] AND a member of this array. The array MUST be strictly ascending
+ * integers, and both `minArgs` and `maxArgs` MUST be members (so `validArities[0] === minArgs`
+ * and the last element `=== maxArgs`). Example shape: a function that accepts exactly 1 or 6
+ * arguments (2-5 fail) would set `minArgs: 1, maxArgs: 6, validArities: [1, 6]`.
+ * Absent → behavior is a pure contiguous range. No AMPscript function currently needs it.
+ *
+  @type {{name: string, mcnSince: number | null, mcnNotes: string | null, handlebarsEquivalent?: string | null, mcnHandlebarsGap?: boolean, docUrl?: string, guideUrl?: string, minArgs: number, maxArgs: number, validArities?: number[], category: string, description: string, params: {name: string, description: string, type?: string, enum?: (string | number)[], optional?: boolean, default?: string | number | boolean}[], returnType?: string, returnDescription?: string, returnEnum?: (string | number)[], syntax?: string, example?: string, repeat?: {startIndex: number, groupSize: number, minGroups: number, countParam?: string}[], deprecated?: boolean, deprecatedReplacement?: string, deprecatedReason?: string, isConfirmed?: boolean, verificationBlocked?: boolean, verificationBlockedReason?: string, differsFromOfficialDocs?: boolean, officialDocsNote?: string}[]} */
 export const FUNCTIONS = [
     {
         name: 'Add',
@@ -39,13 +92,15 @@ export const FUNCTIONS = [
         category: 'Math',
         description: 'Computes the sum of two numeric values.',
         params: [
-            { name: 'number1', description: 'First operand', type: 'number' },
-            { name: 'number2', description: 'Second operand', type: 'number' },
+            { name: 'number1', description: 'First operand', type: 'string|number' },
+            { name: 'number2', description: 'Second operand', type: 'string|number' },
         ],
         returnType: 'number',
         returnDescription: 'The numeric sum of the two operands.',
         syntax: 'Add(number1, number2)',
         example: '%%=Add(15, 27)=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'AddMscrmListMember',
@@ -811,18 +866,30 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-concat.html',
         guideUrl: 'https://ampscript.guide/concat/',
-        minArgs: 2,
+        minArgs: 1,
         maxArgs: INF,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'String',
         description: 'Concatenates two or more string values.',
         params: [
-            { name: 'string1', description: 'First string', type: 'string' },
-            { name: 'string2', description: 'Second string', type: 'string' },
-            { name: 'stringN', description: 'Additional string', type: 'string', optional: true },
+            { name: 'string1', description: 'First string', type: 'string|number|date' },
+            {
+                name: 'string2',
+                description: 'Second string',
+                type: 'string|number|date',
+                optional: true,
+            },
+            {
+                name: 'stringN',
+                description: 'Additional string',
+                type: 'string|number|date',
+                optional: true,
+            },
         ],
         returnType: 'string',
         returnDescription: 'The concatenation of all supplied values as a single string.',
-        repeat: [{ startIndex: 0, groupSize: 1, minGroups: 2 }],
+        repeat: [{ startIndex: 0, groupSize: 1, minGroups: 1 }],
         syntax: 'Concat(string1, string2[, stringN, ...])',
         example: "%%=Concat('Hello', ' ', 'World')=%%",
     },
@@ -1675,13 +1742,16 @@ export const FUNCTIONS = [
         category: 'Math',
         description: 'Divides the first number by the second.',
         params: [
-            { name: 'dividend', description: 'Number to divide', type: 'number' },
-            { name: 'divisor', description: 'Number to divide by', type: 'number' },
+            { name: 'dividend', description: 'Number to divide', type: 'string|number' },
+            { name: 'divisor', description: 'Number to divide by', type: 'string|number' },
         ],
         returnType: 'number',
-        returnDescription: 'The quotient of the two operands.',
+        returnDescription:
+            'The quotient of the two operands. A zero divisor does not raise an error: a non-zero dividend yields the infinity symbol and a zero dividend yields NaN, so guard against a zero divisor before rendering the result.',
         syntax: 'Divide(dividend, divisor)',
         example: '%%=Divide(100, 4)=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'Domain',
@@ -3087,11 +3157,20 @@ export const FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/length/',
         minArgs: 1,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'String',
         description: 'Returns the number of characters in a string.',
-        params: [{ name: 'sourceString', description: 'String to measure', type: 'string' }],
+        params: [
+            {
+                name: 'sourceString',
+                description: 'String to measure',
+                type: 'string|number|date',
+            },
+        ],
         returnType: 'number',
-        returnDescription: 'The number of characters in the string.',
+        returnDescription:
+            'The number of UTF-16 code units in the string, so characters outside the Basic Multilingual Plane (such as emoji) count as 2.',
         syntax: 'Length(sourceString)',
         example: "%%=Length('Hello')=%%",
     },
@@ -3407,9 +3486,17 @@ export const FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/lowercase/',
         minArgs: 1,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'String',
         description: 'Converts a string to all lowercase characters.',
-        params: [{ name: 'sourceString', description: 'String to convert', type: 'string' }],
+        params: [
+            {
+                name: 'sourceString',
+                description: 'String to convert',
+                type: 'string|number|date',
+            },
+        ],
         returnType: 'string',
         returnDescription: 'The string converted to lower case.',
         syntax: 'Lowercase(sourceString)',
@@ -3526,13 +3613,16 @@ export const FUNCTIONS = [
         description:
             'Returns the remainder after dividing the first number by the second (modulo).',
         params: [
-            { name: 'dividend', description: 'Number to divide', type: 'number' },
-            { name: 'divisor', description: 'Number to divide by', type: 'number' },
+            { name: 'dividend', description: 'Number to divide', type: 'string|number' },
+            { name: 'divisor', description: 'Number to divide by', type: 'string|number' },
         ],
         returnType: 'number',
-        returnDescription: 'The remainder after dividing the first number by the second.',
+        returnDescription:
+            'The remainder after dividing the first number by the second. The result takes the sign of the dividend, and a divisor of 0 yields NaN instead of raising an error.',
         syntax: 'Mod(dividend, divisor)',
         example: '%%=Mod(10, 3)=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'Msg',
@@ -3570,13 +3660,15 @@ export const FUNCTIONS = [
         category: 'Math',
         description: 'Computes the product of two numeric values.',
         params: [
-            { name: 'number1', description: 'First operand', type: 'number' },
-            { name: 'number2', description: 'Second operand', type: 'number' },
+            { name: 'number1', description: 'First operand', type: 'string|number' },
+            { name: 'number2', description: 'Second operand', type: 'string|number' },
         ],
         returnType: 'number',
         returnDescription: 'The product of the two operands.',
         syntax: 'Multiply(number1, number2)',
         example: '%%=Multiply(5, 3)=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'Noun',
@@ -3783,15 +3875,20 @@ export const FUNCTIONS = [
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
-        description: 'Returns a random integer between the two specified values (inclusive).',
+        description:
+            'Returns a random integer between the two specified values (inclusive). Both bounds must be whole numbers; a decimal bound aborts the page. The bounds may be supplied in either order.',
         params: [
-            { name: 'min', description: 'Lower bound (inclusive)', type: 'number' },
-            { name: 'max', description: 'Upper bound (inclusive)', type: 'number' },
+            { name: 'min', description: 'Lower bound (inclusive)', type: 'string|number' },
+            { name: 'max', description: 'Upper bound (inclusive)', type: 'string|number' },
         ],
         returnType: 'number',
         returnDescription: 'A random whole number within the supplied range.',
         syntax: 'Random(min, max)',
         example: '%%=Random(1, 100)=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The official reference states the bounds may be decimal numbers. On the child QA BU (MID 518005426) every decimal bound aborted the CloudPage with HTTP 422 — Random(1.2,1.8), Random(1,2.5), Random(1.0,3.0) and the quoted form Random("1.5","3.5") all failed, while the equivalent whole-number and numeric-string calls returned values normally. The same decimal calls also aborted on the parent BU (MID 7281698), so this is not a child-BU limitation. Only whole-number bounds are usable at runtime.',
     },
     {
         name: 'RatingStars',
@@ -4397,13 +4494,15 @@ export const FUNCTIONS = [
         category: 'Math',
         description: 'Computes the difference between two numeric values.',
         params: [
-            { name: 'minuend', description: 'Value to subtract from', type: 'number' },
-            { name: 'subtrahend', description: 'Value to subtract', type: 'number' },
+            { name: 'minuend', description: 'Value to subtract from', type: 'string|number' },
+            { name: 'subtrahend', description: 'Value to subtract', type: 'string|number' },
         ],
         returnType: 'number',
         returnDescription: 'The difference of the two operands.',
         syntax: 'Subtract(minuend, subtrahend)',
         example: '%%=Subtract(50, 15)=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'SystemDateToLocalDate',
@@ -4749,9 +4848,18 @@ export const FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/uppercase/',
         minArgs: 1,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'String',
-        description: 'Converts a string to all uppercase characters.',
-        params: [{ name: 'sourceString', description: 'String to convert', type: 'string' }],
+        description:
+            'Converts a string to all uppercase characters. The German sharp s remains unchanged rather than expanding to SS.',
+        params: [
+            {
+                name: 'sourceString',
+                description: 'String to convert',
+                type: 'string|number|date',
+            },
+        ],
         returnType: 'string',
         returnDescription: 'The string converted to upper case.',
         syntax: 'Uppercase(sourceString)',

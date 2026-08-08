@@ -32,6 +32,7 @@ import {
     isMcnSupported,
     getMcnApiVersion,
     getMcnNotes,
+    VERIFICATION_BLOCKED_REASONS,
 } from 'ampscript-data';
 ```
 
@@ -60,6 +61,50 @@ for (const fn of FUNCTIONS) {
     console.log(fn.mcnHandlebarsGap);     // true when MCN-supported but no Handlebars helper yet
 }
 ```
+
+#### Optional: `validArities`
+
+Most functions accept any argument count in the contiguous `minArgs..maxArgs` range. A function with a **discontinuous overload** — where intermediate counts are invalid — additionally sets `validArities`, the exact set of permitted argument counts:
+
+```js
+import { functionLookup } from 'ampscript-data';
+
+const entry = functionLookup.get('somefunction');
+if (entry.validArities) {
+    // e.g. minArgs: 1, maxArgs: 6, validArities: [1, 6] — 2-5 arguments are invalid
+    const isValidCall = entry.validArities.includes(argumentCount);
+}
+```
+
+The array is always strictly ascending integers and includes both `minArgs` (first element) and `maxArgs` (last element). When absent, the arity range is purely contiguous — which is currently the case for every AMPscript function.
+
+#### Optional: verification state
+
+| Field | Type | Description |
+|---|---|---|
+| `isConfirmed` | `boolean` | `true` when the behavior was verified against the live AMPscript engine; absent means never checked |
+| `verificationBlocked` | `boolean` | `true` when verification was attempted but could not complete; requires `isConfirmed: false` and a `verificationBlockedReason` |
+| `verificationBlockedReason` | `string` | One of `VERIFICATION_BLOCKED_REASONS`; only valid together with `verificationBlocked: true` |
+| `differsFromOfficialDocs` | `boolean` | `true` when the verified runtime behavior contradicts the official Salesforce reference; requires `officialDocsNote` |
+| `officialDocsNote` | `string` | What the official docs claim, what the runtime actually did, and what was tried |
+
+### `VERIFICATION_BLOCKED_REASONS`
+
+A frozen array of the blocker categories that may be used as `verificationBlockedReason`:
+
+```js
+import { VERIFICATION_BLOCKED_REASONS } from 'ampscript-data';
+// ['no-working-invocation', 'needs-auth-context', 'no-test-data',
+//  'classic-only-no-assets', 'destructive-unsafe']
+```
+
+| Value | Meaning |
+|---|---|
+| `no-working-invocation` | Probing found no invocation shape that works |
+| `needs-auth-context` | Requires an authenticated / session / subscriber state the probe context cannot supply |
+| `no-test-data` | Requires pre-existing data or an integration not provisioned on the BU |
+| `classic-only-no-assets` | Only works with classic (legacy) assets and none exist to test against |
+| `destructive-unsafe` | Cannot be exercised without unacceptable side effects |
 
 ### `functionLookup`
 
