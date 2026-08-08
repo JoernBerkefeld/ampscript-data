@@ -55,12 +55,24 @@ for (const fn of FUNCTIONS) {
     console.log(fn.example);     // usage example (where available)
     console.log(fn.docUrl);      // URL to official Salesforce developer docs
     console.log(fn.guideUrl);    // URL to ampscript.guide reference page
+    console.log(fn.sfmcGuideUrl); // URL to our own sfmc.guide reference page (only when published)
     console.log(fn.mcnSince);    // API version when MCN support was added (null = MCE only)
     console.log(fn.mcnNotes);    // behavioral differences on MCN (null = none)
     console.log(fn.handlebarsEquivalent); // MCN Handlebars helper name, or null when none exists
     console.log(fn.mcnHandlebarsGap);     // true when MCN-supported but no Handlebars helper yet
 }
 ```
+
+#### Optional: `sfmcGuideUrl`
+
+`docUrl` and `guideUrl` point at third-party documentation and are set for (almost) every function. `sfmcGuideUrl` is different: it links to our own published reference page and only exists once that page has been written, which happens at the end of a runtime verification sweep. It is therefore a reliable marker for "this function has a proven, self-hosted reference page":
+
+```js
+const entry = functionLookup.get('add');
+entry.sfmcGuideUrl; // 'https://sfmc.guide/engagement/ampscript/functions/add/'
+```
+
+The URL is always `https://sfmc.guide/engagement/ampscript/functions/<lowercase-name>/`, and an entry carrying it is always `isConfirmed: true`.
 
 #### Optional: `validArities`
 

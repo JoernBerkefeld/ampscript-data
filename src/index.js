@@ -78,7 +78,14 @@ export const VERIFICATION_BLOCKED_REASONS = Object.freeze([
  * arguments (2-5 fail) would set `minArgs: 1, maxArgs: 6, validArities: [1, 6]`.
  * Absent → behavior is a pure contiguous range. No AMPscript function currently needs it.
  *
-  @type {{name: string, mcnSince: number | null, mcnNotes: string | null, handlebarsEquivalent?: string | null, mcnHandlebarsGap?: boolean, docUrl?: string, guideUrl?: string, minArgs: number, maxArgs: number, validArities?: number[], category: string, description: string, params: {name: string, description: string, type?: string, enum?: (string | number)[], optional?: boolean, default?: string | number | boolean}[], returnType?: string, returnDescription?: string, returnEnum?: (string | number)[], syntax?: string, example?: string, repeat?: {startIndex: number, groupSize: number, minGroups: number, countParam?: string}[], deprecated?: boolean, deprecatedReplacement?: string, deprecatedReason?: string, isConfirmed?: boolean, verificationBlocked?: boolean, verificationBlockedReason?: string, differsFromOfficialDocs?: boolean, officialDocsNote?: string}[]} */
+ * `sfmcGuideUrl` (OPTIONAL): absolute URL of our own published reference page,
+ * `https://sfmc.guide/engagement/ampscript/functions/<lowercase-name>/`. Present ONLY when
+ * that page actually exists — it is written by the verification skills at step 4j, together
+ * with the page itself, and therefore always accompanies `isConfirmed: true`. Unlike `docUrl`
+ * (Salesforce) and `guideUrl` (ampscript.guide), this one points at content we own and have
+ * runtime-proven. Kept in sync by a cross-package test in `tests/cross-package.test.mjs`.
+ *
+  @type {{name: string, mcnSince: number | null, mcnNotes: string | null, handlebarsEquivalent?: string | null, mcnHandlebarsGap?: boolean, docUrl?: string, guideUrl?: string, sfmcGuideUrl?: string, minArgs: number, maxArgs: number, validArities?: number[], category: string, description: string, params: {name: string, description: string, type?: string, enum?: (string | number)[], optional?: boolean, default?: string | number | boolean}[], returnType?: string, returnDescription?: string, returnEnum?: (string | number)[], syntax?: string, example?: string, repeat?: {startIndex: number, groupSize: number, minGroups: number, countParam?: string}[], deprecated?: boolean, deprecatedReplacement?: string, deprecatedReason?: string, isConfirmed?: boolean, verificationBlocked?: boolean, verificationBlockedReason?: string, differsFromOfficialDocs?: boolean, officialDocsNote?: string}[]} */
 export const FUNCTIONS = [
     {
         name: 'Add',
@@ -87,6 +94,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-add.html',
         guideUrl: 'https://ampscript.guide/add/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/add/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -866,6 +874,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-concat.html',
         guideUrl: 'https://ampscript.guide/concat/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/concat/',
         minArgs: 1,
         maxArgs: INF,
         isConfirmed: true,
@@ -1737,6 +1746,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-divide.html',
         guideUrl: 'https://ampscript.guide/divide/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/divide/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -3155,6 +3165,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-length.html',
         guideUrl: 'https://ampscript.guide/length/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/length/',
         minArgs: 1,
         maxArgs: 1,
         isConfirmed: true,
@@ -3484,6 +3495,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-lowercase.html',
         guideUrl: 'https://ampscript.guide/lowercase/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lowercase/',
         minArgs: 1,
         maxArgs: 1,
         isConfirmed: true,
@@ -3607,6 +3619,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-mod.html',
         guideUrl: 'https://ampscript.guide/mod/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/mod/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -3655,6 +3668,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-multiply.html',
         guideUrl: 'https://ampscript.guide/multiply/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/multiply/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -3872,6 +3886,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-random.html',
         guideUrl: 'https://ampscript.guide/random/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/random/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -4489,6 +4504,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-subtract.html',
         guideUrl: 'https://ampscript.guide/subtract/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/subtract/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Math',
@@ -4846,6 +4862,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-uppercase.html',
         guideUrl: 'https://ampscript.guide/uppercase/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/uppercase/',
         minArgs: 1,
         maxArgs: 1,
         isConfirmed: true,
