@@ -299,10 +299,18 @@ export const FUNCTIONS = [
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
-        description: 'Returns the notification email address of the authenticated employee.',
+        description:
+            'Returns the notification email address of the Marketing Cloud user tied to the current context. On a public CloudPage, where nobody is signed in, it still returns a non-empty address rather than an empty value, so it cannot be used to tell an authenticated visitor apart from an anonymous one. It is a separate value from AuthenticatedEmployeeUserName() — neither can be derived from the other.',
         params: [],
         returnType: 'string',
-        returnDescription: 'The notification email address of the authenticated employee.',
+        returnDescription:
+            'The notification address as a string, usable directly in Concat and in comparisons. On the business unit tested it was a real email address on a registered domain, and it was non-empty even without a signed-in visitor.',
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Proven on the child BU MCDEV_Training_QA (MID 518005426); the parent BU was not needed. The official reference scopes the function to microsites that use sender authenticated redirection and explicitly says it is not for use with CloudPages. At runtime the opposite happened: an anonymous GET of a public CloudPage rendered at HTTP 200 and the call returned a well-formed, non-empty notification email address — Empty() answered false, Length() reported 29 characters and IsEmailAddress() accepted it. The value behaved as an ordinary string when used inline, nested inside Concat and compared against the empty string. The literal address is redacted here because it identifies an account user; only its shape is described.',
+        sfmcGuideUrl:
+            'https://sfmc.guide/engagement/ampscript/functions/authenticatedemployeenotificationaddress/',
         syntax: 'AuthenticatedEmployeeNotificationAddress()',
         example: '%%=AuthenticatedEmployeeNotificationAddress()=%%',
     },
@@ -316,10 +324,16 @@ export const FUNCTIONS = [
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
-        description: 'Returns the username of the authenticated employee.',
+        description:
+            'Returns the login username of the Marketing Cloud user tied to the current context. On a public CloudPage, where nobody is signed in, it still returns a non-empty username rather than an empty value, so it cannot be used to tell an authenticated visitor apart from an anonymous one.',
         params: [],
         returnType: 'string',
-        returnDescription: 'The user name of the authenticated employee.',
+        returnDescription:
+            'The username as a string, usable directly in Concat and in comparisons. On the business unit tested it was shaped like an email address and was non-empty even without a signed-in visitor.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl:
+            'https://sfmc.guide/engagement/ampscript/functions/authenticatedemployeeusername/',
         syntax: 'AuthenticatedEmployeeUserName()',
         example: '%%=AuthenticatedEmployeeUserName()=%%',
     },
@@ -333,10 +347,16 @@ export const FUNCTIONS = [
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
-        description: 'Returns the enterprise ID (top-level MID) of the authenticated user.',
+        description:
+            'Returns the enterprise ID (EID) of the Marketing Cloud account tied to the current context. On a public CloudPage, where nobody is signed in, it still returns a non-empty ID rather than an empty value, so it cannot be used to tell an authenticated visitor apart from an anonymous one. Called from a child business unit it reports the parent (enterprise) MID, not the child MID, and it is a different value from AuthenticatedEmployeeID().',
         params: [],
         returnType: 'string',
-        returnDescription: 'The enterprise ID (EID) of the authenticated context.',
+        returnDescription:
+            'The enterprise ID as a digits-only numeric string, usable directly in Concat, in comparisons and in arithmetic. It was non-empty even without a signed-in visitor.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl:
+            'https://sfmc.guide/engagement/ampscript/functions/authenticatedenterpriseid/',
         syntax: 'AuthenticatedEnterpriseID()',
         example: '%%=AuthenticatedEnterpriseID()=%%',
     },
@@ -347,13 +367,18 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-member-id.html',
         guideUrl: 'https://ampscript.guide/authenticatedmemberid/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/authenticatedmemberid/',
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
-        description: 'Returns the member ID (MID) of the authenticated business unit.',
+        description:
+            'Returns the member ID (MID) of the business unit the code runs on. On a public CloudPage, where nobody is signed in, it still returns a non-empty MID rather than an empty value, so it cannot be used to tell an authenticated visitor apart from an anonymous one. Called from a child business unit it reports that CHILD MID, unlike AuthenticatedEnterpriseID(), which reports the parent (enterprise) MID in the same render.',
         params: [],
         returnType: 'string',
-        returnDescription: 'The member ID (MID) of the authenticated business unit.',
+        returnDescription:
+            'The member ID as a digits-only numeric string, usable directly in Concat, in comparisons and in arithmetic. It was non-empty even without a signed-in visitor.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         syntax: 'AuthenticatedMemberID()',
         example: '%%=AuthenticatedMemberID()=%%',
     },
@@ -364,13 +389,18 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-authenticated-member-name.html',
         guideUrl: 'https://ampscript.guide/authenticatedmembername/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/authenticatedmembername/',
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
-        description: 'Returns the name of the authenticated business unit.',
+        description:
+            'Returns the display name of the business unit the code runs on. On a public CloudPage, where nobody is signed in, it still returns a non-empty name rather than an empty value, so it cannot be used to tell an authenticated visitor apart from an anonymous one. It is the business unit name as shown in the Marketing Cloud UI — spaces and punctuation included — not a person and not the login username returned by AuthenticatedEmployeeUserName() in the same render.',
         params: [],
         returnType: 'string',
-        returnDescription: 'The name of the authenticated business unit.',
+        returnDescription:
+            'The business unit display name as a free-text string that can contain spaces and punctuation, usable directly in Concat and in comparisons. It was non-empty even without a signed-in visitor.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         syntax: 'AuthenticatedMemberName()',
         example: '%%=AuthenticatedMemberName()=%%',
     },
@@ -621,6 +651,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-json.html',
         guideUrl: 'https://ampscript.guide/buildrowsetfromjson/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/buildrowsetfromjson/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Content',
@@ -643,14 +674,19 @@ export const FUNCTIONS = [
                 mcnSince: null,
                 mcnNotes: null,
                 description:
-                    'If false, return an empty rowset on a syntax error; if true, raise an exception',
-                type: 'boolean',
+                    'Pass 1 or true to get an empty rowset when the payload or path cannot be parsed; 0 or false makes the same input abort the page',
+                type: 'boolean|number',
             },
         ],
         returnType: 'rowset',
-        returnDescription: 'A rowset built from the matched JSON nodes.',
+        returnDescription:
+            'A rowset built from the matched JSON nodes. A path that matches nothing yields a rowset with zero rows rather than an error.',
         syntax: 'BuildRowsetFromJSON(jsonData, jsonPathExpression, returnEmptyOnError)',
         example: "%%[ SET @rows = BuildRowsetFromJSON(@json, '$.items[*]', 1) ]%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The official syntax section states that a false third argument yields an empty rowset and a true one raises an exception; runtime on the child BU (MID 518005426, CloudPage GET) does the opposite. Malformed JSON with 1 rendered a rowset of zero rows, while the identical payload with 0 aborted the page with HTTP 422. The same page also proved that an unparsable payload, an unset variable, an empty string, [] and a path matching nothing all yield zero rows when 1 is passed. Note the official Errors section already describes the runtime ordering, so the page contradicts itself.',
     },
     {
         name: 'BuildRowSetFromString',
@@ -659,6 +695,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-string.html',
         guideUrl: 'https://ampscript.guide/buildrowsetfromstring/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/buildrowsetfromstring/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Content',
@@ -671,15 +708,18 @@ export const FUNCTIONS = [
             },
             {
                 name: 'delimiter',
-                description: 'The character used as a delimiter in the source data',
+                description:
+                    'The separator to split on; it may be several characters long, and an empty separator leaves the input as a single row',
                 type: 'string',
             },
         ],
         returnType: 'rowset',
         returnDescription:
-            'A rowset where each row holds one delimited segment of the input string.',
+            'A rowset where each row holds one delimited segment of the input string. The single column has no name, so read it with Field(row, 1). An empty or unset input gives zero rows.',
         syntax: 'BuildRowSetFromString(sourceData, delimiter)',
         example: "%%=BuildRowSetFromString('a,b,c', ',')=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'BuildRowSetFromXML',
@@ -688,6 +728,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-xml.html',
         guideUrl: 'https://ampscript.guide/buildrowsetfromxml/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/buildrowsetfromxml/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Content',
@@ -704,14 +745,19 @@ export const FUNCTIONS = [
                 mcnSince: null,
                 mcnNotes: null,
                 description:
-                    'If false, return an empty rowset on a syntax error; if true, raise an exception',
-                type: 'boolean',
+                    'Pass 1 or true to get an empty rowset when the payload or path cannot be parsed; 0 or false makes the same input abort the page',
+                type: 'boolean|number',
             },
         ],
         returnType: 'rowset',
-        returnDescription: 'A rowset built from the matched XML nodes.',
+        returnDescription:
+            'A rowset built from the matched XML nodes, with a Value column, an Xml column holding the inner markup, and one <attribute>_att column per attribute seen on any matched node. An XPath that matches nothing yields zero rows rather than an error.',
         syntax: 'BuildRowSetFromXML(xmlData, xpathExpression, returnEmptyOnError)',
         example: "%%[ SET @rows = BuildRowSetFromXML(@xml, '/root/item', 1) ]%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The official syntax section states that a false third argument yields an empty rowset and a true one raises an exception; runtime on the child BU (MID 518005426, CloudPage GET) behaves the other way round. Unclosed XML parsed with 1 rendered a rowset of zero rows, whereas the identical payload with 0 aborted the page with HTTP 422. An empty string, an unset variable, an empty root element and an XPath matching nothing likewise gave zero rows under 1.',
     },
     {
         name: 'Char',
@@ -886,12 +932,10 @@ export const FUNCTIONS = [
         maxArgs: INF,
         category: 'Utility',
         description:
-            'Generates a secure, encrypted URL to a CloudPages landing page, optionally passing name-value parameters.',
-        isConfirmed: false,
-        verificationBlocked: true,
-        verificationBlockedReason: 'no-working-invocation',
-        officialDocsNote:
-            'No invocation shape produced a URL from a CloudPage render. Called with the numeric id of the very landing page running the probe (1467160), with that id as a quoted string, with the id in a variable, with one and with two extra name-value pairs, and with an id that does not exist, every gated branch aborted its own request with HTTP 422 while the ungated control on the same deploy rendered at HTTP 200. The identical harness was redeployed to the parent business unit (MID 7281698) and behaved the same, whereas the sibling microsite function returned a URL from both business units on the same requests. Verification is therefore incomplete rather than a statement that the function is broken; the documented usage is an email link, which a CloudPage GET cannot exercise.',
+            'Builds the published URL of a CloudPages landing page. Name-value pairs are appended in PAIRS and are folded into a single encrypted query token rather than readable parameters; an odd trailing argument or a page ID that matches no page aborts the page.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/cloudpagesurl/',
         params: [
             {
                 name: 'pageId',
@@ -925,7 +969,7 @@ export const FUNCTIONS = [
         ],
         returnType: 'string',
         returnDescription:
-            'A tracked URL to the referenced CloudPage, including any passed parameters.',
+            'The page URL. With no extra pairs it is the bare published URL; with pairs it carries one encrypted query token that changes on every call, so the result must never be compared or cached.',
         repeat: [{ startIndex: 1, groupSize: 2, minGroups: 0 }],
         syntax: 'CloudPagesURL(pageId[, paramName1, paramValue1, paramNameN, paramValueN, ...])',
         example: "%%=CloudPagesURL(123, 'key', 'value')=%%",
