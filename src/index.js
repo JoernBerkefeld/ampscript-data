@@ -245,16 +245,27 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-attribute-value.html',
         guideUrl: 'https://ampscript.guide/attributevalue/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/attributevalue/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
         description:
-            'Safely retrieves a subscriber attribute value, returning empty string if null.',
-        params: [{ name: 'attributeName', description: 'Attribute name', type: 'string' }],
+            'Reads an attribute of the current message or page context by name, giving an empty value instead of failing when the name is unknown. The name is matched without regard to case, and system attributes such as the message context resolve on a CloudPage even though no subscriber is involved.',
+        params: [
+            {
+                name: 'attributeName',
+                description:
+                    'Attribute name, matched without regard to case; an empty name aborts the page',
+                type: 'string',
+            },
+        ],
         returnType: 'string',
-        returnDescription: 'The value of the named subscriber or send attribute as a string.',
+        returnDescription:
+            'The attribute value as a string, or an empty value when the name resolves to nothing.',
         syntax: 'AttributeValue(attributeName)',
         example: "%%=AttributeValue('firstname')=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'AuthenticatedEmployeeID',
@@ -453,23 +464,40 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: 3,
         category: 'Encryption and Encoding',
-        description: 'Decodes a Base64-encoded string.',
+        description:
+            'Decodes a Base64-encoded string. The decoded bytes are read as UTF-8 unless encoding names another character encoding, and any value that is not well-formed Base64 aborts the page instead of returning an empty or partial result.',
         params: [
-            { name: 'encodedString', description: 'Base64 string to decode', type: 'string' },
-            { name: 'encoding', description: 'Encoding scheme', type: 'string', optional: true },
             {
-                name: 'characterSet',
+                name: 'encodedString',
+                description:
+                    'Base64 string to decode; it must be well-formed, because malformed input aborts the page',
+                type: 'string',
+            },
+            {
+                name: 'encoding',
+                description:
+                    'Name of the character encoding used to turn the decoded bytes back into text; defaults to UTF-8, and an unrecognised or empty name aborts the page',
+                type: 'string',
+                enum: ['UTF-8', 'UTF-16', 'UTF-16BE', 'UTF-32', 'ASCII', 'ISO-8859-1'],
+                optional: true,
+                default: 'UTF-8',
+            },
+            {
+                name: 'abortOnFailure',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Character set for output',
-                type: 'string',
+                description:
+                    'Flag reserved for send-time failure handling; 0, 1, true and false are all accepted and none of them changes the value a successful decode returns',
+                type: 'number|boolean',
                 optional: true,
             },
         ],
         returnType: 'string',
         returnDescription: 'The decoded string.',
-        syntax: 'Base64Decode(encodedString[, encoding, characterSet])',
+        syntax: 'Base64Decode(encodedString[, encoding, abortOnFailure])',
         example: "%%=Base64Decode('SGVsbG8=')=%%",
+        isConfirmed: true,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/base64decode/',
     },
     {
         name: 'Base64Encode',
@@ -481,15 +509,31 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
-        description: 'Encodes a value as a Base64 string.',
+        description:
+            'Encodes a value as a Base64 string. The bytes encoded are the UTF-8 representation of the input unless encoding names another character encoding.',
         params: [
-            { name: 'value', description: 'Value to encode', type: 'string' },
-            { name: 'encoding', description: 'Encoding scheme', type: 'string', optional: true },
+            {
+                name: 'value',
+                description: 'Value to encode; the empty string encodes to the empty string',
+                type: 'string',
+            },
+            {
+                name: 'encoding',
+                description:
+                    'Name of the character encoding applied before encoding; any encoding name the platform recognises works, and an unrecognised or empty name aborts the page',
+                type: 'string',
+                enum: ['UTF-8', 'UTF-16', 'UTF-16BE', 'UTF-32', 'ASCII', 'ISO-8859-1'],
+                optional: true,
+                default: 'UTF-8',
+            },
         ],
         returnType: 'string',
-        returnDescription: 'The Base64-encoded representation of the input.',
+        returnDescription:
+            'The Base64-encoded representation of the input, padded with = to a multiple of four characters.',
         syntax: 'Base64Encode(value[, encoding])',
         example: "%%=Base64Encode('Hello')=%%",
+        isConfirmed: true,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/base64encode/',
     },
     {
         name: 'BeginImpressionRegion',
@@ -674,22 +718,31 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: 2,
         category: 'String',
-        description: 'Returns the character for the given ASCII code.',
+        description:
+            'Returns the character for the given numeric character code. Codes above 255 are not rejected — they resolve to the matching Unicode character.',
         params: [
-            { name: 'characterCode', description: 'ASCII character code', type: 'number' },
+            {
+                name: 'characterCode',
+                description: 'Character code, as a whole number',
+                type: 'string|number',
+            },
             {
                 name: 'numRepetitions',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Number of times to repeat the returned character',
-                type: 'number',
+                description: 'Number of times to repeat the returned character, as a whole number',
+                type: 'string|number',
                 optional: true,
             },
         ],
         returnType: 'string',
-        returnDescription: 'The character that corresponds to the supplied character code.',
+        returnDescription:
+            'The character for the supplied code, repeated when a repetition count is given. A count of 0 yields an empty string.',
         syntax: 'Char(characterCode[, numRepetitions])',
         example: '%%=Char(10)=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/char/',
     },
     {
         name: 'ClaimRow',
@@ -829,6 +882,11 @@ export const FUNCTIONS = [
         category: 'Utility',
         description:
             'Generates a secure, encrypted URL to a CloudPages landing page, optionally passing name-value parameters.',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
+        officialDocsNote:
+            'No invocation shape produced a URL from a CloudPage render. Called with the numeric id of the very landing page running the probe (1467160), with that id as a quoted string, with the id in a variable, with one and with two extra name-value pairs, and with an id that does not exist, every gated branch aborted its own request with HTTP 422 while the ungated control on the same deploy rendered at HTTP 200. The identical harness was redeployed to the parent business unit (MID 7281698) and behaved the same, whereas the sibling microsite function returned a URL from both business units on the same requests. Verification is therefore incomplete rather than a statement that the function is broken; the documented usage is an email link, which a CloudPage GET cannot exercise.',
         params: [
             {
                 name: 'pageId',
@@ -1436,22 +1494,37 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-add.html',
         guideUrl: 'https://ampscript.guide/dateadd/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/dateadd/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 3,
         maxArgs: 3,
         category: 'Date and Time',
-        description: 'Adds a specified interval to a date value.',
+        description:
+            'Adds a whole number of intervals to a date value. Only the five documented units are accepted and every other unit, including seconds and weeks, aborts the page — as does a non-integer amount or a date the engine cannot parse.',
         params: [
-            { name: 'date', description: 'Base date', type: 'date' },
-            { name: 'amountToAdd', description: 'Number of intervals to add', type: 'number' },
+            {
+                name: 'date',
+                description:
+                    'The date to adjust, either a real date value or a parseable date string',
+                type: 'string|date',
+            },
+            {
+                name: 'amountToAdd',
+                description:
+                    'Whole number of intervals to add; negative subtracts, zero returns the date unchanged, and a decimal aborts the page',
+                type: 'string|number',
+            },
             {
                 name: 'unitToAdd',
                 description:
-                    'The unit of the time value being added to the date. Accepted values: Y (years), M (months), D (days), H (hours), and MI (minutes)',
+                    'The unit to add, case-insensitive. Accepted values: Y (years), M (months), D (days), H (hours), MI (minutes). Any other value aborts the page',
                 type: 'string',
             },
         ],
         returnType: 'date',
-        returnDescription: 'The resulting date after the interval is added.',
+        returnDescription:
+            'The resulting date value, which the other date functions accept directly. Adding months clamps to the last day of the shorter target month.',
         syntax: 'DateAdd(date, amountToAdd, unitToAdd)',
         example: "%%=DateAdd(Now(), 7, 'D')=%%",
     },
@@ -1465,30 +1538,37 @@ export const FUNCTIONS = [
         minArgs: 3,
         maxArgs: 3,
         category: 'Date and Time',
-        description: 'Returns the difference between two dates in the specified interval.',
+        description:
+            'Counts how many boundaries of the requested unit lie between two dates, by truncating both to that unit and subtracting — so a 23-hour gap that crosses midnight counts as 1 day, while 23 hours within one day counts as 0. Finer units than the one requested are ignored rather than rounded.',
         params: [
             {
                 name: 'startDate',
-                description: 'The starting date for the comparison',
-                type: 'date',
+                description:
+                    'The starting date, either a real date value or a parseable date string',
+                type: 'string|date',
             },
             {
                 name: 'endDate',
-                description: 'The end date; the function subtracts startDate from endDate',
-                type: 'date',
+                description:
+                    'The end date, either a real date value or a parseable date string; a later end date gives a positive result and an earlier one a negative result',
+                type: 'string|date',
             },
             {
                 name: 'unitOfDifference',
-                description: 'Unit of time difference to return',
+                description:
+                    'The unit to count in, case-insensitive. Accepted values: Y (years), M (months), D (days), H (hours), MI (minutes). Any other value aborts the page',
                 type: 'string',
                 enum: ['Y', 'M', 'D', 'H', 'MI'],
             },
         ],
         returnType: 'number',
         returnDescription:
-            'The whole-number difference between the two dates in the requested unit.',
+            'A whole number that is negative when the end date precedes the start date and 0 when both fall inside the same unit.',
         syntax: 'DateDiff(startDate, endDate, unitOfDifference)',
         example: "%%=DateDiff(Now(), DateAdd(Now(), 1, 'D'), 'MI')=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/datediff/',
     },
     {
         name: 'DateParse',
@@ -1500,26 +1580,32 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: 2,
         category: 'Date and Time',
-        description: 'Parses a date string into a date value.',
+        description:
+            'Parses a date string into a date value. A string the parser cannot read aborts the page instead of returning a sentinel, and an ambiguous day-first string such as 5/8/2026 is silently read month-first rather than rejected. An offset or GMT marker in the input is honoured and converted to the account time zone.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/dateparse/',
         params: [
             {
                 name: 'dateString',
-                description: 'A string that contains a date or timestamp',
-                type: 'string',
+                description:
+                    'A date or timestamp string, or an existing date value; anything the parser cannot read aborts the page',
+                type: 'string|date',
             },
             {
                 name: 'useUtc',
                 mcnSince: null,
                 mcnNotes: null,
                 description:
-                    'If true, return the date and time in UTC; if false, use the Business Unit local time',
-                type: 'boolean',
+                    'If true, return the instant in UTC; otherwise in the account time zone. Accepts 1/0, true/false, or those spellings quoted, and is not validated',
+                type: 'string|boolean|number',
                 optional: true,
                 default: false,
             },
         ],
         returnType: 'date',
-        returnDescription: 'The parsed date value.',
+        returnDescription:
+            'A real date value the other date functions accept directly. Rendered on its own it prints as a US short date followed by a 12-hour clock with an AM/PM suffix.',
         syntax: 'DateParse(dateString[, useUtc])',
         example: "%%=DateParse('2026-01-15T08:30:00', 1)=%%",
     },
@@ -1533,18 +1619,24 @@ export const FUNCTIONS = [
         minArgs: 2,
         maxArgs: 2,
         category: 'Date and Time',
-        description: 'Extracts a specific component from a date value.',
+        description:
+            'Extracts one component from a date. The hour is reported on a 12-hour clock with no AM/PM indicator, so 19:35 yields 7 and any time at midnight — including a date with no time part at all — yields 12. Month and day come back zero-padded to two digits while hour and minute do not.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/datepart/',
         params: [
             {
                 name: 'dateString',
-                description: 'A string that contains a date or timestamp',
-                type: 'string',
+                description:
+                    'A real date value or a parseable date string; an unreadable or empty value aborts the page',
+                type: 'string|date',
             },
             {
                 name: 'datePart',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'The date part to extract from the string',
+                description:
+                    'The component to extract, case-insensitive. Any other value aborts the page',
                 type: 'string',
                 enum: [
                     'year',
@@ -1563,7 +1655,7 @@ export const FUNCTIONS = [
         ],
         returnType: 'string',
         returnDescription:
-            'The requested component of the date. Most parts return a numeric value as a string; `monthName` returns the full month name as text.',
+            'The requested component as text — a zero-padded two-digit month or day, an unpadded hour or minute, a four-digit year, or the full English month name. Numeric components still feed the math functions directly.',
         syntax: 'DatePart(dateString, datePart)',
         example: "%%=DatePart('2026-01-15', 'Y')=%%",
     },
@@ -1577,10 +1669,23 @@ export const FUNCTIONS = [
         minArgs: 8,
         maxArgs: 8,
         category: 'Encryption and Encoding',
-        description: 'Decrypts a value using symmetric key encryption.',
+        isConfirmed: true,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/decryptsymmetric/',
+        description:
+            'Decrypts a Base64 ciphertext produced by EncryptSymmetric, using the same algorithm, passphrase, salt and initialization vector.',
         params: [
-            { name: 'encryptedValue', description: 'Value to decrypt', type: 'string' },
-            { name: 'algorithm', description: 'Encryption algorithm (e.g. AES)', type: 'string' },
+            {
+                name: 'encryptedValue',
+                description: 'Base64 ciphertext to decrypt',
+                type: 'string',
+            },
+            {
+                name: 'algorithm',
+                description:
+                    'Cipher name, optionally followed by semicolon-separated mode and padding settings; must match the settings used to encrypt, and an unrecognised name aborts the page',
+                type: 'string',
+                enum: ['aes', 'des', 'tripledes'],
+            },
             {
                 name: 'passwordExternalKey',
                 mcnSince: null,
@@ -1770,13 +1875,24 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-domain.html',
         guideUrl: 'https://ampscript.guide/domain/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/domain/',
         minArgs: 1,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'Utility',
-        description: 'Extracts the domain portion from an email address.',
-        params: [{ name: 'emailAddress', description: 'Email address', type: 'string' }],
+        description:
+            'Returns everything after the first at sign, without validating the address or the domain. A value with no at sign, an empty string and a number all return an empty string.',
+        params: [
+            {
+                name: 'emailAddress',
+                description: 'Email address; the text after the first at sign is returned verbatim',
+                type: 'string',
+            },
+        ],
         returnType: 'string',
-        returnDescription: 'The domain portion of the supplied email address.',
+        returnDescription:
+            'The text following the first at sign, preserving the original case and any further at signs. Empty when the value contains no at sign or nothing follows it.',
         syntax: 'Domain(emailAddress)',
         example: "%%=Domain('user@example.com')=%%",
     },
@@ -1787,14 +1903,24 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-empty.html',
         guideUrl: 'https://ampscript.guide/empty/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/empty/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
-        description: 'Returns true if the value is empty, null, or not defined.',
-        params: [{ name: 'value', description: 'Value to test' }],
+        description:
+            'Returns true when the value is an empty string, an unset variable, or an undeclared variable. Whitespace, the number 0, the string "0" and the string "false" are all treated as present.',
+        params: [
+            {
+                name: 'value',
+                description:
+                    'Value to test; a variable, literal, attribute or nested function call is accepted',
+                type: 'string|number|boolean|date',
+            },
+        ],
         returnType: 'boolean',
-        returnDescription: 'True when the value is empty or null, otherwise false.',
+        returnDescription: 'True when the value is empty or missing, otherwise false.',
         returnEnum: [true, false],
+        isConfirmed: true,
         syntax: 'Empty(value)',
         example: '%%=Empty(@myVar)=%%',
     },
@@ -1808,10 +1934,19 @@ export const FUNCTIONS = [
         minArgs: 8,
         maxArgs: 8,
         category: 'Encryption and Encoding',
-        description: 'Encrypts a value using symmetric key encryption.',
+        isConfirmed: true,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/encryptsymmetric/',
+        description:
+            'Encrypts a value using symmetric key encryption and returns the ciphertext as Base64. The result is deterministic: the same inputs produce the same ciphertext on every call.',
         params: [
             { name: 'value', description: 'Value to encrypt', type: 'string' },
-            { name: 'algorithm', description: 'Encryption algorithm (e.g. AES)', type: 'string' },
+            {
+                name: 'algorithm',
+                description:
+                    'Cipher name, optionally followed by semicolon-separated mode and padding settings such as des;mode=ecb;padding=zeros; an unrecognised name aborts the page',
+                type: 'string',
+                enum: ['aes', 'des', 'tripledes'],
+            },
             {
                 name: 'passwordExternalKey',
                 mcnSince: null,
@@ -1844,7 +1979,7 @@ export const FUNCTIONS = [
             { name: 'iv', description: 'IV value or empty to use external key', type: 'string' },
         ],
         returnType: 'string',
-        returnDescription: 'The encrypted value.',
+        returnDescription: 'The ciphertext, Base64-encoded.',
         syntax: 'EncryptSymmetric(value, algorithm, passwordExternalKey, password, saltExternalKey, salt, ivExternalKey, iv)',
         example: "%%=EncryptSymmetric('secret', 'aes', 'pwKey', '', 'saltKey', '', 'ivKey', '')=%%",
     },
@@ -1995,24 +2130,48 @@ export const FUNCTIONS = [
         minArgs: 2,
         maxArgs: 4,
         category: 'Utility',
-        description: 'Formats a value using a .NET format string.',
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Proven on the child BU MCDEV_Training_QA (MID 518005426). The official reference names two possible values for the third parameter, Date and Number, but at runtime only Date is usable. Passing the literal Number aborts the page with HTTP 422 and discards all output, whether or not a locale follows it — Format(1234.555, "C2", "Number") and Format(1234.555, "C2", "Number", "de-DE") both aborted, exactly like the invented value Banana. Date works in any capitalisation, and the empty string works and still allows a locale in the fourth parameter, so Format(1234.555, "C2", "", "de-DE") is the way to format a localised number. Number formatting also happens correctly with the third parameter omitted entirely, so the documented value is not merely optional, it is unusable.',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/format/',
+        description:
+            'Formats a number, a date or a string with a .NET format pattern. The third parameter only accepts Date or the empty string; the documented value Number aborts the page.',
         params: [
-            { name: 'value', description: 'Value to format' },
-            { name: 'formatString', description: '.NET format string', type: 'string' },
             {
-                name: 'culture',
+                name: 'value',
+                description:
+                    'The value to format; a number, a numeric string, a date value or a parseable date string',
+                type: 'string|number|date',
+            },
+            {
+                name: 'formatString',
+                description:
+                    'Standard or custom .NET format pattern; an unusable pattern is echoed back instead of failing',
+                type: 'string',
+            },
+            {
+                name: 'dataFormat',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Culture code (e.g. en-US)',
+                description:
+                    'Only Date, in any capitalisation, or the empty string; any other value including the documented Number aborts the page',
                 type: 'string',
                 optional: true,
             },
-            { name: 'timeZone', description: 'Target time zone', type: 'string', optional: true },
+            {
+                name: 'cultureCode',
+                description:
+                    'The locale for separators, symbols and month and day names, written with either a hyphen or an underscore',
+                type: 'string',
+                optional: true,
+            },
         ],
         returnType: 'string',
-        returnDescription: 'The formatted string representation of the value.',
-        syntax: 'Format(value, formatString[, culture, timeZone])',
-        example: "%%=Format('2026-01-15', 'dd.MM.yyyy')=%%",
+        returnDescription:
+            'The formatted value, or an unformatted echo of the input or of the pattern when the pattern does not suit the input.',
+        syntax: 'Format(value, formatString[, dataFormat, cultureCode])',
+        example: '%%=Format("2026-03-04 13:52:07", "yyyy-MM-dd HH:mm:ss", "Date")=%%',
     },
     {
         name: 'FormatCurrency',
@@ -2024,17 +2183,31 @@ export const FUNCTIONS = [
         minArgs: 2,
         maxArgs: 4,
         category: 'Utility',
-        description: 'Formats a number as a currency string.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/formatcurrency/',
+        description:
+            'Formats a number as a currency amount for a locale, choosing the symbol, the separators and the symbol position from that locale. Rounding is half-up.',
         params: [
-            { name: 'value', description: 'Numeric value', type: 'number' },
-            { name: 'locale', description: 'Locale code (e.g. en-US)', type: 'string' },
+            {
+                name: 'value',
+                description:
+                    'The amount to format, as a number or as a numeric string; a string may carry thousands separators',
+                type: 'string|number',
+            },
+            {
+                name: 'locale',
+                description:
+                    'The locale that supplies the symbol, the separators and the symbol position, written with either a hyphen or an underscore; a language-only code works and an unknown code falls back to a generic currency sign',
+                type: 'string',
+            },
             {
                 name: 'decimalPlaces',
                 mcnSince: null,
                 mcnNotes: null,
                 description:
-                    'Number of decimal places; defaults to 2 when omitted (locale-dependent rounding may apply)',
-                type: 'number',
+                    'Number of decimal places; without it the locale decides, which is zero places for currencies that have no minor unit',
+                type: 'string|number',
                 optional: true,
                 default: 2,
             },
@@ -2042,15 +2215,16 @@ export const FUNCTIONS = [
                 name: 'symbol',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Custom currency symbol',
+                description:
+                    "Replaces the locale's currency symbol while keeping the locale's separators and symbol position; requires decimalPlaces to be supplied as well",
                 type: 'string',
                 optional: true,
             },
         ],
         returnType: 'string',
-        returnDescription: 'The value formatted as a localized currency string.',
+        returnDescription: 'The amount formatted as a currency string for the requested locale.',
         syntax: 'FormatCurrency(value, locale[, decimalPlaces, symbol])',
-        example: "%%=FormatCurrency(1234.5, 'en-US', 2, '$')=%%",
+        example: "%%=FormatCurrency(1234.555, 'en-US')=%%",
     },
     {
         name: 'FormatDate',
@@ -2063,37 +2237,47 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: 4,
         category: 'Date and Time',
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Proven on the child BU MCDEV_Training_QA (MID 518005426). The official reference presents one .NET-style custom-pattern table and shows it applied to the dateFormat argument, but at runtime the two format arguments use SEPARATE, case-INSENSITIVE token sets. In dateFormat, mm and MM both render the MONTH, so the documented pattern yyyy-MM-dd HH:mm:ss returned 2026-03-04 13:03:07 for the instant 2026-03-04 13:52:07 — the minutes position printed 03, the month. The same pattern moved to timeFormat returned 13:52:07 correctly, because there mm and MM mean minutes. Single-letter tokens also disagree with the doc: d rendered the whole short date 3/4/2026 rather than the day number, M rendered March 4 rather than 3, and h or H alone in timeFormat aborts the page with HTTP 422 instead of rendering an hour. The day-name tokens are off by one repetition — dddd rendered Wed where the doc promises Wednesday, ddddd rendered Wednesday, and ddd rendered the corrupted string We4ne74a26 in which digits from the date replaced letters of the day name.',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/formatdate/',
         description:
-            'Formats a date string according to the specified date and time format patterns.',
+            'Formats a date according to a date pattern, a time pattern and a locale. The two pattern arguments use separate, case-insensitive token sets: in the date pattern mm means month, and minutes are only reachable from the time pattern.',
         params: [
             {
                 name: 'dateString',
-                description: 'The date string that you want to format',
-                type: 'string',
+                description:
+                    'The date to format, either a real date value or a parseable date string',
+                type: 'string|date',
             },
             {
                 name: 'dateFormat',
                 mcnSince: 67,
                 mcnNotes: null,
-                description: 'A string that represents the format to apply to the date',
+                description:
+                    'The date pattern, or a single-letter standard format such as D, G or s. Case-insensitive, and mm here means month, not minutes',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'timeFormat',
-                description: 'A string that represents the format to apply to the time',
+                description:
+                    'The time pattern. Case-insensitive, and this is the only argument in which mm means minutes',
                 type: 'string',
                 optional: true,
             },
             {
                 name: 'localeCode',
-                description: 'The locale code to use when formatting the date',
+                description:
+                    'The locale for month and day names and for the standard formats, written with either a hyphen or an underscore',
                 type: 'string',
                 optional: true,
             },
         ],
         returnType: 'string',
-        returnDescription: 'The date formatted according to the supplied format and locale.',
+        returnDescription:
+            'The formatted date, or an empty string when the first argument cannot be parsed as a date.',
         syntax: 'FormatDate(dateString[, dateFormat, timeFormat, localeCode])',
         example: '%%=FormatDate(Now(), "dddd, MMMM d yyyy", "HH:mm:ss")=%%',
     },
@@ -2107,16 +2291,36 @@ export const FUNCTIONS = [
         minArgs: 2,
         maxArgs: 3,
         category: 'Utility',
-        description: 'Formats a number using a format pattern.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/formatnumber/',
+        description:
+            'Formats a number with a standard or custom .NET numeric pattern, optionally for a locale. Rounding is half-up.',
         params: [
-            { name: 'number', description: 'Numeric value to format', type: 'number' },
-            { name: 'format', description: 'Format pattern (e.g. N2, C0)', type: 'string' },
-            { name: 'locale', description: 'Locale code', type: 'string', optional: true },
+            {
+                name: 'number',
+                description:
+                    'The value to format, as a number or as a numeric string; a string may carry thousands separators',
+                type: 'string|number',
+            },
+            {
+                name: 'format',
+                description:
+                    'Standard pattern letter with an optional precision digit, such as N2 or C0, or a custom pattern; an unrecognised pattern is echoed back',
+                type: 'string',
+            },
+            {
+                name: 'locale',
+                description:
+                    'The locale that supplies separators and the currency symbol, written with either a hyphen or an underscore; an unknown code falls back rather than failing',
+                type: 'string',
+                optional: true,
+            },
         ],
         returnType: 'string',
-        returnDescription: 'The number formatted according to the supplied format string.',
+        returnDescription: 'The number formatted according to the supplied pattern.',
         syntax: 'FormatNumber(number, format[, locale])',
-        example: "%%=FormatNumber(1234.567, 'N2', 'en-US')=%%",
+        example: "%%=FormatNumber(1234.555, 'N2', 'de-DE')=%%",
     },
     {
         name: 'GetJWT',
@@ -2128,24 +2332,34 @@ export const FUNCTIONS = [
         minArgs: 3,
         maxArgs: 3,
         category: 'Encryption and Encoding',
-        description: 'Generates a JSON Web Token using the supplied claims, algorithm, and secret.',
+        description:
+            'Generates a JSON Web Token signed with the supplied inline secret. The payload is passed through verbatim and is only Base64url-encoded, never encrypted.',
         params: [
-            { name: 'secret', description: 'Secret key for signing', type: 'string' },
+            {
+                name: 'secret',
+                description:
+                    'Secret used to sign the token; the empty string aborts the page rather than signing with an empty key',
+                type: 'string',
+            },
             {
                 name: 'algorithm',
-                description: 'Hashing algorithm',
+                description:
+                    'HMAC algorithm name, matched case-insensitively; an unknown name aborts the page',
                 type: 'string',
                 enum: ['HS256', 'HS384', 'HS512'],
             },
             {
                 name: 'jsonPayload',
                 description:
-                    "The payload of the JWT. Typically, the payload is a JSON object with name-value pairs. The JWT payload isn't encrypted.",
+                    'Payload to encode. It is copied into the token untouched and is not validated as JSON, so a non-JSON string is signed just as readily.',
                 type: 'string',
             },
         ],
         returnType: 'string',
-        returnDescription: 'A signed JSON Web Token string.',
+        returnDescription:
+            'The token as three Base64url segments joined by dots, with no padding. The same arguments always produce the same token.',
+        isConfirmed: true,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/getjwt/',
         syntax: 'GetJWT(secret, algorithm, jsonPayload)',
         example: "%%=GetJWT(@secret, 'HS256', @payload)=%%",
     },
@@ -2177,6 +2391,9 @@ export const FUNCTIONS = [
         ],
         returnType: 'string',
         returnDescription: 'A signed JSON Web Token string created with the named key.',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-test-data',
         syntax: 'GetJWTByKeyName(keyName, algorithm, jsonPayload)',
         example: "%%=GetJWTByKeyName('MyKeyName', 'HS256', @payload)=%%",
     },
@@ -2233,21 +2450,29 @@ export const FUNCTIONS = [
         maxArgs: 1,
         category: 'Date and Time',
         description:
-            'Returns the scheduled send time for the current job. In STO context returns the Einstein-optimized time.',
+            'Returns a send timestamp: by default the time the send completed for the individual subscriber, or with a true argument the job start or publish time. Outside a send context, such as on a CloudPage, it returns the current system time instead of a send time, in every argument spelling.',
         params: [
             {
-                name: 'persistFormat',
+                name: 'boolAllSubscribers',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Persist date format flag',
-                type: 'boolean',
+                description:
+                    'If true, return the job start or publish time instead of the individual subscriber send-completed time; outside a send context it makes no difference. Accepts 1/0, true/false, or those spellings quoted, and is not validated',
+                type: 'string|boolean|number',
                 optional: true,
             },
         ],
         returnType: 'date',
-        returnDescription: 'The send time of the message as a date value.',
-        syntax: 'GetSendTime([persistFormat])',
+        returnDescription:
+            'A real date value the other date functions accept directly, in the same system time zone as Now().',
+        syntax: 'GetSendTime([boolAllSubscribers])',
         example: '%%=GetSendTime(1)=%%',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'needs-auth-context',
+        differsFromOfficialDocs: false,
+        officialDocsNote:
+            'Send-context semantics could not be proven: a CloudPage GET has no send, so both documented paths collapse. Probed on the child BU MCDEV_Training_QA (MID 518005426), one deploy and eight gated fetches. GetSendTime() rendered 8/8/2026 7:35:16 PM against Now()=8/8/2026 7:35:16 PM in the same render, with FormatDate(..., "ffffff") giving 507042 for both, so the two are the same instant to the microsecond rather than merely the same second. Every argument spelling (1, 0, true, false, "1", "0", "true", "false", and the non-flag word spring) was accepted at HTTP 200 and returned that same current time, and DateDiff(GetSendTime(1), Now(), "MI") was 0. What IS proven on a CloudPage: the value is a real date (FormatDate gave 2026-08-08, DatePart gave 2026 and 7, DateAdd of three hours advanced it, DateDiff measured that gap as 3), it renders as a US short date plus a 12-hour clock (Length 19 for that instant), Empty() over it is False, it sits on the system side of the clock (DateDiff to SystemDateToLocalDate was 480 minutes, identical to the same measurement over Now()), arity 0 and 1 both work and arity 2 aborts the page with HTTP 422. What is NOT proven and needs a real list, data extension, triggered or journey send: the individual subscriber send-completed time, the job start time, the job publish time and the STO-optimized time.',
     },
     {
         name: 'GetSocialPublishURL',
@@ -2365,15 +2590,20 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-guid.html',
         guideUrl: 'https://ampscript.guide/guid/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/guid/',
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
-        description: 'Generates a new globally unique identifier (GUID).',
+        description:
+            'Generates a new globally unique identifier. Every call returns a different value, so store the result in a variable when the same identifier is needed twice.',
         params: [],
         returnType: 'string',
-        returnDescription: 'A newly generated globally unique identifier.',
+        returnDescription:
+            'A 36-character lowercase identifier in the eight-four-four-four-twelve hyphenated form, without surrounding braces.',
         syntax: 'GUID()',
         example: '%%=GUID()=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'HTTPGet',
@@ -2679,18 +2909,34 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-iif.html',
         guideUrl: 'https://ampscript.guide/iif/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/iif/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Utility',
-        description: 'Returns one of two values based on a boolean expression (inline if).',
+        description:
+            'Returns one of two values based on a boolean expression (inline if). Only a real comparison or a boolean-returning function selects the true branch; a plain string or number always selects the false branch. Only the selected branch is evaluated, so a call that would abort the page is safe in the branch that is not taken.',
         params: [
-            { name: 'expression', description: 'Boolean expression to evaluate', type: 'boolean' },
-            { name: 'trueValue', description: 'Value returned when true' },
-            { name: 'falseValue', description: 'Value returned when false' },
+            {
+                name: 'expression',
+                description:
+                    'Boolean expression to evaluate; a non-boolean value always selects the false branch',
+                type: 'boolean',
+            },
+            {
+                name: 'trueValue',
+                description: 'Value returned when true; evaluated only when true is selected',
+                type: 'string|number|boolean|date',
+            },
+            {
+                name: 'falseValue',
+                description: 'Value returned when false; evaluated only when false is selected',
+                type: 'string|number|boolean|date',
+            },
         ],
         returnType: 'string',
         returnDescription:
             'The second argument when the condition is true, otherwise the third argument.',
+        isConfirmed: true,
         syntax: 'IIf(expression, trueValue, falseValue)',
         example: "%%=IIf(Empty(@name), 'Friend', @name)=%%",
     },
@@ -2735,18 +2981,32 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-index-of.html',
         guideUrl: 'https://ampscript.guide/indexof/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/indexof/',
         minArgs: 2,
-        maxArgs: 2,
+        maxArgs: 3,
         category: 'String',
-        description: 'Returns the 1-based position of the first occurrence of a substring.',
+        description:
+            'Returns the 1-based position of a substring, matching case-insensitively. An undocumented third argument selects which occurrence to locate.',
         params: [
-            { name: 'sourceString', description: 'String to search in', type: 'string' },
-            { name: 'substring', description: 'Substring to find', type: 'string' },
+            {
+                name: 'sourceString',
+                description: 'String to search in',
+                type: 'string|number',
+            },
+            { name: 'substring', description: 'Substring to find', type: 'string|number' },
+            {
+                name: 'occurrence',
+                description: 'Which occurrence to locate, as a whole number; defaults to the first',
+                type: 'string|number',
+            },
         ],
         returnType: 'number',
-        returnDescription: 'The 1-based position of the substring, or 0 when it is not found.',
-        syntax: 'IndexOf(sourceString, substring)',
+        returnDescription:
+            'The 1-based position of the substring, or 0 when it is not found or the requested occurrence does not exist.',
+        syntax: 'IndexOf(sourceString, substring[, occurrence])',
         example: "%%=IndexOf('Hello World', 'World')=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'InsertData',
@@ -3071,12 +3331,22 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-is-chtml-browser.html',
         guideUrl: 'https://ampscript.guide/ischtmlbrowser/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/ischtmlbrowser/',
         minArgs: 1,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'Utility',
         description:
-            "Returns true if the subscriber's browser is identified as a compact HTML (cHTML) device.",
-        params: [{ name: 'userAgent', description: 'User agent string to test', type: 'string' }],
+            'Tests a user agent string for a compact HTML (cHTML) feature-phone browser. Feature-phone agents such as i-mode and KDDI handsets are recognised; modern desktop and mobile agents are not.',
+        params: [
+            {
+                name: 'userAgent',
+                description:
+                    'User agent string to test, typically HTTPRequestHeader("user-agent") on a CloudPage',
+                type: 'string',
+            },
+        ],
         returnType: 'boolean',
         returnDescription: 'True when the user agent indicates a cHTML browser, otherwise false.',
         returnEnum: [true, false],
@@ -3090,11 +3360,24 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-email-address.html',
         guideUrl: 'https://ampscript.guide/isemailaddress/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/isemailaddress/',
         minArgs: 1,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The official reference states that an address whose domain has no top-level domain is accepted, giving a call on a bare single-label domain as an example of a true result. On a live Engagement CloudPage on the child business unit (MID 518005426) that shape returned False, in a gate that printed its own start and done markers at HTTP 200 alongside a known-good control block. Every other example in the same table matched: the missing at sign, the double at sign, the missing local part and the missing second-level domain all returned False, and a well-formed address returned True. Surrounding whitespace is also rejected, which no source mentions.',
         category: 'Utility',
-        description: 'Returns true if the value is a syntactically valid email address.',
-        params: [{ name: 'value', description: 'Value to validate', type: 'string' }],
+        description:
+            'Checks a value against email address syntax only; it never tests whether the mailbox or domain exists. Surrounding whitespace and a domain without a top-level domain are both rejected.',
+        params: [
+            {
+                name: 'value',
+                description:
+                    'Value to validate; trim it first, as a leading or trailing space fails',
+                type: 'string',
+            },
+        ],
         returnType: 'boolean',
         returnDescription:
             'True when the value is a syntactically valid email address, otherwise false.',
@@ -3109,14 +3392,27 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-null.html',
         guideUrl: 'https://ampscript.guide/isnull/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/isnull/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
-        description: 'Returns true if the value is null.',
-        params: [{ name: 'value', description: 'Value to test' }],
+        description:
+            'Returns true only for a genuine null, which in practice means a data extension field with no value. An unset or undeclared variable, an empty string, whitespace and every ordinary value all return false, so this is not a general emptiness test.',
+        params: [
+            {
+                name: 'value',
+                description:
+                    'Value to test; typically a data extension field value retrieved with Lookup',
+                type: 'string|number|boolean|date',
+            },
+        ],
         returnType: 'boolean',
-        returnDescription: 'True when the value is null, otherwise false.',
-        returnEnum: [true, false],
+        returnDescription:
+            'True when the value is null, otherwise false. Prefer Empty when the intent is to detect a missing or blank value.',
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The official reference shows a variable declared with VAR and never assigned, and states IsNull returns true for it. On a live Engagement CloudPage on the child business unit (MID 518005426) that exact shape returned False, in a gate that printed its own start and done markers at HTTP 200 alongside a known-good control block. The same False came back for an undeclared variable, an empty string, whitespace, 0, "0", "false", a real value, a date, an absent attribute, an absent request parameter and the subscriber-context tokens. Use Empty for a missing-value test.',
         syntax: 'IsNull(value)',
         example: '%%=IsNull(@value)=%%',
     },
@@ -3127,16 +3423,28 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-is-null-default.html',
         guideUrl: 'https://ampscript.guide/isnulldefault/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/isnulldefault/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Utility',
-        description: 'Returns the value if not null, otherwise returns the default.',
+        description:
+            'Returns the value if not null, otherwise returns the default. Outside a Smart Capture form the default is never reached: on a CloudPage every empty-ish input returns the empty string instead, so it cannot be used as a general fallback.',
         params: [
-            { name: 'value', description: 'Value to test' },
-            { name: 'defaultValue', description: 'Default to return when null' },
+            {
+                name: 'value',
+                description: 'Value to test; returned unchanged whenever it is present',
+                type: 'string|number|boolean|date',
+            },
+            {
+                name: 'defaultValue',
+                description:
+                    'Default to return when the value is null; only reached in a Smart Capture form context',
+                type: 'string|number|boolean|date',
+            },
         ],
         returnType: 'string',
         returnDescription: 'The original value, or the default value when the original is null.',
+        isConfirmed: true,
         syntax: 'IsNullDefault(value, defaultValue)',
         example: "%%=IsNullDefault(@name, 'Friend')=%%",
     },
@@ -3147,16 +3455,27 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-phone-number.html',
         guideUrl: 'https://ampscript.guide/isphonenumber/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/isphonenumber/',
         minArgs: 1,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'Utility',
-        description: 'Returns true if the value is a valid phone number.',
-        params: [{ name: 'value', description: 'Value to validate', type: 'string' }],
+        description:
+            'Checks a value against the North American Numbering Plan. Dashes, dots, spaces and parentheses are tolerated, but a leading plus sign, any letter, a number outside the plan and a leading country-code digit all fail.',
+        params: [
+            {
+                name: 'value',
+                description:
+                    'Phone number to validate; strip any leading plus sign or country code first',
+                type: 'string|number',
+            },
+        ],
         returnType: 'boolean',
         returnDescription: 'True when the value is a valid phone number, otherwise false.',
         returnEnum: [true, false],
         syntax: 'IsPhoneNumber(value)',
-        example: "%%=IsPhoneNumber('+1 718 209 7651')=%%",
+        example: "%%=IsPhoneNumber('425-555-0142')=%%",
     },
     {
         name: 'Length',
@@ -3225,18 +3544,24 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: 1,
         category: 'Date and Time',
-        description: 'Converts a local date to the Marketing Cloud system date (Central Time).',
+        description:
+            'Converts a date in the time zone configured on the account to the Marketing Cloud system date (Central Time, no daylight saving). The shift is not constant: the local side observes daylight saving, so a summer instant moves one hour further than a winter one. A value the date parser cannot read aborts the page instead of returning a sentinel.',
         params: [
             {
                 name: 'timeToConvert',
-                description: 'The time string that you want to convert',
-                type: 'string',
+                description:
+                    'The local time value to convert, as a date value or a parseable date string',
+                type: 'string|date',
             },
         ],
-        returnType: 'string',
-        returnDescription: 'The supplied local time converted to system (account) time.',
+        returnType: 'date',
+        returnDescription:
+            'A real date value the other date functions accept directly. Rendered on its own it prints as a US short date followed by a 12-hour clock with an AM/PM suffix.',
         syntax: 'LocalDateToSystemDate(timeToConvert)',
         example: '%%=LocalDateToSystemDate(Now())=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/localdatetosystemdate/',
     },
     {
         name: 'LongSFID',
@@ -3521,27 +3846,37 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-md5.html',
         guideUrl: 'https://ampscript.guide/md5/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/md5/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
-        description: 'Returns the MD5 hash of the input value.',
+        description:
+            'Returns the MD5 hash of the input value. The bytes hashed are the UTF-8 encoding of the input unless charSet names another encoding, and a number or date argument is hashed as the text it renders as.',
         params: [
-            { name: 'stringToConvert', description: 'The string to encode', type: 'string' },
+            {
+                name: 'stringToConvert',
+                description:
+                    'The value to hash; a number or date is hashed as its rendered text, and the empty string yields the well-known empty-input digest',
+                type: 'string|number|date',
+            },
             {
                 name: 'charSet',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Character set to use for the encoding',
+                description:
+                    'Name of the character encoding applied before hashing; any encoding name the platform recognises works, and an unrecognised or empty name aborts the page',
                 type: 'string',
-                enum: ['UTF-8', 'UTF-16'],
+                enum: ['UTF-8', 'UTF-16', 'UTF-16BE', 'UTF-32', 'ASCII', 'ISO-8859-1'],
                 optional: true,
                 default: 'UTF-8',
             },
         ],
         returnType: 'string',
-        returnDescription: 'The MD5 hash of the input as a hexadecimal string.',
+        returnDescription: 'The MD5 hash of the input as 32 lowercase hexadecimal characters.',
         syntax: 'MD5(stringToConvert[, charSet])',
         example: '%%=MD5("This is a string of text.")=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'MMS_Content_URL',
@@ -3578,9 +3913,13 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: INF,
         category: 'Utility',
-        description: 'Generates a tracked URL to a microsite page, optionally passing parameters.',
+        description:
+            'Builds a Classic Content microsite URL whose single encrypted query string carries the page reference and any extra name-value pairs. Every call produces a fresh token, so two calls with identical arguments never match.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/micrositeurl/',
         params: [
-            { name: 'pageId', description: 'Microsite page ID', type: 'number' },
+            { name: 'pageId', description: 'Microsite page ID', type: 'string|number' },
             {
                 name: 'paramName1',
                 description: 'Query parameter name',
@@ -3607,7 +3946,8 @@ export const FUNCTIONS = [
             },
         ],
         returnType: 'string',
-        returnDescription: 'A tracked URL to the referenced microsite page.',
+        returnDescription:
+            'A microsite page URL carrying one encrypted token; extra name-value pairs are folded into that token rather than appended as readable query parameters.',
         repeat: [{ startIndex: 1, groupSize: 2, minGroups: 0 }],
         syntax: 'MicrositeURL(pageId[, paramName1, paramValue1, paramNameN, paramValueN, ...])',
         example: '%%=MicrositeURL(12345)=%%',
@@ -3734,23 +4074,28 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-now.html',
         guideUrl: 'https://ampscript.guide/now/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/now/',
         minArgs: 0,
         maxArgs: 1,
         category: 'Date and Time',
         description:
-            'Returns the current system date and time (Central Time). Pass 1 to persist the value across renders.',
+            'Returns the current system date and time in Central Standard Time, with no daylight-saving adjustment. Every call within one render returns the same instant.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         params: [
             {
                 name: 'persistFormat',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Pass 1 to persist value',
-                type: 'boolean',
+                description:
+                    'In a send context, a true value returns the send job start or publish time instead of the current time; on a CloudPage it makes no difference. Accepts 1/0, true/false, or those spellings quoted',
+                type: 'string|boolean|number',
                 optional: true,
             },
         ],
         returnType: 'date',
-        returnDescription: 'The current date and time.',
+        returnDescription:
+            'The system date and time, as a date value that the other date functions accept directly.',
         syntax: 'Now([persistFormat])',
         example: '%%=Now()=%%',
     },
@@ -3761,16 +4106,28 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-output.html',
         guideUrl: 'https://ampscript.guide/output/',
-        minArgs: 1,
-        maxArgs: 1,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/output/',
+        minArgs: 0,
+        maxArgs: Infinity,
         category: 'Utility',
         description:
-            'Writes a value to the rendered output. Used inside script blocks to emit content.',
-        params: [{ name: 'content', description: 'Content to output' }],
+            'Writes the result of a nested function call into the rendered content. A string literal, a bare variable or a number renders nothing at all, without raising an error.',
+        params: [
+            {
+                name: 'content',
+                description:
+                    'Function call whose result is written; a literal or bare variable renders nothing',
+            },
+        ],
         returnType: 'void',
-        returnDescription: 'No value is returned; the content is written to the message.',
+        returnDescription:
+            'No value is returned, so the call cannot be nested inside another function; the result is written straight into the rendered content.',
         syntax: 'Output(content)',
         example: "%%=Output(Concat('Hello ', @firstName))=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The official reference states that a value which is not a function call, such as a string literal, makes the function return an error. On a live Engagement CloudPage on the child business unit (MID 518005426) a literal argument, a bare variable and a bare number each rendered nothing at all while the page still returned HTTP 200 and every surrounding marker printed, so no error surfaced anywhere. The same page also accepted zero arguments and up to three arguments, writing each one in turn.',
     },
     {
         name: 'OutputLine',
@@ -3779,15 +4136,26 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-output-line.html',
         guideUrl: 'https://ampscript.guide/outputline/',
-        minArgs: 1,
-        maxArgs: 1,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/outputline/',
+        minArgs: 0,
+        maxArgs: Infinity,
         category: 'Utility',
-        description: 'Writes a value followed by a line break to the rendered output.',
-        params: [{ name: 'content', description: 'Content to output' }],
+        description:
+            'Writes the result of a nested function call into the rendered content, followed by a carriage return and line feed. A string literal, a bare variable or a number renders only the line break. The break is not an HTML line break, so an HTML view keeps everything on one line unless the content sits inside a preformatted element.',
+        params: [
+            {
+                name: 'content',
+                description:
+                    'Function call whose result is written; a literal or bare variable renders only the line break',
+            },
+        ],
         returnType: 'void',
-        returnDescription: 'No value is returned; the content is written followed by a line break.',
+        returnDescription:
+            'No value is returned, so the call cannot be nested inside another function; the result and a carriage return plus line feed are written straight into the rendered content.',
         syntax: 'OutputLine(content)',
         example: "%%=OutputLine(Concat('Hello ', @firstName))=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'ProperCase',
@@ -3796,14 +4164,20 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-propercase.html',
         guideUrl: 'https://ampscript.guide/propercase/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/propercase/',
         minArgs: 1,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'String',
         description:
-            'Converts a string to proper (title) case, capitalizing the first letter of each word.',
-        params: [{ name: 'sourceString', description: 'String to convert', type: 'string' }],
+            'Converts a value to proper (title) case. Every letter after the first of a word is forced to lower case, so existing internal capitals are lost.',
+        params: [
+            { name: 'sourceString', description: 'Value to convert', type: 'string|number|date' },
+        ],
         returnType: 'string',
-        returnDescription: 'The string with the first letter of each word capitalized.',
+        returnDescription:
+            'The value with the first letter of each word capitalized and the rest lower-cased.',
         syntax: 'ProperCase(sourceString)',
         example: "%%=ProperCase('hello world')=%%",
     },
@@ -3814,16 +4188,25 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-query-parameter.html',
         guideUrl: 'https://ampscript.guide/queryparameter/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/queryparameter/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
         description:
-            'Returns the value of a URL query string parameter from the current page request.',
-        params: [{ name: 'parameterName', description: 'Query parameter name', type: 'string' }],
+            'Returns the value of a URL query string parameter from the current page request. The name is matched without regard to case, percent-encoded characters arrive decoded, and a name supplied more than once yields the values joined by a comma.',
+        params: [
+            {
+                name: 'parameterName',
+                description: 'Query parameter name, matched without regard to case',
+                type: 'string',
+            },
+        ],
         returnType: 'string',
-        returnDescription: 'The value of the named query-string parameter.',
+        returnDescription:
+            'The decoded value of the named query-string parameter, or an empty string when the request carries no such parameter. The value is returned exactly as supplied, so escape it before rendering it into markup.',
         syntax: 'QueryParameter(parameterName)',
         example: "%%=QueryParameter('utm_source')=%%",
+        isConfirmed: true,
     },
     {
         name: 'RaiseError',
@@ -3832,11 +4215,12 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-raise-error.html',
         guideUrl: 'https://ampscript.guide/raiseerror/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/raiseerror/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Utility',
         description:
-            'Raises a runtime error, optionally skipping the current subscriber or returning an API error.',
+            'Raises a runtime error, optionally skipping the current subscriber or returning an API error. Outside a send it is not a graceful abort: on a landing page it discards everything already written and answers the same generic failure any other aborting call gives, with the message nowhere in the response.',
         params: [
             { name: 'message', description: 'Error message', type: 'string' },
             {
@@ -3845,7 +4229,7 @@ export const FUNCTIONS = [
                 mcnNotes: null,
                 description:
                     'If true, the function skips only the subscriber for which the error was raised, and proceeds with the rest of the email job. If false, the function stops the entire email job when an error is raised. The default value is false.',
-                type: 'boolean',
+                type: 'string|boolean|number',
                 optional: true,
             },
             {
@@ -3875,9 +4259,12 @@ export const FUNCTIONS = [
             },
         ],
         returnType: 'void',
-        returnDescription: 'No value is returned; message processing is halted with an error.',
+        returnDescription:
+            'No value is returned; processing is halted. On a landing page the whole request is abandoned and the response body is a fixed failure notice rather than the supplied message.',
         syntax: 'RaiseError(message[, skipSubscriber, apiErrorCode, apiErrorNumber, preserveDataExt])',
         example: "RaiseError('Missing required field', 0)",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'Random',
@@ -3932,15 +4319,20 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-redirect.html',
         guideUrl: 'https://ampscript.guide/redirect/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/redirect/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
-        description: 'Performs an HTTP redirect to the specified URL. Landing pages only.',
-        params: [{ name: 'url', description: 'Target URL', type: 'string' }],
+        description:
+            'Performs an HTTP redirect to the specified URL. Landing pages only. The response is a 302 whose Location is the supplied value verbatim, and everything written before the call is discarded along with the page body. Not to be confused with RedirectTo, which emits no redirect at all.',
+        params: [{ name: 'url', description: 'Target URL', type: 'string|number' }],
         returnType: 'void',
-        returnDescription: 'No value is returned; the request is redirected to the supplied URL.',
+        returnDescription:
+            'No value is returned; the request answers 302 and the supplied value becomes the Location header unchanged, even when it is not an absolute URL.',
         syntax: 'Redirect(url)',
         example: "Redirect('https://example.com')",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'RedirectTo',
@@ -3952,10 +4344,15 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
-        description: 'Creates a trackable redirect URL, typically used in email links.',
-        params: [{ name: 'url', description: 'Target URL', type: 'string' }],
+        description:
+            'Marks a URL held in a variable or field as a tracked email link. It never redirects the current request and never halts the script; outside a tracked send it hands the value straight back.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/redirectto/',
+        params: [{ name: 'url', description: 'Target URL', type: 'string|number' }],
         returnType: 'string',
-        returnDescription: 'A tracked URL that redirects to the supplied address.',
+        returnDescription:
+            'The link-tracking target for the supplied address during a tracked send; on a CloudPage the supplied value unchanged.',
         syntax: 'RedirectTo(url)',
         example: '%%=RedirectTo(@targetUrl)=%%',
     },
@@ -3966,13 +4363,20 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-regex-match.html',
         guideUrl: 'https://ampscript.guide/regexmatch/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/regexmatch/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 3,
-        maxArgs: 4,
+        maxArgs: Infinity,
         category: 'String',
         description:
-            'Tests a string against a regular expression pattern and returns first occurrence of the matching regular expression pattern.',
+            'Returns the first occurrence of a regular expression match in a string, selected by capture group. Matching is case-sensitive unless the IgnoreCase option is passed.',
         params: [
-            { name: 'sourceString', description: 'String to match against', type: 'string' },
+            {
+                name: 'sourceString',
+                description: 'String to match against',
+                type: 'string|number',
+            },
             {
                 name: 'regExPattern',
                 description: 'The regular expression to use in the search',
@@ -3980,20 +4384,28 @@ export const FUNCTIONS = [
             },
             {
                 name: 'returnValue',
-                description: 'The name or ordinal of the matching group to return',
-                type: 'string',
+                description:
+                    'Index or name of the capture group to return; 0 returns the whole match',
+                type: 'string|number',
             },
             {
                 name: 'regExOptions',
                 description:
-                    'A .NET RegexOptions value to apply to the search, such as IgnoreCase or Multiline',
+                    'A .NET RegexOptions member name to apply to the search, such as IgnoreCase or Multiline',
+                type: 'string',
+                optional: true,
+            },
+            {
+                name: 'regExOptionsN',
+                description: 'Additional RegexOptions member name',
                 type: 'string',
                 optional: true,
             },
         ],
         returnType: 'string',
-        returnDescription: 'The matched text, or an empty string when there is no match.',
-        syntax: 'RegExMatch(sourceString, regExPattern, returnValue[, regExOptions])',
+        returnDescription:
+            'The text of the selected capture group, or an empty string when the pattern does not match or the group does not exist.',
+        syntax: 'RegExMatch(sourceString, regExPattern, returnValue[, regExOptions, ...])',
         example:
             'Var @couponCode, @regEx, @regExMatch\n' +
             'Set @couponCode = "SAVE23"\n' +
@@ -4007,18 +4419,28 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-replace.html',
         guideUrl: 'https://ampscript.guide/replace/',
-        minArgs: 3,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/replace/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        minArgs: 2,
         maxArgs: 3,
         category: 'String',
-        description: 'Replaces all occurrences of a substring with a new value.',
+        description:
+            'Replaces all occurrences of a substring with a new value, matching case-insensitively. The source is scanned once, so text formed by a replacement is not replaced again.',
         params: [
-            { name: 'sourceString', description: 'Source string', type: 'string' },
-            { name: 'searchSubstring', description: 'Substring to find', type: 'string' },
-            { name: 'replacementSubstring', description: 'Replacement string', type: 'string' },
+            { name: 'sourceString', description: 'Source string', type: 'string|number' },
+            { name: 'searchSubstring', description: 'Substring to find', type: 'string|number' },
+            {
+                name: 'replacementSubstring',
+                description: 'Replacement string. If omitted, the search text is removed.',
+                type: 'string|number',
+                optional: true,
+            },
         ],
         returnType: 'string',
-        returnDescription: 'The string with all occurrences of the search text replaced.',
-        syntax: 'Replace(sourceString, searchSubstring, replacementSubstring)',
+        returnDescription:
+            'The string with every occurrence of the search text replaced, or the source unchanged when the search text is not found.',
+        syntax: 'Replace(sourceString, searchSubstring[, replacementSubstring])',
         example: "%%=Replace('Hello World', 'World', 'There')=%%",
     },
     {
@@ -4031,24 +4453,28 @@ export const FUNCTIONS = [
         minArgs: 3,
         maxArgs: INF,
         category: 'String',
-        description: 'Replaces multiple old values in a string with a single new value.',
+        description:
+            'Replaces every occurrence of each supplied search value with one common replacement value, matching case-insensitively. The search values are applied one after another in the order given, so text produced by an earlier replacement can still be matched by a later one.',
         params: [
-            { name: 'sourceString', description: 'Source string', type: 'string' },
-            { name: 'replacementString', description: 'Replacement string', type: 'string' },
-            { name: 'searchString1', description: 'First value to replace', type: 'string' },
+            { name: 'sourceString', description: 'Source string', type: 'string|number' },
+            { name: 'replacementString', description: 'Replacement string', type: 'string|number' },
+            { name: 'searchString1', description: 'First value to replace', type: 'string|number' },
             {
                 name: 'searchStringN',
                 description: 'Additional value to replace',
-                type: 'string',
+                type: 'string|number',
                 optional: true,
             },
         ],
         returnType: 'string',
         returnDescription:
-            'The string with every supplied search value replaced by the replacement.',
+            'The string with every supplied search value replaced by the replacement, or the source unchanged when none of them is found.',
         repeat: [{ startIndex: 2, groupSize: 1, minGroups: 1 }],
         syntax: 'ReplaceList(sourceString, replacementString, searchString1[, searchStringN, ...])',
         example: "%%=ReplaceList('a-b/c', '_', '-', '/')=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/replacelist/',
     },
     {
         name: 'RequestParameter',
@@ -4057,16 +4483,25 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-request-parameter.html',
         guideUrl: 'https://ampscript.guide/requestparameter/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/requestparameter/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
         description:
-            'Returns the value of a form post or query string parameter from the current request.',
-        params: [{ name: 'parameterName', description: 'Parameter name', type: 'string' }],
+            'Returns the value of a form post or query string parameter from the current request. The name is matched without regard to case, percent-encoded characters arrive decoded, and a name supplied more than once yields the values joined by a comma.',
+        params: [
+            {
+                name: 'parameterName',
+                description: 'Parameter name, matched without regard to case',
+                type: 'string',
+            },
+        ],
         returnType: 'string',
-        returnDescription: 'The value of the named request parameter.',
+        returnDescription:
+            'The decoded value of the named request parameter, or an empty string when the request carries no such parameter. The value is returned exactly as supplied, so escape it before rendering it into markup.',
         syntax: 'RequestParameter(parameterName)',
         example: "%%=RequestParameter('id')=%%",
+        isConfirmed: true,
     },
     {
         name: 'RetrieveMSCRMRecords',
@@ -4338,27 +4773,37 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha1.html',
         guideUrl: 'https://ampscript.guide/sha1/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/sha1/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
-        description: 'Returns the SHA-1 hash of the input value.',
+        description:
+            'Returns the SHA-1 hash of the input value. The bytes hashed are the UTF-8 encoding of the input unless charSet names another encoding, and a number or date argument is hashed as the text it renders as.',
         params: [
-            { name: 'stringToConvert', description: 'The string to encode', type: 'string' },
+            {
+                name: 'stringToConvert',
+                description:
+                    'The value to hash; a number or date is hashed as its rendered text, and the empty string yields the well-known empty-input digest',
+                type: 'string|number|date',
+            },
             {
                 name: 'charSet',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Character set to use for the encoding',
+                description:
+                    'Name of the character encoding applied before hashing; any encoding name the platform recognises works, and an unrecognised or empty name aborts the page',
                 type: 'string',
-                enum: ['UTF-8', 'UTF-16'],
+                enum: ['UTF-8', 'UTF-16', 'UTF-16BE', 'UTF-32', 'ASCII', 'ISO-8859-1'],
                 optional: true,
                 default: 'UTF-8',
             },
         ],
         returnType: 'string',
-        returnDescription: 'The SHA-1 hash of the input as a hexadecimal string.',
+        returnDescription: 'The SHA-1 hash of the input as 40 lowercase hexadecimal characters.',
         syntax: 'SHA1(stringToConvert[, charSet])',
         example: "%%=SHA1('This is a string of text.')=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'SHA256',
@@ -4367,27 +4812,37 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha256.html',
         guideUrl: 'https://ampscript.guide/sha256/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/sha256/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
-        description: 'Returns the SHA-256 hash of the input value.',
+        description:
+            'Returns the SHA-256 hash of the input value. The bytes hashed are the UTF-8 encoding of the input unless charSet names another encoding, and a number or date argument is hashed as the text it renders as.',
         params: [
-            { name: 'stringToConvert', description: 'The string to encode', type: 'string' },
+            {
+                name: 'stringToConvert',
+                description:
+                    'The value to hash; a number or date is hashed as its rendered text, and the empty string yields the well-known empty-input digest',
+                type: 'string|number|date',
+            },
             {
                 name: 'charSet',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Character set to use for the encoding',
+                description:
+                    'Name of the character encoding applied before hashing; any encoding name the platform recognises works, and an unrecognised or empty name aborts the page',
                 type: 'string',
-                enum: ['UTF-8', 'UTF-16'],
+                enum: ['UTF-8', 'UTF-16', 'UTF-16BE', 'UTF-32', 'ASCII', 'ISO-8859-1'],
                 optional: true,
                 default: 'UTF-8',
             },
         ],
         returnType: 'string',
-        returnDescription: 'The SHA-256 hash of the input as a hexadecimal string.',
+        returnDescription: 'The SHA-256 hash of the input as 64 lowercase hexadecimal characters.',
         syntax: 'SHA256(stringToConvert[, charSet])',
         example: '%%=SHA256("This is a string of text.")=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'SHA512',
@@ -4396,27 +4851,37 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha512.html',
         guideUrl: 'https://ampscript.guide/sha512/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/sha512/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
-        description: 'Returns the SHA-512 hash of the input value.',
+        description:
+            'Returns the SHA-512 hash of the input value. The bytes hashed are the UTF-8 encoding of the input unless charSet names another encoding, and a number or date argument is hashed as the text it renders as.',
         params: [
-            { name: 'stringToConvert', description: 'The string to encode', type: 'string' },
+            {
+                name: 'stringToConvert',
+                description:
+                    'The value to hash; a number or date is hashed as its rendered text, and the empty string yields the well-known empty-input digest',
+                type: 'string|number|date',
+            },
             {
                 name: 'charSet',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Character set to use for the encoding',
+                description:
+                    'Name of the character encoding applied before hashing; any encoding name the platform recognises works, and an unrecognised or empty name aborts the page',
                 type: 'string',
-                enum: ['UTF-8', 'UTF-16'],
+                enum: ['UTF-8', 'UTF-16', 'UTF-16BE', 'UTF-32', 'ASCII', 'ISO-8859-1'],
                 optional: true,
                 default: 'UTF-8',
             },
         ],
         returnType: 'string',
-        returnDescription: 'The SHA-512 hash of the input as a hexadecimal string.',
+        returnDescription: 'The SHA-512 hash of the input as 128 lowercase hexadecimal characters.',
         syntax: 'SHA512(stringToConvert[, charSet])',
         example: "%%=SHA512('This is a string of text.')=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'StringToDate',
@@ -4426,15 +4891,27 @@ export const FUNCTIONS = [
             'In MCN, returns a locale-formatted string (G standard format, e.g. "5/15/2026 1:23:45 PM") instead of a dateTime object. Cannot be reliably passed to FormatDate() or other date functions in MCN - use FormatDate() directly instead.',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-string-to-date.html',
         guideUrl: 'https://ampscript.guide/stringtodate/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/stringtodate/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Date and Time',
-        description: 'Converts a date string to a date value.',
-        params: [{ name: 'dateString', description: 'String to convert', type: 'string' }],
+        description:
+            'Converts a date string to a date value. Behaves identically to DateParse for every input format tested, but takes no second argument, so DateParse is the only one of the two that can return the instant in UTC. A string the parser cannot read aborts the page instead of returning a sentinel, and an ambiguous day-first string such as 5/8/2026 is silently read month-first rather than rejected.',
+        params: [
+            {
+                name: 'dateString',
+                description:
+                    'A date or timestamp string, or an existing date value; anything the parser cannot read aborts the page',
+                type: 'string|date',
+            },
+        ],
         returnType: 'date',
-        returnDescription: 'The date value parsed from the supplied string.',
+        returnDescription:
+            'A real date value the other date functions accept directly. Rendered on its own it prints as a US short date followed by a 12-hour clock with an AM/PM suffix.',
         syntax: 'StringToDate(dateString)',
         example: "%%=StringToDate('2026-01-15')=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'StringToHex',
@@ -4446,26 +4923,33 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
-        description: 'Converts a string to its hexadecimal representation.',
+        description:
+            'Converts a string to its hexadecimal representation. The bytes rendered are the UTF-8 encoding of the input unless charSet names another encoding.',
         params: [
             {
                 name: 'sourceString',
-                description: 'The string to convert to hexadecimal character codes',
+                description:
+                    'The string to convert to hexadecimal character codes; the empty string yields the empty string',
                 type: 'string',
             },
             {
                 name: 'charSet',
-                description: 'Character set to use for encoding',
+                description:
+                    'Character set to use for encoding; any encoding name the platform recognises works, and an unrecognised or empty name aborts the page',
                 type: 'string',
-                enum: ['UTF-8', 'UTF-16'],
+                enum: ['UTF-8', 'UTF-16', 'UTF-16BE', 'UTF-32', 'ASCII', 'ISO-8859-1'],
                 optional: true,
                 default: 'UTF-8',
             },
         ],
         returnType: 'string',
-        returnDescription: 'The hexadecimal representation of the input string.',
+        returnDescription:
+            'The hexadecimal representation of the input string, in lowercase digits with no separators.',
         syntax: 'StringToHex(sourceString[, charSet])',
         example: "%%=StringToHex('AB')=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/stringtohex/',
     },
     {
         name: 'Substring',
@@ -4474,26 +4958,34 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-substring.html',
         guideUrl: 'https://ampscript.guide/substring/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/substring/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 2,
         maxArgs: 3,
         category: 'String',
         description:
-            'Extracts a portion of a string starting at the given index for the specified length.',
+            'Extracts a portion of a string starting at the given index for the specified length. A start position below 1 is treated as the first character.',
         params: [
-            { name: 'sourceString', description: 'Source string', type: 'string' },
-            { name: 'startPosition', description: '1-based start position', type: 'number' },
+            { name: 'sourceString', description: 'Source string', type: 'string|number' },
+            {
+                name: 'startPosition',
+                description: '1-based start position, as a whole number',
+                type: 'string|number',
+            },
             {
                 name: 'substringLength',
                 mcnSince: 67,
                 mcnNotes: null,
                 description:
-                    'Number of characters to extract. If omitted, returns the remainder of the string.',
-                type: 'number',
+                    'Number of characters to extract, as a whole number. If omitted, returns the remainder of the string.',
+                type: 'string|number',
                 optional: true,
             },
         ],
         returnType: 'string',
-        returnDescription: 'The requested portion of the string.',
+        returnDescription:
+            'The requested portion of the string, or an empty string when the start position is past the end of the source.',
         syntax: 'Substring(sourceString, startPosition[, substringLength])',
         example: "%%=Substring('Hello World', 1, 5)=%%",
     },
@@ -4531,16 +5023,21 @@ export const FUNCTIONS = [
         maxArgs: 1,
         category: 'Date and Time',
         description:
-            "Converts a Marketing Cloud system date (Central Time) to the subscriber's local time.",
+            'Converts a Marketing Cloud system date (Central Time, no daylight saving) to the time zone configured on the account. The shift is not constant: the local side observes daylight saving, so a summer instant moves one hour further than a winter one. A value the date parser cannot read aborts the page instead of returning a sentinel.',
         params: [
             {
                 name: 'systemTime',
-                description: 'The system time value that you want to convert to local time',
-                type: 'string',
+                description:
+                    'The system time value to convert, as a date value or a parseable date string',
+                type: 'string|date',
             },
         ],
-        returnType: 'string',
-        returnDescription: 'The supplied system (account) time converted to local time.',
+        returnType: 'date',
+        returnDescription:
+            'A real date value the other date functions accept directly. Rendered on its own it prints as a US short date followed by a 12-hour clock with an AM/PM suffix.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/systemdatetolocaldate/',
         syntax: 'SystemDateToLocalDate(systemTime)',
         example: '%%=SystemDateToLocalDate(Now())=%%',
     },
@@ -4626,11 +5123,17 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-trim.html',
         guideUrl: 'https://ampscript.guide/trim/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/trim/',
         minArgs: 1,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'String',
-        description: 'Removes leading and trailing whitespace from a string.',
-        params: [{ name: 'sourceString', description: 'String to trim', type: 'string' }],
+        description:
+            'Removes leading and trailing whitespace from a value. Tabs, line breaks and the non-breaking space count as whitespace.',
+        params: [
+            { name: 'sourceString', description: 'Value to trim', type: 'string|number|date' },
+        ],
         returnType: 'string',
         returnDescription: 'The string with leading and trailing whitespace removed.',
         syntax: 'Trim(sourceString)',
@@ -5164,28 +5667,32 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: 3,
         category: 'Encryption and Encoding',
-        description: 'URL-encodes a string for safe inclusion in a URL.',
+        description:
+            'URL-encodes a string for safe inclusion in a URL. By default only the part after a question mark is touched, so a value that is not a URL passes through unchanged unless the third argument is switched on.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/urlencode/',
         params: [
             {
                 name: 'urlToEncode',
                 description: 'The string to convert to a format that is safe to include in URLs',
-                type: 'string',
+                type: 'string|number',
             },
             {
                 name: 'encodeAllChars',
                 mcnSince: null,
                 mcnNotes: null,
                 description:
-                    'If true, the function converts all spaces and non-ASCII characters in a URL parameter string to their hexadecimal character codes. If false, the function only converts spaces in a URL parameter string to the hexadecimal character code %20, and leaves other characters unchanged. The default value is false',
-                type: 'boolean',
+                    'When switched on, every reserved character of the query string is percent-encoded and spaces become plus signs; when off, only spaces are encoded, as %20. Accepts 1/0, true/false, or those spellings quoted. Defaults to off',
+                type: 'string|boolean|number',
                 optional: true,
                 default: false,
             },
             {
                 name: 'encodeAllStrings',
                 description:
-                    'If true, the function converts any text string that you pass as the first parameter into a version that is safe to use in URLs. If false, the function only converts a string into a URL-safe version if the unsafe characters are part of a URL parameter string.',
-                type: 'boolean',
+                    'When switched on, the whole input is encoded even if it is not a URL; when off, only the part after a question mark is encoded. Accepts 1/0, true/false, or those spellings quoted. Defaults to off',
+                type: 'string|boolean|number',
                 optional: true,
             },
         ],
@@ -5219,16 +5726,24 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-v.html',
         guideUrl: 'https://ampscript.guide/v/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/v/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
         description:
-            'Short alias for retrieving a variable value inline. Equivalent to %%=v(@var)=%%.',
-        params: [{ name: 'variableName', description: 'Variable reference' }],
+            'Outputs a value inline, normally a variable reference. A string or number literal and a nested function call are accepted as well, each rendering its own value.',
+        params: [
+            {
+                name: 'variableName',
+                description: 'Variable reference, literal or nested function call to output',
+                type: 'string|number',
+            },
+        ],
         returnType: 'string',
-        returnDescription: 'The value of the referenced variable as a string.',
+        returnDescription: 'The referenced value rendered as a string.',
         syntax: 'v(variableName)',
         example: '%%=v(@myVar)=%%',
+        isConfirmed: true,
     },
     {
         name: 'WAT',
@@ -5266,6 +5781,9 @@ export const FUNCTIONS = [
         repeat: [{ startIndex: 1, groupSize: 1, minGroups: 1 }],
         syntax: 'WAT(parameterSetKey, parameterValue1[, parameterValueN, ...])',
         example: "%%=WAT('Omniture', '1234', '5678')=%%",
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
     },
     {
         name: 'WATP',
@@ -5291,6 +5809,9 @@ export const FUNCTIONS = [
             'The parameter value supplied to the WAT function at the given ordinal position.',
         syntax: 'WATP(ordinal)',
         example: '%%=urlencode(WATP(1))=%%',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
     },
     {
         name: 'WrapLongURL',
@@ -5302,10 +5823,17 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: 1,
         category: 'Utility',
-        description: 'Wraps a long URL to prevent line-break issues in email clients.',
-        params: [{ name: 'url', description: 'Long URL to wrap', type: 'string' }],
+        description:
+            'Shortens a long URL for email clients that truncate long hyperlinks. Outside an email send the argument comes back unchanged, so a CloudPage never sees a shortened link.',
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The official reference states that a URL longer than 975 characters comes back as a shortened link that redirects through the platform. On a live Engagement CloudPage on the child business unit (MID 518005426) a 1048-character URL was returned byte for byte unchanged at the same length, twice in one render, and the same held for a 27-character URL, an empty string and a string that is not a URL at all. The community guide notes that shortening only happens on a send, which the official page does not mention.',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/wraplongurl/',
+        params: [{ name: 'url', description: 'URL to shorten', type: 'string|number' }],
         returnType: 'string',
-        returnDescription: 'A shortened, wrapped form of the supplied long URL.',
+        returnDescription:
+            'The shortened URL when the call happens during a send; in any other context the supplied value unchanged.',
         syntax: 'WrapLongURL(url)',
         example: "%%=WrapLongURL('https://example.com/a/very/long/path')=%%",
     },
