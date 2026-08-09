@@ -277,10 +277,15 @@ export const FUNCTIONS = [
         minArgs: 0,
         maxArgs: 0,
         category: 'Utility',
-        description: 'Returns the employee ID of the currently authenticated user.',
+        description:
+            'Returns the numeric employee ID of the Marketing Cloud user tied to the current context. On a public CloudPage, where nobody is signed in, it still returns a non-empty ID rather than an empty value, so it cannot be used to tell an authenticated visitor apart from an anonymous one.',
         params: [],
         returnType: 'string',
-        returnDescription: 'The ID of the authenticated employee, or empty when none is set.',
+        returnDescription:
+            'The employee ID as a numeric string, usable directly in Concat and in comparisons. It was non-empty even without a signed-in visitor.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/authenticatedemployeeid/',
         syntax: 'AuthenticatedEmployeeID()',
         example: '%%=AuthenticatedEmployeeID()=%%',
     },
