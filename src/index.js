@@ -85,12 +85,20 @@ export const VERIFICATION_BLOCKED_REASONS = Object.freeze([
  * (Salesforce) and `guideUrl` (ampscript.guide), this one points at content we own and have
  * runtime-proven. Kept in sync by a cross-package test in `tests/cross-package.test.mjs`.
  *
-  @type {{name: string, mcnSince: number | null, mcnNotes: string | null, handlebarsEquivalent?: string | null, mcnHandlebarsGap?: boolean, docUrl?: string, guideUrl?: string, sfmcGuideUrl?: string, minArgs: number, maxArgs: number, validArities?: number[], category: string, description: string, params: {name: string, description: string, type?: string, enum?: (string | number)[], optional?: boolean, default?: string | number | boolean}[], returnType?: string, returnDescription?: string, returnEnum?: (string | number)[], syntax?: string, example?: string, repeat?: {startIndex: number, groupSize: number, minGroups: number, countParam?: string}[], deprecated?: boolean, deprecatedReplacement?: string, deprecatedReason?: string, isConfirmed?: boolean, verificationBlocked?: boolean, verificationBlockedReason?: string, differsFromOfficialDocs?: boolean, officialDocsNote?: string}[]} */
+ * `handlebarsExact` (OPTIONAL): only meaningful when `handlebarsEquivalent` names a helper.
+ * `true` means the helper is an argument-for-argument drop-in replacement for the AMPscript
+ * function. `false` means the helper does the same job but with a different call shape (dropped,
+ * shifted, or renamed arguments, or different error behaviour), so a converter must emit a hint
+ * for a human to finish the rewrite rather than a mechanical substitution. Must be present
+ * whenever `handlebarsEquivalent` is non-null.
+ *
+  @type {{name: string, mcnSince: number | null, mcnNotes: string | null, handlebarsEquivalent?: string | null, handlebarsExact?: boolean, docUrl?: string, guideUrl?: string, sfmcGuideUrl?: string, minArgs: number, maxArgs: number, validArities?: number[], category: string, description: string, params: {name: string, description: string, type?: string, enum?: (string | number)[], optional?: boolean, default?: string | number | boolean}[], returnType?: string, returnDescription?: string, returnEnum?: (string | number)[], syntax?: string, example?: string, repeat?: {startIndex: number, groupSize: number, minGroups: number, countParam?: string}[], deprecated?: boolean, deprecatedReplacement?: string, deprecatedReason?: string, isConfirmed?: boolean, verificationBlocked?: boolean, verificationBlockedReason?: string, differsFromOfficialDocs?: boolean, officialDocsNote?: string}[]} */
 export const FUNCTIONS = [
     {
         name: 'Add',
         mcnSince: 67,
         handlebarsEquivalent: 'add',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-add.html',
         guideUrl: 'https://ampscript.guide/add/',
@@ -241,7 +249,8 @@ export const FUNCTIONS = [
     {
         name: 'AttributeValue',
         mcnSince: null,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'personalizationResult',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-attribute-value.html',
         guideUrl: 'https://ampscript.guide/attributevalue/',
@@ -647,7 +656,8 @@ export const FUNCTIONS = [
     {
         name: 'BuildRowsetFromJSON',
         mcnSince: 67,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'jsonPath',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-json.html',
         guideUrl: 'https://ampscript.guide/buildrowsetfromjson/',
@@ -762,7 +772,8 @@ export const FUNCTIONS = [
     {
         name: 'Char',
         mcnSince: null,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'char',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-char.html',
         guideUrl: 'https://ampscript.guide/char/',
@@ -978,6 +989,7 @@ export const FUNCTIONS = [
         name: 'Concat',
         mcnSince: 67,
         handlebarsEquivalent: 'concat',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-concat.html',
         guideUrl: 'https://ampscript.guide/concat/',
@@ -1139,7 +1151,6 @@ export const FUNCTIONS = [
         name: 'ContentBlockByID',
         mcnSince: 67,
         handlebarsEquivalent: null,
-        mcnHandlebarsGap: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-id.html',
         guideUrl: 'https://ampscript.guide/contentblockbyid/',
@@ -1198,8 +1209,8 @@ export const FUNCTIONS = [
     {
         name: 'ContentBlockByKey',
         mcnSince: 67,
-        handlebarsEquivalent: null,
-        mcnHandlebarsGap: true,
+        handlebarsEquivalent: 'getContentBlock',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-key.html',
         guideUrl: 'https://ampscript.guide/contentblockbykey/',
@@ -1259,7 +1270,6 @@ export const FUNCTIONS = [
         name: 'ContentBlockByName',
         mcnSince: 67,
         handlebarsEquivalent: null,
-        mcnHandlebarsGap: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-name.html',
         guideUrl: 'https://ampscript.guide/contentblockbyname/',
@@ -1540,6 +1550,7 @@ export const FUNCTIONS = [
         name: 'DateAdd',
         mcnSince: 67,
         handlebarsEquivalent: 'dateAdd',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-add.html',
         guideUrl: 'https://ampscript.guide/dateadd/',
@@ -1581,6 +1592,7 @@ export const FUNCTIONS = [
         name: 'DateDiff',
         mcnSince: 67,
         handlebarsEquivalent: 'dateDiff',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-diff.html',
         guideUrl: 'https://ampscript.guide/datediff/',
@@ -1897,6 +1909,7 @@ export const FUNCTIONS = [
         name: 'Divide',
         mcnSince: 67,
         handlebarsEquivalent: 'divide',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-divide.html',
         guideUrl: 'https://ampscript.guide/divide/',
@@ -1949,6 +1962,7 @@ export const FUNCTIONS = [
         name: 'Empty',
         mcnSince: 67,
         handlebarsEquivalent: 'isEmpty',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-empty.html',
         guideUrl: 'https://ampscript.guide/empty/',
@@ -2142,7 +2156,8 @@ export const FUNCTIONS = [
     {
         name: 'Field',
         mcnSince: 67,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'get',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-field.html',
         guideUrl: 'https://ampscript.guide/field/',
@@ -2173,6 +2188,7 @@ export const FUNCTIONS = [
         name: 'Format',
         mcnSince: 67,
         handlebarsEquivalent: 'format',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-format.html',
         guideUrl: 'https://ampscript.guide/format/',
@@ -2226,6 +2242,7 @@ export const FUNCTIONS = [
         name: 'FormatCurrency',
         mcnSince: 67,
         handlebarsEquivalent: 'formatCurrency',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-formatCurrency.html',
         guideUrl: 'https://ampscript.guide/formatcurrency/',
@@ -2278,7 +2295,8 @@ export const FUNCTIONS = [
     {
         name: 'FormatDate',
         mcnSince: 67,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'format',
+        handlebarsExact: false,
         mcnNotes:
             'In MCN, uses Java SimpleDateFormat format strings instead of .NET. Omitting dateFormat returns the G standard format (e.g. "5/15/2026 1:23:45 PM").',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-format-date.html',
@@ -2334,6 +2352,7 @@ export const FUNCTIONS = [
         name: 'FormatNumber',
         mcnSince: 67,
         handlebarsEquivalent: 'formatNumber',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-formatNumber.html',
         guideUrl: 'https://ampscript.guide/formatnumber/',
@@ -2955,6 +2974,7 @@ export const FUNCTIONS = [
         name: 'IIf',
         mcnSince: 67,
         handlebarsEquivalent: 'iif',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-iif.html',
         guideUrl: 'https://ampscript.guide/iif/',
@@ -3027,6 +3047,7 @@ export const FUNCTIONS = [
         name: 'IndexOf',
         mcnSince: 67,
         handlebarsEquivalent: 'indexOf',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-index-of.html',
         guideUrl: 'https://ampscript.guide/indexof/',
@@ -3437,7 +3458,8 @@ export const FUNCTIONS = [
     {
         name: 'IsNull',
         mcnSince: 67,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'isEmpty',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-null.html',
         guideUrl: 'https://ampscript.guide/isnull/',
@@ -3468,7 +3490,8 @@ export const FUNCTIONS = [
     {
         name: 'IsNullDefault',
         mcnSince: null,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'fallback',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-is-null-default.html',
         guideUrl: 'https://ampscript.guide/isnulldefault/',
@@ -3530,6 +3553,7 @@ export const FUNCTIONS = [
         name: 'Length',
         mcnSince: 67,
         handlebarsEquivalent: 'length',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-length.html',
         guideUrl: 'https://ampscript.guide/length/',
@@ -3586,7 +3610,8 @@ export const FUNCTIONS = [
     {
         name: 'LocalDateToSystemDate',
         mcnSince: null,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'timeZoneConversion',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-local-date-to-system-date.html',
         guideUrl: 'https://ampscript.guide/localdatetosystemdate/',
@@ -3633,7 +3658,8 @@ export const FUNCTIONS = [
     {
         name: 'Lookup',
         mcnSince: 67,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'queryFirst',
+        handlebarsExact: false,
         mcnNotes:
             'In MCN, search arguments must be provided in column/value pairs - an odd count causes an error. All filter keys must fully specify the composite primary key.',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup.html',
@@ -3680,7 +3706,8 @@ export const FUNCTIONS = [
     {
         name: 'LookupOrderedRows',
         mcnSince: null,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'query',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-ordered-rows.html',
         guideUrl: 'https://ampscript.guide/lookuporderedrows/',
@@ -3734,7 +3761,8 @@ export const FUNCTIONS = [
     {
         name: 'LookupOrderedRowsCS',
         mcnSince: null,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'query',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-ordered-rows-cs.html',
         guideUrl: 'https://ampscript.guide/lookuporderedrowscs/',
@@ -3787,7 +3815,8 @@ export const FUNCTIONS = [
     {
         name: 'LookupRows',
         mcnSince: null,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'query',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-rows.html',
         guideUrl: 'https://ampscript.guide/lookuprows/',
@@ -3826,7 +3855,8 @@ export const FUNCTIONS = [
     {
         name: 'LookupRowsCS',
         mcnSince: null,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'query',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-rows-cs.html',
         guideUrl: 'https://ampscript.guide/lookuprowscs/',
@@ -3866,6 +3896,7 @@ export const FUNCTIONS = [
         name: 'Lowercase',
         mcnSince: 67,
         handlebarsEquivalent: 'lowercase',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-lowercase.html',
         guideUrl: 'https://ampscript.guide/lowercase/',
@@ -4005,6 +4036,7 @@ export const FUNCTIONS = [
         name: 'Mod',
         mcnSince: 67,
         handlebarsEquivalent: 'modulo',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-mod.html',
         guideUrl: 'https://ampscript.guide/mod/',
@@ -4054,6 +4086,7 @@ export const FUNCTIONS = [
         name: 'Multiply',
         mcnSince: 67,
         handlebarsEquivalent: 'multiply',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-multiply.html',
         guideUrl: 'https://ampscript.guide/multiply/',
@@ -4120,6 +4153,7 @@ export const FUNCTIONS = [
         name: 'Now',
         mcnSince: 67,
         handlebarsEquivalent: 'now',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-now.html',
         guideUrl: 'https://ampscript.guide/now/',
@@ -4210,6 +4244,7 @@ export const FUNCTIONS = [
         name: 'ProperCase',
         mcnSince: 67,
         handlebarsEquivalent: 'properCase',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-propercase.html',
         guideUrl: 'https://ampscript.guide/propercase/',
@@ -4261,6 +4296,7 @@ export const FUNCTIONS = [
         name: 'RaiseError',
         mcnSince: 67,
         handlebarsEquivalent: 'raiseError',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-raise-error.html',
         guideUrl: 'https://ampscript.guide/raiseerror/',
@@ -4319,6 +4355,7 @@ export const FUNCTIONS = [
         name: 'Random',
         mcnSince: 67,
         handlebarsEquivalent: 'random',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-random.html',
         guideUrl: 'https://ampscript.guide/random/',
@@ -4465,6 +4502,7 @@ export const FUNCTIONS = [
         name: 'Replace',
         mcnSince: 67,
         handlebarsEquivalent: 'replace',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-replace.html',
         guideUrl: 'https://ampscript.guide/replace/',
@@ -4632,7 +4670,8 @@ export const FUNCTIONS = [
     {
         name: 'RetrieveSalesforceObjects',
         mcnSince: 67,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'query',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-retrieve-objects.html',
         guideUrl: 'https://ampscript.guide/retrievesalesforceobjects/',
@@ -4692,7 +4731,8 @@ export const FUNCTIONS = [
     {
         name: 'Row',
         mcnSince: 67,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'get',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-row.html',
         guideUrl: 'https://ampscript.guide/row/',
@@ -4712,7 +4752,8 @@ export const FUNCTIONS = [
     {
         name: 'RowCount',
         mcnSince: 67,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'length',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-row-count.html',
         guideUrl: 'https://ampscript.guide/rowcount/',
@@ -5004,6 +5045,7 @@ export const FUNCTIONS = [
         name: 'Substring',
         mcnSince: 67,
         handlebarsEquivalent: 'substring',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-substring.html',
         guideUrl: 'https://ampscript.guide/substring/',
@@ -5042,6 +5084,7 @@ export const FUNCTIONS = [
         name: 'Subtract',
         mcnSince: 67,
         handlebarsEquivalent: 'subtract',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-subtract.html',
         guideUrl: 'https://ampscript.guide/subtract/',
@@ -5064,7 +5107,8 @@ export const FUNCTIONS = [
     {
         name: 'SystemDateToLocalDate',
         mcnSince: null,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'timeZoneConversion',
+        handlebarsExact: false,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-system-date-to-local-date.html',
         guideUrl: 'https://ampscript.guide/systemdatetolocaldate/',
@@ -5169,6 +5213,7 @@ export const FUNCTIONS = [
         name: 'Trim',
         mcnSince: 67,
         handlebarsEquivalent: 'trim',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-trim.html',
         guideUrl: 'https://ampscript.guide/trim/',
@@ -5411,6 +5456,7 @@ export const FUNCTIONS = [
         name: 'Uppercase',
         mcnSince: 67,
         handlebarsEquivalent: 'uppercase',
+        handlebarsExact: true,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-uppercase.html',
         guideUrl: 'https://ampscript.guide/uppercase/',
@@ -5992,47 +6038,186 @@ export const deprecatedFunctionLookup = new Map(
  *  - `name`         the keyword as written in source
  *  - `description`  short human-readable explanation
  *  - `snippet`      completion body with `${n:placeholder}` tab stops
+ *  - `handlebarsEquivalent` (OPTIONAL): name of the Handlebars helper/construct that plays the
+ *       same role, or `null` when the keyword has no counterpart. Handlebars models control flow
+ *       and logic as helpers, so language constructs (not just functions) map across.
+ *  - `handlebarsNote` (OPTIONAL): human-readable caveat about how the Handlebars construct differs
+ *       from the AMPscript keyword. Only set when `handlebarsEquivalent` is non-null.
  *
- *  @type {{name: string, description: string, snippet: string}[]}
+ *  @type {{name: string, description: string, snippet: string, handlebarsEquivalent?: string | null, handlebarsNote?: string | null}[]}
  */
 export const AMPSCRIPT_KEYWORDS = [
     {
         name: 'var',
         description: 'Declares one or more variables',
         snippet: 'var @${1:variableName}',
+        handlebarsEquivalent: 'set',
+        handlebarsNote: 'Handlebars set is block-scoped and does not persist outside its block.',
     },
     {
         name: 'set',
         description: 'Assigns a value to a variable',
         snippet: 'set @${1:variableName} = ${2:value}',
+        handlebarsEquivalent: 'set',
+        handlebarsNote: 'Handlebars set is block-scoped and does not persist outside its block.',
     },
     {
         name: 'if',
         description: 'Begins a conditional block',
         snippet: 'if ${1:condition} then\n\t${2}\nendif',
+        handlebarsEquivalent: 'if',
+        handlebarsNote: 'elseif/else become {{else if}} / {{else}} inside the same block.',
     },
-    { name: 'then', description: 'Follows an if/elseif condition', snippet: 'then' },
+    {
+        name: 'then',
+        description: 'Follows an if/elseif condition',
+        snippet: 'then',
+        handlebarsEquivalent: null,
+    },
     {
         name: 'elseif',
         description: 'Additional condition in an if block',
         snippet: 'elseif ${1:condition} then',
+        handlebarsEquivalent: 'if',
+        handlebarsNote: 'Written as {{else if condition}} inside the enclosing {{#if}} block.',
     },
-    { name: 'else', description: 'Fallback branch in an if block', snippet: 'else' },
-    { name: 'endif', description: 'Closes an if block', snippet: 'endif' },
+    {
+        name: 'else',
+        description: 'Fallback branch in an if block',
+        snippet: 'else',
+        handlebarsEquivalent: 'if',
+        handlebarsNote: 'Written as {{else}} inside the enclosing {{#if}} block.',
+    },
+    {
+        name: 'endif',
+        description: 'Closes an if block',
+        snippet: 'endif',
+        handlebarsEquivalent: null,
+    },
     {
         name: 'for',
         description: 'Begins a counting loop',
         snippet: 'for @${1:i} = ${2:1} to ${3:rowCount} do\n\t${4}\nnext @${1:i}',
+        handlebarsEquivalent: 'each',
+        handlebarsNote:
+            'Use {{#repeat}} for a plain counting loop; {{#each}} iterates a collection.',
     },
-    { name: 'to', description: 'Ascending direction in a for loop', snippet: 'to' },
-    { name: 'downto', description: 'Descending direction in a for loop', snippet: 'downto' },
-    { name: 'do', description: 'Marks the start of a loop body', snippet: 'do' },
-    { name: 'next', description: 'Ends a for loop iteration', snippet: 'next' },
-    { name: 'and', description: 'Logical AND operator', snippet: 'and' },
-    { name: 'or', description: 'Logical OR operator', snippet: 'or' },
-    { name: 'not', description: 'Logical NOT operator', snippet: 'not' },
-    { name: 'true', description: 'Boolean true constant', snippet: 'true' },
-    { name: 'false', description: 'Boolean false constant', snippet: 'false' },
+    {
+        name: 'to',
+        description: 'Ascending direction in a for loop',
+        snippet: 'to',
+        handlebarsEquivalent: null,
+    },
+    {
+        name: 'downto',
+        description: 'Descending direction in a for loop',
+        snippet: 'downto',
+        handlebarsEquivalent: null,
+    },
+    {
+        name: 'do',
+        description: 'Marks the start of a loop body',
+        snippet: 'do',
+        handlebarsEquivalent: null,
+    },
+    {
+        name: 'next',
+        description: 'Ends a for loop iteration',
+        snippet: 'next',
+        handlebarsEquivalent: null,
+    },
+    {
+        name: 'and',
+        description: 'Logical AND operator',
+        snippet: 'and',
+        handlebarsEquivalent: 'and',
+    },
+    { name: 'or', description: 'Logical OR operator', snippet: 'or', handlebarsEquivalent: 'or' },
+    {
+        name: 'not',
+        description: 'Logical NOT operator',
+        snippet: 'not',
+        handlebarsEquivalent: 'not',
+    },
+    {
+        name: 'true',
+        description: 'Boolean true constant',
+        snippet: 'true',
+        handlebarsEquivalent: null,
+    },
+    {
+        name: 'false',
+        description: 'Boolean false constant',
+        snippet: 'false',
+        handlebarsEquivalent: null,
+    },
+];
+
+// ── Operators ────────────────────────────────────────────────────────────────
+
+/**
+ * AMPscript symbolic operator with its Handlebars counterpart. These glyphs are not valid
+ * keyword names (they fail the identifier grammar), so they live in a dedicated export rather
+ * than in AMPSCRIPT_KEYWORDS.
+ *  - `name`         the operator glyph as written in source
+ *  - `category`     'comparison' or 'assignment'
+ *  - `description`  short human-readable explanation
+ *  - `handlebarsEquivalent`  name of the Handlebars helper that plays the same role, or `null`
+ *  - `handlebarsNote`        caveat about how the Handlebars helper is invoked; only set when
+ *       `handlebarsEquivalent` is non-null
+ *
+ *  @type {{name: string, category: 'comparison' | 'assignment', description: string, handlebarsEquivalent: string | null, handlebarsNote: string | null}[]}
+ */
+export const AMPSCRIPT_OPERATORS = [
+    {
+        name: '==',
+        category: 'comparison',
+        description: 'Equality comparison',
+        handlebarsEquivalent: 'equals',
+        handlebarsNote: null,
+    },
+    {
+        name: '!=',
+        category: 'comparison',
+        description: 'Inequality comparison',
+        handlebarsEquivalent: 'compare',
+        handlebarsNote: 'Pass "!=" as the operator argument to compare.',
+    },
+    {
+        name: '>',
+        category: 'comparison',
+        description: 'Greater-than comparison',
+        handlebarsEquivalent: 'compare',
+        handlebarsNote: 'Pass ">" as the operator argument to compare.',
+    },
+    {
+        name: '>=',
+        category: 'comparison',
+        description: 'Greater-than-or-equal comparison',
+        handlebarsEquivalent: 'compare',
+        handlebarsNote: 'Pass ">=" as the operator argument to compare.',
+    },
+    {
+        name: '<',
+        category: 'comparison',
+        description: 'Less-than comparison',
+        handlebarsEquivalent: 'compare',
+        handlebarsNote: 'Pass "<" as the operator argument to compare.',
+    },
+    {
+        name: '<=',
+        category: 'comparison',
+        description: 'Less-than-or-equal comparison',
+        handlebarsEquivalent: 'compare',
+        handlebarsNote: 'Pass "<=" as the operator argument to compare.',
+    },
+    {
+        name: '=',
+        category: 'assignment',
+        description: 'Assignment operator (inside set)',
+        handlebarsEquivalent: 'set',
+        handlebarsNote: 'Handlebars set is block-scoped and does not persist outside its block.',
+    },
 ];
 
 // ── Personalization strings ──────────────────────────────────────────────────
