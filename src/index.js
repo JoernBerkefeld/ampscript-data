@@ -150,6 +150,11 @@ export const FUNCTIONS = [
             'var @list = "fdc5dfe4-e5e1-48af-87a1-4ac10433e895"\n' +
             'AddMscrmListMember(@member, @list)\n' +
             ']%%',
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        deprecated: true,
+        deprecatedReason:
+            'The Marketing Cloud Connector for Microsoft Dynamics CRM was retired (online integration in December 2020, on-premises in October 2021), so the Dynamics CRM AMPscript functions no longer have a live integration to call and are non-functional. No replacement AMPscript function exists; integrate Dynamics data through the SFTP import/export or a custom API instead.',
     },
     {
         name: 'AddObjectArrayItem',
@@ -158,6 +163,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-add-object-array.html',
         guideUrl: 'https://ampscript.guide/addobjectarrayitem/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/addobjectarrayitem/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Marketing Cloud API',
@@ -172,6 +178,7 @@ export const FUNCTIONS = [
             'No value is returned; the item is appended to the named array property.',
         syntax: 'AddObjectArrayItem(apiObject, arrayProperty, itemToAdd)',
         example: "AddObjectArrayItem(@apiObject, 'Recipients', @recipient)",
+        isConfirmed: true,
     },
     {
         name: 'AttachFile',
@@ -828,6 +835,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-claim-row.html',
         guideUrl: 'https://ampscript.guide/claimrow/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/claimrow/',
         minArgs: 4,
         maxArgs: INF,
         category: 'Data Extension',
@@ -884,6 +892,10 @@ export const FUNCTIONS = [
         repeat: [{ startIndex: 4, groupSize: 2, minGroups: 0 }],
         syntax: 'ClaimRow(dataExt, claimColumn, claimantColumn, claimantValue[, additionalColumnNameN, additionalColumnValueN, ...])',
         example: "%%[ SET @row = ClaimRow('Coupons', 'Claimed', 'SubKey', _subscriberkey) ]%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Runtime-proven on a Marketing Cloud Engagement CloudPage (child BU MID 518005426) against a data extension built to the documented claimable schema (Text primary key, Text claimant column, required non-nullable Boolean claim column defaulting to False, nullable Date column). Each call passing a NEW claimant value claims the next unclaimed row and advances: four distinct claimants received C1, C2, C3, C4 in order, each row flipping to claimed with its claimant recorded and ClaimedDate auto-populated. Re-calling with a claimant value that already holds a row returns that same row rather than advancing (per-subscriber idempotency). The official reference states that ClaimRow returns an exception when no unclaimed rows remain; at runtime it instead returned an empty row that does not abort the page (Empty() on it is true), so a caller must guard with Empty() rather than expecting a raised error. Each claim was driven by a separate HTTP request carrying the claimant value as a RequestParameter — the prior single-render probe that reused one claimant value never advanced because of the idempotency rule, not a provisioning gap.',
     },
     {
         name: 'ClaimRowValue',
@@ -892,6 +904,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-claim-row-value.html',
         guideUrl: 'https://ampscript.guide/claimrowvalue/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/claimrowvalue/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -946,6 +959,8 @@ export const FUNCTIONS = [
         repeat: [{ startIndex: 4, groupSize: 2, minGroups: 0 }],
         syntax: 'ClaimRowValue(dataExt, returnValueColumn, claimColumn[, valueIfClaimed, claimantColumnN, claimantValueN, ...])',
         example: "%%=ClaimRowValue('Coupons', 'Code', 'Claimed', '', 'SubKey', _subscriberkey)=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'CloudPagesURL',
@@ -1480,6 +1495,11 @@ export const FUNCTIONS = [
         repeat: [{ startIndex: 2, groupSize: 2, minGroups: 1, countParam: 'numFields' }],
         syntax: 'CreateMSCRMRecord(entityName, numFields, attributeName1, attributeValue1[, attributeNameN, attributeValueN, ...])',
         example: "%%=CreateMSCRMRecord('contact', 1, 'lastname', 'Smith')=%%",
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        deprecated: true,
+        deprecatedReason:
+            'The Marketing Cloud Connector for Microsoft Dynamics CRM was retired (online integration in December 2020, on-premises in October 2021), so the Dynamics CRM AMPscript functions no longer have a live integration to call and are non-functional. No replacement AMPscript function exists; integrate Dynamics data through the SFTP import/export or a custom API instead.',
     },
     {
         name: 'CreateObject',
@@ -1488,6 +1508,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-create-object.html',
         guideUrl: 'https://ampscript.guide/createobject/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/createobject/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Marketing Cloud API',
@@ -1500,6 +1521,7 @@ export const FUNCTIONS = [
         returnDescription: 'A new API object instance for use with the Invoke* functions.',
         syntax: 'CreateObject(objectName)',
         example: "%%=CreateObject('DataExtensionObject')=%%",
+        isConfirmed: true,
     },
     {
         name: 'CreateSalesforceObject',
@@ -1508,10 +1530,16 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-create-object.html',
         guideUrl: 'https://ampscript.guide/createsalesforceobject/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/createsalesforceobject/',
         minArgs: 4,
         maxArgs: INF,
         category: 'Sales and Service Cloud',
-        description: 'Creates a new record in a connected Salesforce CRM object.',
+        description:
+            'Creates a new record in a connected Salesforce Sales or Service Cloud object via Marketing Cloud Connect and returns the 18-character ID of the created record. Requires an active Marketing Cloud Connect integration; the field names must be valid API names on the target object, and a fault (unknown object or field) aborts the whole page rather than returning an error value.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        officialDocsNote:
+            'The success path was runtime-proven on cred/DEV (MID 510007949), which has an active Marketing Cloud Connect integration to a real Salesforce org. Creating a benign Task with a single opaque field returned a real 18-character Salesforce ID (an 00T-prefixed Task ID), confirming the documented return shape. The fault path was also proven: an unknown object name and an unknown field name on a real object each aborted the CloudPage with HTTP 422 — the SOAP fault from the connected org propagates as an uncatchable page abort (AMPscript has no try/catch), exactly like RetrieveSalesforceObjects against an unknown object — so there is no testable error value, the function either returns an ID or aborts. AMPscript has no delete function for Salesforce objects, so the created Task remains as benign residue in the org. Catalog signature, returnType and repeat group all match the official reference and ampscript.guide, so differsFromOfficialDocs stays false.',
         params: [
             {
                 name: 'objectName',
@@ -1541,7 +1569,7 @@ export const FUNCTIONS = [
             { name: 'fieldValueN', description: 'Additional field value', optional: true },
         ],
         returnType: 'string',
-        returnDescription: 'The ID of the newly created Salesforce object record.',
+        returnDescription: 'The 18-character ID of the newly created Salesforce object record.',
         repeat: [{ startIndex: 2, groupSize: 2, minGroups: 1, countParam: 'numFields' }],
         syntax: 'CreateSalesforceObject(objectName, numFields, fieldName1, fieldValue1[, fieldNameN, fieldValueN, ...])',
         example: "%%=CreateSalesforceObject('Contact', 1, 'LastName', 'Smith')=%%",
@@ -1556,17 +1584,41 @@ export const FUNCTIONS = [
         minArgs: 4,
         maxArgs: 4,
         category: 'MobileConnect',
-        description: 'Initiates an SMS conversation on a MobileConnect short code.',
+        description:
+            'Initiates an SMS conversation with a contact from within a MobileConnect message. Returns true when a conversation is created inside a MobileConnect message context, and false in any other context (for example a CloudPage or email). The success path cannot be exercised outside a live MobileConnect send.',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            "Runtime-observed on cred/DEV (MID 510007949), the only BU available for this batch (no parent-BU escalation). Unlike Msg()/Noun()/Verb(), this is an ordinary function call, so it compiles and runs on a CloudPage: called there with a real short code, the authorized destination number and app 'MOBILECONNECT', it returned the literal boolean false (Empty() false) and the page rendered fully with no exception — no SMS was sent. Passing an invalid app value also returned false, so the CloudPage context masks any app-validation error. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour (true on success, exception on failure). The success path (true, real conversation creation) requires a live MobileConnect message context that does not exist on a CloudPage and cannot be captured on this tenant, so the function is recorded blocked for the success path while the CloudPage false-return is proven. The catalogued signature was also corrected here: the four parameters are originationNumber, destinationNumber, nextKeyword and app, and the return is a boolean, not void.",
         params: [
-            { name: 'shortCode', description: 'SMS short code', type: 'string' },
-            { name: 'keyword', description: 'Current conversation keyword', type: 'string' },
-            { name: 'nextKeyword', description: 'Next expected keyword', type: 'string' },
-            { name: 'messageText', description: 'Message to send', type: 'string' },
+            {
+                name: 'originationNumber',
+                description: 'The MobileConnect short code or long code used to send',
+                type: 'string',
+            },
+            {
+                name: 'destinationNumber',
+                description: "The contact's phone number, including country code",
+                type: 'string',
+            },
+            {
+                name: 'nextKeyword',
+                description: 'The keyword to set as the next conversation keyword',
+                type: 'string',
+            },
+            {
+                name: 'app',
+                description: "The application for the conversation; must be 'MOBILECONNECT'",
+                type: 'string',
+            },
         ],
-        returnType: 'void',
-        returnDescription: 'No value is returned; an SMS conversation is started.',
-        syntax: 'CreateSmsConversation(shortCode, keyword, nextKeyword, messageText)',
-        example: "CreateSmsConversation('12345', 'JOIN', 'CONFIRM', 'Reply CONFIRM to continue')",
+        returnType: 'boolean',
+        returnDescription:
+            'true when a conversation is created inside a MobileConnect message context; false in any other context (proven on a CloudPage). Fails with an exception in-context if unsuccessful.',
+        syntax: 'CreateSmsConversation(originationNumber, destinationNumber, nextKeyword, app)',
+        example: '%%=CreateSmsConversation("12345", MOBILE_NUMBER, "KEYWORD", "MOBILECONNECT")=%%',
     },
     {
         name: 'DataExtensionRowCount',
@@ -1575,6 +1627,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-de-row-count.html',
         guideUrl: 'https://ampscript.guide/dataextensionrowcount/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/dataextensionrowcount/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 1,
         maxArgs: 1,
         category: 'Data Extension',
@@ -1838,6 +1893,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-delete-data.html',
         guideUrl: 'https://ampscript.guide/deletedata/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/deletedata/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -1882,6 +1940,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-delete-de.html',
         guideUrl: 'https://ampscript.guide/deletede/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/deletede/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -1934,6 +1995,11 @@ export const FUNCTIONS = [
         returnDescription: 'A rowset describing the available Microsoft Dynamics CRM entities.',
         syntax: 'DescribeMSCRMEntities()',
         example: '%%[ SET @entities = DescribeMSCRMEntities() ]%%',
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        deprecated: true,
+        deprecatedReason:
+            'The Marketing Cloud Connector for Microsoft Dynamics CRM was retired (online integration in December 2020, on-premises in October 2021), so the Dynamics CRM AMPscript functions no longer have a live integration to call and are non-functional. No replacement AMPscript function exists; integrate Dynamics data through the SFTP import/export or a custom API instead.',
     },
     {
         name: 'DescribeMSCRMEntityAttributes',
@@ -1951,6 +2017,11 @@ export const FUNCTIONS = [
         returnDescription: 'A rowset describing the attributes of the requested CRM entity.',
         syntax: 'DescribeMSCRMEntityAttributes(entityType)',
         example: "%%[ SET @attrs = DescribeMSCRMEntityAttributes('contact') ]%%",
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        deprecated: true,
+        deprecatedReason:
+            'The Marketing Cloud Connector for Microsoft Dynamics CRM was retired (online integration in December 2020, on-premises in October 2021), so the Dynamics CRM AMPscript functions no longer have a live integration to call and are non-functional. No replacement AMPscript function exists; integrate Dynamics data through the SFTP import/export or a custom API instead.',
     },
     {
         name: 'Divide',
@@ -2133,15 +2204,31 @@ export const FUNCTIONS = [
         minArgs: 2,
         maxArgs: 2,
         category: 'MobileConnect',
-        description: 'Ends an active SMS conversation on a short code.',
+        description:
+            'Ends an active SMS conversation with a contact from within a MobileConnect message. Returns true when the conversation is ended inside a MobileConnect message context, and false in any other context (for example a CloudPage or email). The success path cannot be exercised outside a live MobileConnect send.',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Runtime-observed on cred/DEV (MID 510007949), the only BU available (no parent-BU escalation). This is an ordinary function call, so it compiles and runs on a CloudPage: called there with a real short code and the authorized destination number, it returned the literal boolean false (Empty() false) and the page rendered fully with no exception — no SMS was sent and no conversation state changed. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour (true on success, exception on failure). The success path (true, real conversation end) requires a live MobileConnect message context that cannot be captured on this tenant, so the function is recorded blocked for the success path while the CloudPage false-return is proven. The catalogued signature was corrected here: the two parameters are originationNumber and destinationNumber, and the return is a boolean, not void.',
         params: [
-            { name: 'shortCode', description: 'SMS short code', type: 'string' },
-            { name: 'keyword', description: 'Conversation keyword to end', type: 'string' },
+            {
+                name: 'originationNumber',
+                description: 'The MobileConnect short code or long code used to send',
+                type: 'string',
+            },
+            {
+                name: 'destinationNumber',
+                description: "The contact's phone number, including country code",
+                type: 'string',
+            },
         ],
-        returnType: 'void',
-        returnDescription: 'No value is returned; the SMS conversation is ended.',
-        syntax: 'EndSmsConversation(shortCode, keyword)',
-        example: "EndSmsConversation('12345', 'JOIN')",
+        returnType: 'boolean',
+        returnDescription:
+            'true when the conversation is ended inside a MobileConnect message context; false in any other context (proven on a CloudPage). Fails with an exception in-context if unsuccessful.',
+        syntax: 'EndSmsConversation(originationNumber, destinationNumber)',
+        example: '%%=EndSmsConversation("12345", MOBILE_NUMBER)=%%',
     },
     {
         name: 'ExecuteFilter',
@@ -2150,6 +2237,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-execute-filter.html',
         guideUrl: 'https://ampscript.guide/executefilter/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/executefilter/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 1,
         maxArgs: 1,
         category: 'Data Extension',
@@ -2174,6 +2264,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-execute-filter-ordered-rows.html',
         guideUrl: 'https://ampscript.guide/executefilterorderedrows/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/executefilterorderedrows/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 3,
         maxArgs: 3,
         category: 'Data Extension',
@@ -2212,10 +2305,14 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-field.html',
         guideUrl: 'https://ampscript.guide/field/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/field/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 2,
         maxArgs: 3,
         category: 'Data Extension',
-        description: 'Retrieves the value of a specific field from a rowset row.',
+        description:
+            'Retrieves the value of a named field from a rowset row. The two-argument form aborts the page when the column is absent; pass the optional third argument as 0 (or false) to get an empty string for a possibly-missing column instead.',
         params: [
             { name: 'row', description: 'Row object from a rowset', type: 'row' },
             { name: 'fieldName', description: 'Column name to retrieve', type: 'string' },
@@ -2510,9 +2607,8 @@ export const FUNCTIONS = [
         ],
         returnType: 'string',
         returnDescription: 'A signed JSON Web Token string created with the named key.',
-        isConfirmed: false,
-        verificationBlocked: true,
-        verificationBlockedReason: 'no-test-data',
+        isConfirmed: true,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/getjwtbykeyname/',
         syntax: 'GetJWTByKeyName(keyName, algorithm, jsonPayload)',
         example: "%%=GetJWTByKeyName('MyKeyName', 'HS256', @payload)=%%",
     },
@@ -2795,11 +2891,16 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-post.html',
         guideUrl: 'https://ampscript.guide/httppost/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/httppost/',
         minArgs: 3,
         maxArgs: INF,
         category: 'HTTP',
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The official reference labels the fourth argument as an output parameter holding the "status" of the request, but on a live Engagement CloudPage (child MID 518005426) that variable receives the response BODY, not the status. The HTTP status code is the function return value. A non-2xx response (proven with a 404) and an empty URL both abort the whole page rather than returning the status, so a failing status can never be read from the return value.',
         description:
-            'Performs an HTTP POST request. The response body is stored in the output variable.',
+            'Performs an HTTP POST request and returns the HTTP status code. The response body is written to the optional output variable.',
         params: [
             {
                 name: 'urlEndpoint',
@@ -2820,7 +2921,7 @@ export const FUNCTIONS = [
                 name: 'response',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Output variable that contains the status of the POST request',
+                description: 'Output variable that receives the response body',
                 type: 'string',
                 optional: true,
             },
@@ -2863,11 +2964,16 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-post2.html',
         guideUrl: 'https://ampscript.guide/httppost2/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/httppost2/',
         minArgs: 3,
         maxArgs: INF,
         category: 'HTTP',
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The official reference labels the fifth argument (response) as storing the "status" of the request, but on a live Engagement CloudPage (child MID 518005426) it receives the response BODY and the sixth argument (responseRowSet) receives the response HEADERS as a rowset (11 header rows observed). The HTTP status code is the function return value. The boolean exceptionOnError flag is accepted at position four.',
         description:
-            'Performs an HTTP POST with access to response headers. Response body and headers are stored in output variables.',
+            'Performs an HTTP POST and returns the HTTP status code. The response body and the response headers (as a rowset) are written to optional output variables.',
         params: [
             { name: 'url', description: 'Request URL', type: 'string' },
             { name: 'contentType', description: 'Content-Type header', type: 'string' },
@@ -2932,11 +3038,16 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-post-with-retry.html',
         guideUrl: 'https://ampscript.guide/httppostwithretry/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/httppostwithretry/',
         minArgs: 3,
         maxArgs: INF,
         category: 'HTTP',
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The official reference labels the responseStatus argument as storing the "status" of the request, but on a live Engagement CloudPage (child MID 518005426) it receives the response BODY and responseContentRowset receives the response HEADERS as a rowset (11 header rows observed). The HTTP status code is the function return value. The numRetries, reschedule and returnExceptionOnError arguments are all accepted at runtime; retry-on-failure is documented but was not forced here because a transient failure could not be induced safely against the echo endpoint.',
         description:
-            'Posts content to the specified URL with automatic retry logic on failure. Similar to HTTPPost2 but adds configurable retries and rescheduling.',
+            'Posts content to the specified URL with automatic retry logic on failure, and returns the HTTP status code. Similar to HTTPPost2 but adds configurable retries and rescheduling; the response body and headers (as a rowset) are written to optional output variables.',
         params: [
             { name: 'urlEndpoint', description: 'The URL to send the content to', type: 'string' },
             {
@@ -2973,7 +3084,7 @@ export const FUNCTIONS = [
             },
             {
                 name: 'responseStatus',
-                description: 'An AMPscript variable that stores the status of the POST request',
+                description: 'An AMPscript variable that receives the response body',
                 type: 'string',
                 optional: true,
             },
@@ -3115,9 +3226,11 @@ export const FUNCTIONS = [
         returnDescription: 'An HTML img tag for the referenced image.',
         syntax: 'Image(imageExternalKey[, defaultImageExternalKey])',
         example: "%%=Image('CorpLogo', 'DefaultImage')=%%",
-        isConfirmed: false,
-        verificationBlocked: true,
-        verificationBlockedReason: 'classic-only-no-assets',
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        deprecated: true,
+        deprecatedReason:
+            'The classic Portfolio / Classic Content area this function reads from was retired in April 2023, so no image assets exist for it to reference on any current tenant, and every invocation aborts the page at runtime. Use ContentImageByKey or ContentImageByID against Content Builder image assets instead.',
         officialDocsNote:
             'No working invocation was found on either the child QA BU (MID 518005426) or the parent BU (MID 7281698). Image resolves images from the legacy Portfolio, whose creation and applications have been retired; no Portfolio assets exist on either BU to reference. Every attempt aborted the CloudPage with HTTP 422 and no output: a literal URL, a Content Builder asset external key, and a plausible Portfolio-style key were all tried on the child BU, and a Portfolio-style key on the parent BU. Use ContentImageByKey or ContentImageByID against Content Builder image assets instead.',
     },
@@ -3163,6 +3276,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-insert-data.html',
         guideUrl: 'https://ampscript.guide/insertdata/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/insertdata/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -3205,6 +3321,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-insert-de.html',
         guideUrl: 'https://ampscript.guide/insertde/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/insertde/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -3248,6 +3367,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-create.html',
         guideUrl: 'https://ampscript.guide/invokecreate/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/invokecreate/',
         minArgs: 3,
         maxArgs: 4,
         category: 'Marketing Cloud API',
@@ -3278,9 +3398,12 @@ export const FUNCTIONS = [
             },
         ],
         returnType: 'string',
-        returnDescription: 'The status of the create operation as returned by the API.',
+        returnDescription:
+            "The SOAP OverallStatus as a string — 'OK' on success, 'Error' on failure. The human-readable message goes to the statusMessage out-variable and the numeric error code to errorCode.",
+        returnEnum: ['OK', 'Error'],
         syntax: 'InvokeCreate(apiObject, @statusMessage, @errorCode[, createOptionsObject])',
         example: '%%=InvokeCreate(@apiObject, @statusMessage, @errorCode)=%%',
+        isConfirmed: true,
     },
     {
         name: 'InvokeDelete',
@@ -3289,6 +3412,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-delete.html',
         guideUrl: 'https://ampscript.guide/invokedelete/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/invokedelete/',
         minArgs: 3,
         maxArgs: 4,
         category: 'Marketing Cloud API',
@@ -3319,9 +3443,12 @@ export const FUNCTIONS = [
             },
         ],
         returnType: 'string',
-        returnDescription: 'The status of the delete operation as returned by the API.',
+        returnDescription:
+            "The SOAP OverallStatus as a string — 'OK' on success, 'Error' on failure. The human-readable message goes to the statusMessage out-variable and the numeric error code to errorCode.",
+        returnEnum: ['OK', 'Error'],
         syntax: 'InvokeDelete(apiObject, @statusMessage, @errorCode[, deleteOptionsObject])',
         example: '%%=InvokeDelete(@apiObject, @statusMessage, @errorCode)=%%',
+        isConfirmed: true,
     },
     {
         name: 'InvokeExecute',
@@ -3330,6 +3457,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-execute.html',
         guideUrl: 'https://ampscript.guide/invokeexecute/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/invokeexecute/',
         minArgs: 1,
         maxArgs: 3,
         category: 'Marketing Cloud API',
@@ -3354,9 +3482,10 @@ export const FUNCTIONS = [
         ],
         returnType: 'rowset',
         returnDescription:
-            'A rowset containing the API response. Use Row() and Field() to read the StatusMessage and ErrorCode.',
+            'A rowset containing the API Results. Use Row() and Field() to read each result — StatusCode, StatusMessage and ErrorCode. The optional @statusMessage out-variable receives the OverallStatus string and @requestId receives the RequestID GUID.',
         syntax: 'InvokeExecute(apiObject[, @statusMessage, @requestId])',
         example: '%%[ SET @rows = InvokeExecute(@apiObject, @statusMessage, @requestId) ]%%',
+        isConfirmed: true,
     },
     {
         name: 'InvokePerform',
@@ -3365,6 +3494,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-perform.html',
         guideUrl: 'https://ampscript.guide/invokeperform/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/invokeperform/',
         minArgs: 2,
         maxArgs: 3,
         category: 'Marketing Cloud API',
@@ -3386,9 +3516,12 @@ export const FUNCTIONS = [
             },
         ],
         returnType: 'string',
-        returnDescription: 'The status of the perform operation as returned by the API.',
+        returnDescription:
+            "The SOAP OverallStatus as a string — 'OK' on success, 'Error' on failure. The human-readable message goes to the optional @statusMessage out-variable.",
+        returnEnum: ['OK', 'Error'],
         syntax: 'InvokePerform(apiObject, actionToPerform[, @statusMessage])',
         example: "%%=InvokePerform(@apiObject, 'Start', @statusMessage)=%%",
+        isConfirmed: true,
     },
     {
         name: 'InvokeRetrieve',
@@ -3397,6 +3530,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-retrieve.html',
         guideUrl: 'https://ampscript.guide/invokeretrieve/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/invokeretrieve/',
         minArgs: 1,
         maxArgs: 3,
         category: 'Marketing Cloud API',
@@ -3428,6 +3562,7 @@ export const FUNCTIONS = [
         returnDescription: 'A rowset containing the retrieved API records.',
         syntax: 'InvokeRetrieve(apiObject[, @statusMessage, @requestId])',
         example: '%%[ SET @rows = InvokeRetrieve(@apiObject, @statusMessage, @requestId) ]%%',
+        isConfirmed: true,
     },
     {
         name: 'InvokeUpdate',
@@ -3436,6 +3571,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-invoke-update.html',
         guideUrl: 'https://ampscript.guide/invokeupdate/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/invokeupdate/',
         minArgs: 1,
         maxArgs: 4,
         category: 'Marketing Cloud API',
@@ -3468,9 +3604,12 @@ export const FUNCTIONS = [
             },
         ],
         returnType: 'string',
-        returnDescription: 'The status of the update operation as returned by the API.',
+        returnDescription:
+            "The SOAP OverallStatus as a string — 'OK' on success, 'Error' on failure. The human-readable message goes to the statusMessage out-variable and the numeric error code to errorCode.",
+        returnEnum: ['OK', 'Error'],
         syntax: 'InvokeUpdate(apiObject[, @statusMessage, @errorCode, updateOptions])',
         example: '%%=InvokeUpdate(@apiObject, @statusMessage, @errorCode)=%%',
+        isConfirmed: true,
     },
     {
         name: 'IsCHTMLBrowser',
@@ -3666,9 +3805,11 @@ export const FUNCTIONS = [
         maxArgs: 2,
         category: 'Content',
         description: 'Generates a URL to a microsite page that serves live, dynamic content.',
-        isConfirmed: false,
-        verificationBlocked: true,
-        verificationBlockedReason: 'classic-only-no-assets',
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        deprecated: true,
+        deprecatedReason:
+            'Live Offers (Live Content) was removed from Marketing Cloud in 2019 and the Classic Microsites this URL points at were retired in June 2022, so there is no provisionable modern equivalent and every invocation aborts the page at runtime.',
         officialDocsNote:
             "Attempted on both the child QA BU (MID 518005426) and the parent BU (MID 7281698). Every invocation shape aborted the CloudPage with HTTP 200 lost to a 422 page abort: the documented-valid LiveContentMicrositeURL('coupon','MyCoupon'), an unknown content type, and an empty external key all failed identically. The function resolves a Live Offers (Live Content) coupon by external key, and no such Live Content asset is provisioned on either BU, so no working invocation could be produced. Left blocked pending a tenant with a real Live Offers coupon.",
         params: [
@@ -3727,6 +3868,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-long-sfid.html',
         guideUrl: 'https://ampscript.guide/longsfid/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/longsfid/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 1,
         maxArgs: 1,
         category: 'Sales and Service Cloud',
@@ -3747,11 +3891,14 @@ export const FUNCTIONS = [
             'In MCN, search arguments must be provided in column/value pairs - an odd count causes an error. All filter keys must fully specify the composite primary key.',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup.html',
         guideUrl: 'https://ampscript.guide/lookup/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lookup/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 4,
         maxArgs: INF,
         category: 'Data Extension',
         description:
-            'Returns a single field value from the first matching row in a data extension.',
+            'Returns a single field value from the first matching row in a data extension. A no-match returns an empty string.',
         params: [
             {
                 name: 'dataObject',
@@ -3794,6 +3941,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-ordered-rows.html',
         guideUrl: 'https://ampscript.guide/lookuporderedrows/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lookuporderedrows/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 5,
         maxArgs: INF,
         category: 'Data Extension',
@@ -3849,6 +3999,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-ordered-rows-cs.html',
         guideUrl: 'https://ampscript.guide/lookuporderedrowscs/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lookuporderedrowscs/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 5,
         maxArgs: INF,
         category: 'Data Extension',
@@ -3903,6 +4056,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-rows.html',
         guideUrl: 'https://ampscript.guide/lookuprows/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lookuprows/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -3943,6 +4099,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-rows-cs.html',
         guideUrl: 'https://ampscript.guide/lookuprowscs/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lookuprowscs/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -4053,6 +4212,11 @@ export const FUNCTIONS = [
         category: 'MobileConnect',
         description:
             'Returns the URL of MMS content from an inbound mobile-originated (MO) message. Only usable in MobileConnect.',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
+        officialDocsNote:
+            'Could not runtime-verify on the only available context (a CloudPage GET on cred/DEV, MID 510007949; no parent-BU escalation is configured on this tenant). Including an MMS_Content_URL(0) call in the injected content block aborted the whole page at compile time (HTTP 422) even when the call sat inside a non-matching IF branch, while an otherwise identical page with the call removed rendered HTTP 200. This matches the official reference, which states the function is usable only in MobileConnect and not in landing pages or other content types; there is no mobile-originated message context on a CloudPage to exercise it against.',
         params: [
             {
                 name: 'position',
@@ -4153,6 +4317,11 @@ export const FUNCTIONS = [
         category: 'MobileConnect',
         description:
             'Returns the content of an inbound mobile-originated (MO) message. Only usable in MobileConnect. The only accepted argument value is 0.',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
+        officialDocsNote:
+            'Could not runtime-verify on the only available context (a CloudPage GET on cred/DEV, MID 510007949; no parent-BU escalation is configured on this tenant). A page containing a Msg(0) call aborted at compile time (HTTP 422) even when the call sat inside a non-matching IF branch, whereas the same page with no Msg construct rendered HTTP 200 — so the abort happens at parse time, before any runtime gate. This matches the official reference, which states the function is usable only in MobileConnect and not in landing pages or other content types; a CloudPage supplies no mobile-originated message to read.',
         params: [
             {
                 name: 'index',
@@ -4201,6 +4370,11 @@ export const FUNCTIONS = [
         category: 'MobileConnect',
         description:
             'Returns a single word that follows the keyword in an inbound mobile-originated (MO) message, by position. Only usable in MobileConnect, chained off Msg(0).',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
+        officialDocsNote:
+            'Could not runtime-verify on the only available context (a CloudPage GET on cred/DEV, MID 510007949; no parent-BU escalation on this tenant). Noun is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
         params: [
             {
                 name: 'position',
@@ -4226,6 +4400,11 @@ export const FUNCTIONS = [
         category: 'MobileConnect',
         description:
             'Returns all message content that follows the keyword in an inbound mobile-originated (MO) message. Only usable in MobileConnect, chained off Msg(0). Takes no arguments.',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
+        officialDocsNote:
+            'Could not runtime-verify on the only available context (a CloudPage GET on cred/DEV, MID 510007949; no parent-BU escalation on this tenant). Nouns is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
         params: [],
         returnType: 'string',
         returnDescription: 'All content that follows the keyword in the inbound message.',
@@ -4720,6 +4899,11 @@ export const FUNCTIONS = [
         syntax: 'RetrieveMSCRMRecords(entityName, fieldsToRetrieve, queryFieldName, queryFieldOperator, queryFieldValue)',
         example:
             "%%[ SET @rows = RetrieveMSCRMRecords('contact', 'fullname,emailaddress1', 'lastname', 'eq', 'Smith') ]%%",
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        deprecated: true,
+        deprecatedReason:
+            'The Marketing Cloud Connector for Microsoft Dynamics CRM was retired (online integration in December 2020, on-premises in October 2021), so the Dynamics CRM AMPscript functions no longer have a live integration to call and are non-functional. No replacement AMPscript function exists; integrate Dynamics data through the SFTP import/export or a custom API instead.',
     },
     {
         name: 'RetrieveMSCRMRecordsFetchXML',
@@ -4737,6 +4921,11 @@ export const FUNCTIONS = [
         returnDescription: 'A rowset of CRM records matching the FetchXML query.',
         syntax: 'RetrieveMSCRMRecordsFetchXML(fetchXml)',
         example: '%%[ SET @rows = RetrieveMSCRMRecordsFetchXML(@fetchXml) ]%%',
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        deprecated: true,
+        deprecatedReason:
+            'The Marketing Cloud Connector for Microsoft Dynamics CRM was retired (online integration in December 2020, on-premises in October 2021), so the Dynamics CRM AMPscript functions no longer have a live integration to call and are non-functional. No replacement AMPscript function exists; integrate Dynamics data through the SFTP import/export or a custom API instead.',
     },
     {
         name: 'RetrieveSalesforceJobSources',
@@ -4745,13 +4934,25 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-retrieve-job-sources.html',
         guideUrl: 'https://ampscript.guide/retrievesalesforcejobsources/',
+        sfmcGuideUrl:
+            'https://sfmc.guide/engagement/ampscript/functions/retrievesalesforcejobsources/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 1,
         maxArgs: 1,
         category: 'Sales and Service Cloud',
-        description: 'Retrieves the data sources associated with a Salesforce-triggered send job.',
-        params: [{ name: 'jobId', description: 'Job identifier', type: 'number' }],
+        description:
+            'Retrieves the source records (SourceID, SourceType, IsInclusionSource) that made up the audience of a Salesforce-triggered send, matched by its numeric job ID, and returns them as a rowset. Requires an active Marketing Cloud Connect integration. A job ID with no matching sources returns an empty rowset rather than an error; the function reports nothing about the job status.',
+        params: [
+            {
+                name: 'jobId',
+                description: 'The numeric job ID of the Salesforce send',
+                type: 'number',
+            },
+        ],
         returnType: 'rowset',
-        returnDescription: 'A rowset describing the sources of the referenced send job.',
+        returnDescription:
+            'A rowset of the send sources (SourceID, SourceType, IsInclusionSource); an empty rowset when the job ID has no matching sources.',
         syntax: 'RetrieveSalesforceJobSources(jobId)',
         example: '%%[ SET @rows = RetrieveSalesforceJobSources(@jobId) ]%%',
     },
@@ -4763,10 +4964,15 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-retrieve-objects.html',
         guideUrl: 'https://ampscript.guide/retrievesalesforceobjects/',
+        sfmcGuideUrl:
+            'https://sfmc.guide/engagement/ampscript/functions/retrievesalesforceobjects/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 5,
         maxArgs: INF,
         category: 'Sales and Service Cloud',
-        description: 'Retrieves records from a connected Salesforce CRM object.',
+        description:
+            'Retrieves records from a connected Salesforce Sales or Service Cloud object via Marketing Cloud Connect and returns them as a rowset. Requires an active Marketing Cloud Connect integration; a call against an unknown object name aborts the page.',
         params: [
             {
                 name: 'objectName',
@@ -4824,10 +5030,14 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-row.html',
         guideUrl: 'https://ampscript.guide/row/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/row/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 2,
         maxArgs: 2,
         category: 'Data Extension',
-        description: 'Returns a specific row from a rowset by its 1-based index.',
+        description:
+            'Returns a specific row from a rowset by its 1-based index. Index 0 (or any out-of-range index) aborts the page rather than returning an empty row.',
         params: [
             { name: 'rowset', description: 'Rowset to access', type: 'rowset' },
             { name: 'rowIndex', description: '1-based row index', type: 'number' },
@@ -4845,6 +5055,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-row-count.html',
         guideUrl: 'https://ampscript.guide/rowcount/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/rowcount/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 1,
         maxArgs: 1,
         category: 'Data Extension',
@@ -4862,6 +5075,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-api/mc-ampscript-reference-api-set-object-property.html',
         guideUrl: 'https://ampscript.guide/setobjectproperty/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/setobjectproperty/',
         minArgs: 3,
         maxArgs: 3,
         category: 'Marketing Cloud API',
@@ -4883,26 +5097,48 @@ export const FUNCTIONS = [
         returnDescription: 'No value is returned; the named property is set on the object.',
         syntax: 'SetObjectProperty(apiObject, propertyName, propertyValue)',
         example: "SetObjectProperty(@apiObject, 'LastName', 'Smith')",
+        isConfirmed: true,
     },
     {
         name: 'SetSmsConversationNextKeyword',
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sms/mc-ampscript-reference-sms-set-sms-conversation-next-keyword.html',
         guideUrl: 'https://ampscript.guide/setsmsconversationnextkeyword/',
         minArgs: 3,
         maxArgs: 3,
         category: 'MobileConnect',
-        description: 'Sets the next expected keyword for an active SMS conversation.',
+        description:
+            'Sets the keyword for the next path of an existing SMS conversation, applied when the contact next replies. Does not create a new conversation. Returns true when set inside a MobileConnect message context, and false in any other context (for example a CloudPage or email). The success path cannot be exercised outside a live MobileConnect send.',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Runtime-observed on cred/DEV (MID 510007949), the only BU available (no parent-BU escalation). This is an ordinary function call, so it compiles and runs on a CloudPage: called there with a real short code, the authorized destination number and a keyword, it returned the literal boolean false (Empty() false) and the page rendered fully with no exception — no SMS was sent and no conversation state changed. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour. The success path (true, keyword actually set) requires a live MobileConnect message context that cannot be captured on this tenant, so the function is recorded blocked for the success path while the CloudPage false-return is proven. The catalogued signature was corrected here: the three parameters are originationNumber, destinationNumber and keyword, and the return is a boolean, not void. A docUrl to the official reference was also added.',
         params: [
-            { name: 'shortCode', description: 'SMS short code', type: 'string' },
-            { name: 'keyword', description: 'Current conversation keyword', type: 'string' },
-            { name: 'nextKeyword', description: 'Next expected keyword', type: 'string' },
+            {
+                name: 'originationNumber',
+                description: 'The MobileConnect short code or long code used to send',
+                type: 'string',
+            },
+            {
+                name: 'destinationNumber',
+                description: "The contact's phone number, including country code",
+                type: 'string',
+            },
+            {
+                name: 'keyword',
+                description: 'The string to set as the next conversation keyword',
+                type: 'string',
+            },
         ],
-        returnType: 'void',
-        returnDescription: 'No value is returned; the next expected keyword is set.',
-        syntax: 'SetSmsConversationNextKeyword(shortCode, keyword, nextKeyword)',
-        example: "SetSmsConversationNextKeyword('12345', 'JOIN', 'CONFIRM')",
+        returnType: 'boolean',
+        returnDescription:
+            'true when the next keyword is set inside a MobileConnect message context; false in any other context (proven on a CloudPage). Fails with an exception in-context if unsuccessful.',
+        syntax: 'SetSmsConversationNextKeyword(originationNumber, destinationNumber, keyword)',
+        example: '%%=SetSmsConversationNextKeyword("12345", MOBILE_NUMBER, "EXAMPLE")=%%',
     },
     {
         name: 'SetStateMscrmRecord',
@@ -4943,6 +5179,11 @@ export const FUNCTIONS = [
         returnDescription: 'No value is returned; the record state and status are updated.',
         syntax: 'SetStateMscrmRecord(recordGuid, entityName, stateToSet, statusToSet)',
         example: "SetStateMscrmRecord(@guid, 'contact', 'active', 1)",
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        deprecated: true,
+        deprecatedReason:
+            'The Marketing Cloud Connector for Microsoft Dynamics CRM was retired (online integration in December 2020, on-premises in October 2021), so the Dynamics CRM AMPscript functions no longer have a live integration to call and are non-functional. No replacement AMPscript function exists; integrate Dynamics data through the SFTP import/export or a custom API instead.',
     },
     {
         name: 'SHA1',
@@ -5336,6 +5577,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-update-data.html',
         guideUrl: 'https://ampscript.guide/updatedata/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/updatedata/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
@@ -5401,6 +5645,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-update-de.html',
         guideUrl: 'https://ampscript.guide/updatede/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/updatede/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
@@ -5507,6 +5754,11 @@ export const FUNCTIONS = [
         repeat: [{ startIndex: 2, groupSize: 2, minGroups: 1 }],
         syntax: 'UpdateMSCRMRecords(entityName, guidsToUpdate, attributeName1, attributeValue1[, attributeNameN, attributeValueN, ...])',
         example: "%%=UpdateMSCRMRecords('contact', @guids, 'lastname', 'Smith')=%%",
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        deprecated: true,
+        deprecatedReason:
+            'The Marketing Cloud Connector for Microsoft Dynamics CRM was retired (online integration in December 2020, on-premises in October 2021), so the Dynamics CRM AMPscript functions no longer have a live integration to call and are non-functional. No replacement AMPscript function exists; integrate Dynamics data through the SFTP import/export or a custom API instead.',
     },
     {
         name: 'UpdateSingleSalesforceObject',
@@ -5515,11 +5767,17 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-update-single-object.html',
         guideUrl: 'https://ampscript.guide/updatesinglesalesforceobject/',
+        sfmcGuideUrl:
+            'https://sfmc.guide/engagement/ampscript/functions/updatesinglesalesforceobject/',
         minArgs: 4,
         maxArgs: INF,
         category: 'Sales and Service Cloud',
         description:
-            'Updates a single record in a connected Salesforce CRM object. Accepts one or more field name and value pairs. Returns 1 on success, 0 otherwise.',
+            'Updates a single record in a connected Salesforce Sales or Service Cloud object via Marketing Cloud Connect. Accepts one or more field name and value pairs. Returns 1 on success; per the official reference it returns 0 on failure, but on a CloudPage a failed update (unknown object, malformed or non-existent record ID) instead surfaces the SOAP fault as an uncatchable page abort rather than returning 0.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        officialDocsNote:
+            'The success token 1 was runtime-proven on cred/DEV (MID 510007949), which has an active Marketing Cloud Connect integration to a real Salesforce org: updating one field of a record created moments earlier in the same run (a benign Task) returned the literal 1 with the page rendering fully. The failure token 0 is NOT observable in CloudPage GET context: every safe induced failure (unknown object, a malformed ID, and a well-formed but non-existent Lead ID at both 15 and 18 characters, on a real field) aborted the whole page with HTTP 422 — the SOAP fault propagates as an uncatchable page abort (identical to CreateSalesforceObject and RetrieveSalesforceObjects against a bad target), so the documented 0 return never materialises to be read. returnEnum is therefore left unset: only 1 is provable here, and asserting a [0,1] enum would ship the unproven 0 token. returnType stays number and the 0/1 semantics are retained in the description as a documented fact attributed to the official reference. The 0-on-CloudPage-abort behaviour is a context observation, not a contradiction of the send/preview-context 0/1 contract, so differsFromOfficialDocs stays false.',
         params: [
             {
                 name: 'objectName',
@@ -5542,8 +5800,8 @@ export const FUNCTIONS = [
             { name: 'fieldValueN', description: 'Additional field value', optional: true },
         ],
         returnType: 'number',
-        returnDescription: '1 when the record was updated successfully, otherwise 0.',
-        returnEnum: [0, 1],
+        returnDescription:
+            '1 when the record was updated successfully (runtime-proven). Per the official reference a failed update returns 0, but on a CloudPage a failure aborts the page (HTTP 422) instead of returning 0, so the 0 token is not observable in that context.',
         repeat: [{ startIndex: 2, groupSize: 2, minGroups: 1 }],
         syntax: 'UpdateSingleSalesforceObject(objectName, idToUpdate, fieldName1, fieldValue1[, fieldNameN, fieldValueN, ...])',
         example: "%%=UpdateSingleSalesforceObject('Contact', @recordId, 'LastName', 'Smith')=%%",
@@ -5583,11 +5841,16 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-contacts/mc-ampscript-reference-contacts-upsert-contact.html',
         guideUrl: 'https://ampscript.guide/upsertcontact/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/upsertcontact/',
         minArgs: 5,
         maxArgs: INF,
         category: 'MobileConnect',
         description:
-            'Upserts attributes into a contact record. If the contact exists it is updated; otherwise a new contact is created.',
+            "Upserts attributes onto a mobile contact matched by phone number. If the contact exists it is updated; otherwise a new contact is created. Returns a status code: 0 when the upsert succeeds and 1 when an error occurs. The only supported channel is 'mobile' and the only supported match attribute is 'phone'. An unknown attribute name returns the error status without writing anything.",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        officialDocsNote:
+            'Both return tokens were runtime-proven on cred/DEV (MID 510007949). The success status 0 was proven by creating a brand-new mobile contact keyed on an opaque, unreachable phone number in a reserved test range with a documented system attribute (_ZipCode); calling the same key a second time with a different value updated that contact and again returned 0, so both the create and update branches of the upsert return 0. The error status 1 was proven three independent ways (unsupported channel, unsupported match attribute, non-numeric phone) and again by passing an attribute name that is not a defined MobileConnect attribute — each returned 1 with the page rendering fully and no write performed. The return is a status code (0 success / 1 error), not a count of records. The phone-number argument accepts both an integer literal and a numeric string (both returned 0 for a successful create). runtime matches the official reference, so differsFromOfficialDocs stays false.',
         params: [
             {
                 name: 'channel',
@@ -5603,7 +5866,7 @@ export const FUNCTIONS = [
             {
                 name: 'phoneNumber',
                 description: 'The phone number of the contact, including the country code',
-                type: 'number',
+                type: 'string|number',
             },
             {
                 name: 'keyToUpsert1',
@@ -5626,10 +5889,12 @@ export const FUNCTIONS = [
             { name: 'valueToUpsertN', description: 'Additional attribute value', optional: true },
         ],
         returnType: 'number',
-        returnDescription: 'The number of contact records created or updated.',
+        returnEnum: [0, 1],
+        returnDescription:
+            'A status code: 0 when the upsert succeeds (both creating a new contact and updating an existing one), 1 when an error occurs. Both tokens were proven at runtime.',
         repeat: [{ startIndex: 3, groupSize: 2, minGroups: 1 }],
         syntax: 'UpsertContact(channel, attribute, phoneNumber, keyToUpsert1, valueToUpsert1[, keyToUpsertN, valueToUpsertN, ...])',
-        example: "%%=UpsertContact('SMS', 'phone', '+17182097651', 'FirstName', 'Curt')=%%",
+        example: "%%=UpsertContact('mobile', 'phone', 14255550142, '_ZipCode', '98026')=%%",
     },
     {
         name: 'UpsertData',
@@ -5638,6 +5903,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-upsert-data.html',
         guideUrl: 'https://ampscript.guide/upsertdata/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/upsertdata/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
@@ -5713,6 +5981,9 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-upsert-de.html',
         guideUrl: 'https://ampscript.guide/upsertde/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/upsertde/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
@@ -5847,6 +6118,11 @@ export const FUNCTIONS = [
         syntax: 'UpsertMSCRMRecord(entityName, sortField, sortType, numPairsForRetrieve, filterAttributeName, filterAttributeValue, numPairsForUpdate, updateAttributeName, updateAttributeValue)',
         example:
             "%%=UpsertMSCRMRecord('contact', 'createdon', 'DESC', 1, 'emailaddress1', @email, 1, 'lastname', 'Smith')=%%",
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        deprecated: true,
+        deprecatedReason:
+            'The Marketing Cloud Connector for Microsoft Dynamics CRM was retired (online integration in December 2020, on-premises in October 2021), so the Dynamics CRM AMPscript functions no longer have a live integration to call and are non-functional. No replacement AMPscript function exists; integrate Dynamics data through the SFTP import/export or a custom API instead.',
     },
     {
         name: 'URLEncode',
@@ -5904,6 +6180,11 @@ export const FUNCTIONS = [
         category: 'MobileConnect',
         description:
             'Returns the keyword (verb) from an inbound mobile-originated (MO) message. Only usable in MobileConnect, chained off Msg(0). Takes no arguments.',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
+        officialDocsNote:
+            'Could not runtime-verify on the only available context (a CloudPage GET on cred/DEV, MID 510007949; no parent-BU escalation on this tenant). Verb is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
         params: [],
         returnType: 'string',
         returnDescription: 'The keyword (first word) of the inbound mobile-originated message.',
