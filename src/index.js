@@ -245,6 +245,11 @@ export const FUNCTIONS = [
         returnDescription: 'No value is returned; the file is attached to the outgoing email.',
         syntax: 'AttachFile(fileLocationType, fileLocation, attachmentFileName, viewOnWeb, viewOnWebUrl, viewOnWebFileName, viewOnWebDuration, contentDispositionAttachment)',
         example: "%%=AttachFile('http', 'https://example.com/catalog.pdf', 'Catalog.pdf')=%%",
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-working-invocation',
+        officialDocsNote:
+            'AttachFile targets the outgoing email at send time; it has no working invocation on a CloudPage. Every reached call — contentbuilder key, http URL, and the two-argument minimum form — aborted the page with HTTP 422 and no partial output, on the child QA BU (MID 518005426) and again on the parent BU (MID 7281698). The abort only happens when the call is actually reached: gating it behind an unmatched query-string branch leaves the page at HTTP 200, so the failure is a runtime abort of the reached call rather than a compile-time rejection. The official reference additionally documents that the capability must be provisioned per account, which cannot be observed from a full-access probe.',
     },
     {
         name: 'AttributeValue',
@@ -420,11 +425,12 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-barcode-url.html',
         guideUrl: 'https://ampscript.guide/barcodeurl/',
-        minArgs: 9,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/barcodeurl/',
+        minArgs: 4,
         maxArgs: 9,
         category: 'Content',
         description:
-            'Generates a URL pointing to a barcode image rendered from the given parameters.',
+            'Generates a URL that renders a barcode image from the given value, symbology, width, and height, plus optional formatting. An empty value aborts the page instead of returning an empty result.',
         params: [
             {
                 name: 'valueToConvert',
@@ -496,7 +502,9 @@ export const FUNCTIONS = [
         returnType: 'string',
         returnDescription: 'A URL that renders the requested barcode image.',
         syntax: 'BarcodeURL(valueToConvert, barcodeType, width, height, checksumValue, showText, altText, rotation, transparentBG)',
-        example: "%%=BarcodeURL('12345', 'qr', 150, 150, 0, 0, '', 0, 0)=%%",
+        example: "<img src=\"%%=BarcodeURL('12345678901', 'code128auto', 150, 50)=%%\">",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'Base64Decode',
@@ -586,10 +594,14 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-begin-impression-region.html',
         guideUrl: 'https://ampscript.guide/beginimpressionregion/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/beginimpressionregion/',
         minArgs: 1,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'Content',
-        description: 'Marks the start of an impression tracking region.',
+        description:
+            'Marks the start of an impression tracking region. The region name must be a literal — a variable argument aborts the page.',
         params: [{ name: 'regionName', description: 'Impression region name', type: 'string' }],
         returnType: 'void',
         returnDescription: 'No value is returned; it marks the start of an impression region.',
@@ -603,11 +615,12 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-option-list.html',
         guideUrl: 'https://ampscript.guide/buildoptionlist/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/buildoptionlist/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Content',
         description:
-            'Builds HTML <option> elements from a data extension for use in a <select> dropdown.',
+            'Builds HTML <option> elements from supplied value/text pairs for use in a <select> dropdown, marking the pair whose value matches the default selection as selected.',
         params: [
             {
                 name: 'defaultSelection',
@@ -652,6 +665,8 @@ export const FUNCTIONS = [
             ']%%\n' +
             '<p>Choose an option:</p>\n' +
             '<select name="choice">\n%%=v(@OptionList)=%%\n</select>',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'BuildRowsetFromJSON',
@@ -1028,6 +1043,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-area.html',
         guideUrl: 'https://ampscript.guide/contentarea/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/contentarea/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Content',
@@ -1062,7 +1078,8 @@ export const FUNCTIONS = [
                 name: 'errorMessage',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Default content to return if an error occurs',
+                description:
+                    'Default content to return if an error occurs. This value is emitted literally - any AMPscript it contains is not evaluated.',
                 type: 'string',
                 optional: true,
             },
@@ -1080,6 +1097,8 @@ export const FUNCTIONS = [
         returnDescription: 'The rendered HTML of the referenced content area.',
         syntax: 'ContentArea(contentAreaId[, impressionRegionName, errorOnMissingContentArea, errorMessage, statusCode])',
         example: '%%=ContentArea(12345)=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         deprecated: true,
         deprecatedReplacement: 'ContentBlockByID',
         deprecatedReason:
@@ -1092,6 +1111,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-area-by-name.html',
         guideUrl: 'https://ampscript.guide/contentareabyname/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/contentareabyname/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Content',
@@ -1124,7 +1144,8 @@ export const FUNCTIONS = [
                 name: 'errorMessage',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Default content to return if an error occurs',
+                description:
+                    'Default content to return if an error occurs. This value is emitted literally - any AMPscript it contains is not evaluated.',
                 type: 'string',
                 optional: true,
             },
@@ -1142,6 +1163,8 @@ export const FUNCTIONS = [
         returnDescription: 'The rendered HTML of the named content area.',
         syntax: 'ContentAreaByName(contentAreaName[, impressionRegionName, errorOnMissingContentArea, errorMessage, statusCode])',
         example: String.raw`%%=ContentAreaByName('My Folder\My Content')=%%`,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         deprecated: true,
         deprecatedReplacement: 'ContentBlockByName',
         deprecatedReason:
@@ -1154,6 +1177,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-id.html',
         guideUrl: 'https://ampscript.guide/contentblockbyid/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/contentblockbyid/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Content',
@@ -1187,7 +1211,8 @@ export const FUNCTIONS = [
                 name: 'errorMessage',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Default content to return if an error occurs',
+                description:
+                    'Default content to return if an error occurs. This value is emitted literally - any AMPscript it contains is not evaluated.',
                 type: 'string',
                 optional: true,
             },
@@ -1205,6 +1230,8 @@ export const FUNCTIONS = [
         returnDescription: 'The rendered HTML of the content block identified by ID.',
         syntax: 'ContentBlockByID(contentBlockId[, impressionRegionName, errorOnMissingContentBlock, errorMessage, statusCode])',
         example: '%%=ContentBlockByID(12345)=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'ContentBlockByKey',
@@ -1214,6 +1241,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-key.html',
         guideUrl: 'https://ampscript.guide/contentblockbykey/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/contentblockbykey/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Content',
@@ -1247,7 +1275,8 @@ export const FUNCTIONS = [
                 name: 'errorMessage',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Default content to return if an error occurs',
+                description:
+                    'Default content to return if an error occurs. This value is emitted literally - any AMPscript it contains is not evaluated.',
                 type: 'string',
                 optional: true,
             },
@@ -1265,6 +1294,8 @@ export const FUNCTIONS = [
         returnDescription: 'The rendered HTML of the content block identified by customer key.',
         syntax: 'ContentBlockByKey(contentBlockKey[, impressionRegionName, errorOnMissingContentBlock, errorMessage, statusCode])',
         example: "%%=ContentBlockByKey('welcome-header')=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'ContentBlockByName',
@@ -1273,6 +1304,7 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-name.html',
         guideUrl: 'https://ampscript.guide/contentblockbyname/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/contentblockbyname/',
         minArgs: 1,
         maxArgs: 5,
         category: 'Content',
@@ -1307,7 +1339,8 @@ export const FUNCTIONS = [
                 name: 'errorMessage',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Default content to return if an error occurs',
+                description:
+                    'Default content to return if an error occurs. This value is emitted literally - any AMPscript it contains is not evaluated.',
                 type: 'string',
                 optional: true,
             },
@@ -1325,6 +1358,8 @@ export const FUNCTIONS = [
         returnDescription: 'The rendered HTML of the content block identified by name or path.',
         syntax: 'ContentBlockByName(contentBlockName[, impressionRegionName, errorOnMissingContentBlock, errorMessage, statusCode])',
         example: String.raw`%%=ContentBlockByName('My Folder\Welcome Header')=%%`,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'ContentImageByID',
@@ -1333,10 +1368,12 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-image-by-id.html',
         guideUrl: 'https://ampscript.guide/contentimagebyid/',
-        minArgs: 2,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/contentimagebyid/',
+        minArgs: 1,
         maxArgs: 2,
         category: 'Content',
-        description: 'Returns the URL of a Content Builder image asset by its numeric ID.',
+        description:
+            'Returns an HTML img tag for a Content Builder image asset by its numeric ID. A missing image with no fallback aborts the page.',
         params: [
             {
                 name: 'id',
@@ -1350,12 +1387,16 @@ export const FUNCTIONS = [
                 description:
                     "The ID of a fallback image in Content Builder. The function uses this image if it can't find the image that you specified in the first parameter",
                 type: 'number|string',
+                optional: true,
             },
         ],
         returnType: 'string',
-        returnDescription: 'The URL of the image identified by ID.',
-        syntax: 'ContentImageByID(id, defaultImageExternalId)',
-        example: '%%=ContentImageByID(12345, 0)=%%',
+        returnDescription:
+            'An HTML img tag for the referenced image, with title, alt, border and thid attributes.',
+        syntax: 'ContentImageByID(id[, defaultImageExternalId])',
+        example: '%%=ContentImageByID(12345)=%%',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'ContentImageByKey',
@@ -1364,10 +1405,12 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-image-by-key.html',
         guideUrl: 'https://ampscript.guide/contentimagebykey/',
-        minArgs: 2,
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/contentimagebykey/',
+        minArgs: 1,
         maxArgs: 2,
         category: 'Content',
-        description: 'Returns the URL of a Content Builder image asset by its customer key.',
+        description:
+            'Returns an HTML img tag for a Content Builder image asset by its customer key. A missing image with no fallback aborts the page.',
         params: [
             {
                 name: 'imageExternalKey',
@@ -1380,12 +1423,16 @@ export const FUNCTIONS = [
                 mcnNotes: null,
                 description: 'External key of the fallback image asset',
                 type: 'string',
+                optional: true,
             },
         ],
         returnType: 'string',
-        returnDescription: 'The URL of the image identified by customer key.',
-        syntax: 'ContentImageByKey(imageExternalKey, defaultImageExternalKey)',
-        example: "%%=ContentImageByKey('hero-image', '')=%%",
+        returnDescription:
+            'An HTML img tag for the referenced image, with title, alt, border and thid attributes.',
+        syntax: 'ContentImageByKey(imageExternalKey[, defaultImageExternalKey])',
+        example: "%%=ContentImageByKey('hero-image')=%%",
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
     },
     {
         name: 'CreateMSCRMRecord',
@@ -2053,8 +2100,11 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-end-impression-region.html',
         guideUrl: 'https://ampscript.guide/endimpressionregion/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/endimpressionregion/',
         minArgs: 0,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'Content',
         description: 'Marks the end of an impression tracking region.',
         params: [
@@ -2062,8 +2112,9 @@ export const FUNCTIONS = [
                 name: 'endAllRegions',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Whether to end all open impression regions',
-                type: 'boolean',
+                description:
+                    'Whether to end all open impression regions. A truthy value ends every open region; the default ends only the most recent one.',
+                type: 'string|boolean|number',
                 optional: true,
             },
         ],
@@ -2487,6 +2538,10 @@ export const FUNCTIONS = [
         returnDescription: 'The content of the requested Portfolio item.',
         syntax: 'GetPortfolioItem(itemExternalKey)',
         example: "%%=GetPortfolioItem('my-portfolio-key')=%%",
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        officialDocsNote:
+            'Classic Portfolio is retired on this tenant, so no Portfolio item exists to retrieve. A reached call with an external key that does not resolve aborted the page with HTTP 422 and no partial output, on both the child QA BU (MID 518005426) and the parent BU (MID 7281698); the same call gated behind an unmatched query-string branch left the page at HTTP 200, confirming a runtime abort of the reached call. No valid key could be sourced because Portfolio asset creation and applications were retired, so the documented success path could not be exercised here.',
     },
     {
         name: 'GetPublishedSocialContent',
@@ -2506,6 +2561,10 @@ export const FUNCTIONS = [
         returnDescription: 'The published social content for the supplied identifier.',
         syntax: 'GetPublishedSocialContent(socialContentId)',
         example: "%%=GetPublishedSocialContent('socialContentId')=%%",
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        officialDocsNote:
+            'The community guide flags this as usable only inside Microsites and Landing Pages and only for content regions built in Classic Content, which is retired on this tenant. A reached call aborted the page with HTTP 422 and no partial output for both a string region name and a numeric region id, on the child QA BU (MID 518005426) and again on the parent BU (MID 7281698). The same call gated behind an unmatched query-string branch left the page at HTTP 200, confirming a runtime abort of the reached call rather than a compile-time failure. No Classic Content region exists here to source a resolvable identifier, so the documented success path could not be exercised.',
     },
     {
         name: 'GetSendTime',
@@ -2549,16 +2608,18 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-social/mc-ampscript-reference-social-get-social-publish-url.html',
         guideUrl: 'https://ampscript.guide/getsocialpublishurl/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/getsocialpublishurl/',
         minArgs: 2,
         maxArgs: INF,
         category: 'Social',
+        isConfirmed: true,
         description:
             'Returns HTML for sharing a content region on a supported social network via Social Forward. Optionally accepts repeating key/value parameter pairs.',
         params: [
             {
                 name: 'socialNetworkCode',
                 description: 'The number code of the social network to share to',
-                type: 'number',
+                type: 'string|number',
             },
             {
                 name: 'contentRegion',
@@ -2603,9 +2664,12 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-social/mc-ampscript-reference-social-get-social-publish-url-by-name.html',
         guideUrl: 'https://ampscript.guide/getsocialpublishurlbyname/',
+        sfmcGuideUrl:
+            'https://sfmc.guide/engagement/ampscript/functions/getsocialpublishurlbyname/',
         minArgs: 3,
         maxArgs: INF,
         category: 'Social',
+        isConfirmed: true,
         description:
             'Returns HTML for sharing a content region on a supported social network (identified by name) via Social Forward. Optionally accepts repeating key/value parameter pairs.',
         params: [
@@ -2678,8 +2742,10 @@ export const FUNCTIONS = [
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
+        isConfirmed: true,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-get.html',
         guideUrl: 'https://ampscript.guide/httpget/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/httpget/',
         minArgs: 1,
         maxArgs: 4,
         category: 'HTTP',
@@ -2699,25 +2765,27 @@ export const FUNCTIONS = [
                 optional: true,
             },
             {
-                name: 'headerName',
+                name: 'emptyContentHandling',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Request header name',
-                type: 'string',
+                description:
+                    'How empty content is handled: 0 allows empty content, 1 returns an error, 2 skips the subscriber in a send',
+                type: 'number',
                 optional: true,
             },
             {
-                name: 'headerValue',
+                name: 'status',
                 mcnSince: null,
                 mcnNotes: null,
-                description: 'Request header value',
-                type: 'string',
+                description:
+                    'Output variable that receives the function status: 0 success, -1 not found, -2 HTTP request error, -3 empty content',
+                type: 'number',
                 optional: true,
             },
         ],
         returnType: 'string',
         returnDescription: 'The body of the HTTP response as a string.',
-        syntax: 'HTTPGet(httpGetUrl[, continueOnError, headerName, headerValue])',
+        syntax: 'HTTPGet(httpGetUrl[, continueOnError, emptyContentHandling, status])',
         example: "%%=HTTPGet('https://example.com/api')=%%",
     },
     {
@@ -2951,8 +3019,13 @@ export const FUNCTIONS = [
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
+        isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Runtime-verified on a live Marketing Cloud Engagement CloudPage (child BU MID 518005426). The official reference states this function can only retrieve the standard HTTP headers listed in RFC 7231, but at runtime it also returns the value of a non-standard custom request header: a request sent with an X-Amp-Probe header returned that exact value, so the RFC 7231 restriction is not enforced when reading headers. A header that is absent from the request (for example Referer when none was sent) returns the empty string, matching the documented note.',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-request-header.html',
         guideUrl: 'https://ampscript.guide/httprequestheader/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/httprequestheader/',
         minArgs: 1,
         maxArgs: 1,
         category: 'HTTP',
@@ -3042,6 +3115,11 @@ export const FUNCTIONS = [
         returnDescription: 'An HTML img tag for the referenced image.',
         syntax: 'Image(imageExternalKey[, defaultImageExternalKey])',
         example: "%%=Image('CorpLogo', 'DefaultImage')=%%",
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'classic-only-no-assets',
+        officialDocsNote:
+            'No working invocation was found on either the child QA BU (MID 518005426) or the parent BU (MID 7281698). Image resolves images from the legacy Portfolio, whose creation and applications have been retired; no Portfolio assets exist on either BU to reference. Every attempt aborted the CloudPage with HTTP 422 and no output: a literal URL, a Content Builder asset external key, and a plausible Portfolio-style key were all tried on the child BU, and a Portfolio-style key on the parent BU. Use ContentImageByKey or ContentImageByID against Content Builder image assets instead.',
     },
     {
         name: 'IndexOf',
@@ -3588,6 +3666,11 @@ export const FUNCTIONS = [
         maxArgs: 2,
         category: 'Content',
         description: 'Generates a URL to a microsite page that serves live, dynamic content.',
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'classic-only-no-assets',
+        officialDocsNote:
+            "Attempted on both the child QA BU (MID 518005426) and the parent BU (MID 7281698). Every invocation shape aborted the CloudPage with HTTP 200 lost to a 422 page abort: the documented-valid LiveContentMicrositeURL('coupon','MyCoupon'), an unknown content type, and an empty external key all failed identically. The function resolves a Live Offers (Live Content) coupon by external key, and no such Live Content asset is provisioned on either BU, so no working invocation could be produced. Left blocked pending a tenant with a real Live Offers coupon.",
         params: [
             {
                 name: 'contentType',
@@ -4397,6 +4480,11 @@ export const FUNCTIONS = [
         returnDescription: 'An HTML string of star images representing the rating.',
         syntax: 'RatingStars(rating, maxRating, imageUrl)',
         example: "%%=RatingStars(4, 5, 'https://example.com/star.png')=%%",
+        isConfirmed: false,
+        verificationBlocked: true,
+        verificationBlockedReason: 'no-test-data',
+        officialDocsNote:
+            'No working CloudPage invocation was found. Any valid-arity call aborts the whole page with HTTP 422 at compile time, even when placed inside an unreached IF gate, so it cannot be probed behind a query-string switch. Two signature shapes were each deployed as the whole page: the catalog form RatingStars(4, 5, "https://example.com/star.png") and the ampscript.guide form RatingStars(5, "yellow", 25). Both returned HTTP 422 on the child BU (MID 518005426) and again on the parent BU (MID 7281698). The surrounding harness structure (RequestParameter gating, IF/ELSE/ENDIF) returned HTTP 200 once the RatingStars call was removed, confirming the abort is caused by the function itself, not the harness. RatingStars is an Einstein Email Recommendations helper that appears to resolve only inside the recommendations rendering context, which a bare CloudPage does not supply.',
     },
     {
         name: 'Redirect',
@@ -5141,10 +5229,12 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-transform-xml.html',
         guideUrl: 'https://ampscript.guide/transformxml/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/transformxml/',
         minArgs: 2,
         maxArgs: 2,
         category: 'Content',
         description: 'Transforms an XML document using an XSLT stylesheet.',
+        isConfirmed: true,
         params: [
             { name: 'xmlDocument', description: 'XML document string', type: 'string' },
             { name: 'xslDocument', description: 'XSLT stylesheet string', type: 'string' },
@@ -5161,11 +5251,14 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-treat-as-content.html',
         guideUrl: 'https://ampscript.guide/treatascontent/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/treatascontent/',
         minArgs: 1,
         maxArgs: 1,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'Content',
         description:
-            'Evaluates a string as AMPscript content, rendering any embedded AMPscript expressions.',
+            'Evaluates a string as AMPscript content, rendering any embedded AMPscript expressions, and returns the rendered string. Plain text and the empty string pass through unchanged.',
         params: [
             {
                 name: 'stringToReturn',
@@ -5187,11 +5280,14 @@ export const FUNCTIONS = [
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-treat-as-content-area.html',
         guideUrl: 'https://ampscript.guide/treatascontentarea/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/treatascontentarea/',
         minArgs: 2,
         maxArgs: 3,
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
         category: 'Content',
         description:
-            'Treats a string as a content area, optionally assigning it to an impression region.',
+            'Stores a content string under a key for the duration of a send and renders it, evaluating any embedded AMPscript. An optional third argument names an impression region.',
         params: [
             { name: 'contentKey', description: 'Content area key identifier', type: 'string' },
             { name: 'contentValue', description: 'HTML/AMPscript content', type: 'string' },
