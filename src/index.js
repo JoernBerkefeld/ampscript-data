@@ -6408,6 +6408,17 @@ export const deprecatedFunctionLookup = new Map(
     FUNCTIONS.filter((f) => f.deprecated).map((f) => [f.name.toLowerCase(), f]),
 );
 
+/**
+ * Case-insensitive lookup of functions that resolve at runtime but have no known
+ * working invocation (`nonFunctionalAtRuntime`): lowercase name -> function entry.
+ * Every reached call aborts the page (e.g. a retired Classic feature), so callers
+ * can flag the call site. Kept separate from deprecation because these functions
+ * were never formally deprecated by Salesforce.
+ */
+export const nonFunctionalFunctionLookup = new Map(
+    FUNCTIONS.filter((f) => f.nonFunctionalAtRuntime).map((f) => [f.name.toLowerCase(), f]),
+);
+
 // ── Keywords ─────────────────────────────────────────────────────────────────
 
 /**
