@@ -905,10 +905,11 @@ export const FUNCTIONS = [
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-claim-row-value.html',
         guideUrl: 'https://ampscript.guide/claimrowvalue/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/claimrowvalue/',
-        minArgs: 3,
+        minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
-        description: 'Atomically claims a row and returns a specific column value from it.',
+        description:
+            'Atomically claims a row and returns a specific column value from it, or a caller-supplied fallback when no unclaimed rows remain.',
         params: [
             {
                 name: 'dataExt',
@@ -930,35 +931,52 @@ export const FUNCTIONS = [
                 type: 'string',
             },
             {
-                name: 'valueIfClaimed',
-                mcnSince: null,
-                mcnNotes: null,
-                description: 'A fallback value returned if there are no unclaimed rows',
-                optional: true,
-            },
-            {
-                name: 'claimantColumnN',
+                name: 'fallbackValue',
                 mcnSince: null,
                 mcnNotes: null,
                 description:
-                    'The column the function uses to track the subscriber who claimed the row',
+                    'Value returned when no unclaimed rows remain (required at runtime, despite ampscript.guide marking it optional)',
+            },
+            {
+                name: 'claimantColumn',
+                mcnSince: null,
+                mcnNotes: null,
+                description:
+                    'The column the function uses to track the subscriber who claimed the row (required at runtime)',
+                type: 'string',
+            },
+            {
+                name: 'claimantValue',
+                mcnSince: null,
+                mcnNotes: null,
+                description:
+                    'The value to enter in the claimant column when the function claims a row (required at runtime)',
+            },
+            {
+                name: 'additionalColumnNameN',
+                mcnSince: null,
+                mcnNotes: null,
+                description:
+                    'Name of a further column to write on the claimed row (record extra context at claim time). Repeatable as name/value pairs.',
                 type: 'string',
                 optional: true,
             },
             {
-                name: 'claimantValueN',
+                name: 'additionalColumnValueN',
                 mcnSince: null,
                 mcnNotes: null,
                 description:
-                    'The value to enter in the claimant column when the function claims a row',
+                    'Value written to the paired additionalColumnNameN column on the claimed row',
                 optional: true,
             },
         ],
         returnType: 'string',
-        returnDescription: 'The value from the requested column of the claimed row.',
-        repeat: [{ startIndex: 4, groupSize: 2, minGroups: 0 }],
-        syntax: 'ClaimRowValue(dataExt, returnValueColumn, claimColumn[, valueIfClaimed, claimantColumnN, claimantValueN, ...])',
-        example: "%%=ClaimRowValue('Coupons', 'Code', 'Claimed', '', 'SubKey', _subscriberkey)=%%",
+        returnDescription:
+            'The value from the requested column of the claimed row, or the fallbackValue when no unclaimed rows remain.',
+        repeat: [{ startIndex: 6, groupSize: 2, minGroups: 0 }],
+        syntax: 'ClaimRowValue(dataExt, returnValueColumn, claimColumn, fallbackValue, claimantColumn, claimantValue[, additionalColumnNameN, additionalColumnValueN, ...])',
+        example:
+            "%%=ClaimRowValue('Coupons', 'Code', 'Claimed', 'SOLD OUT', 'SubKey', _subscriberkey)=%%",
         isConfirmed: true,
         differsFromOfficialDocs: false,
     },
