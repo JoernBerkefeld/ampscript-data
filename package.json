@@ -1,6 +1,6 @@
 {
     "name": "ampscript-data",
-    "version": "3.6.0",
+    "version": "3.7.0",
     "description": "Canonical AMPscript function catalog, keywords, and personalization strings for SFMC tooling",
     "type": "module",
     "main": "src/index.js",
