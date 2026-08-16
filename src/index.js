@@ -23,6 +23,18 @@
  *       difference.
  *   - officialDocsNote?: string — human-readable evidence: what the official docs claim, what
  *       the runtime actually did, and what was tried.
+ *   - supportedInCloudPage?: boolean — RUNTIME-PROVEN runtime-context flag (orthogonal to the
+ *       Engagement/Next PLATFORM flags mcnSince/mcnNotes). true when a live CloudPage/landing-page
+ *       probe rendered the function successfully; false when the function was actually probed in a
+ *       CloudPage context and proven NOT to work there (the reached call aborts the page, or the
+ *       parser refuses it). ABSENT means the function was never probed in that context — absence
+ *       MUST NOT be read as unsupported. Never defaults to false.
+ *   - supportedInEmail?: boolean — same semantics for the email/send context: true when a live
+ *       email/send probe rendered/evaluated the function successfully (a data/connector/asset gate
+ *       that still lets the function itself run counts as supported); false when the send-content
+ *       parser proved it does not work there (rejected as not valid in sendable content, or the
+ *       engine does not recognise it). ABSENT means never probed — not unsupported. Never defaults
+ *       to false.
  */
 
 const INF = Infinity;
@@ -92,10 +104,12 @@ export const VERIFICATION_BLOCKED_REASONS = Object.freeze([
  * for a human to finish the rewrite rather than a mechanical substitution. Must be present
  * whenever `handlebarsEquivalent` is non-null.
  *
-  @type {{name: string, mcnSince: number | null, mcnNotes: string | null, handlebarsEquivalent?: string | null, handlebarsExact?: boolean, docUrl?: string, guideUrl?: string, sfmcGuideUrl?: string, minArgs: number, maxArgs: number, validArities?: number[], category: string, description: string, params: {name: string, description: string, type?: string, enum?: (string | number)[], optional?: boolean, default?: string | number | boolean}[], returnType?: string, returnDescription?: string, returnEnum?: (string | number)[], syntax?: string, example?: string, repeat?: {startIndex: number, groupSize: number, minGroups: number, countParam?: string}[], deprecated?: boolean, deprecatedReplacement?: string, deprecatedReason?: string, isConfirmed?: boolean, verificationBlocked?: boolean, verificationBlockedReason?: string, differsFromOfficialDocs?: boolean, officialDocsNote?: string}[]} */
+  @type {{name: string, mcnSince: number | null, mcnNotes: string | null, handlebarsEquivalent?: string | null, handlebarsExact?: boolean, docUrl?: string, guideUrl?: string, sfmcGuideUrl?: string, minArgs: number, maxArgs: number, validArities?: number[], category: string, description: string, params: {name: string, description: string, type?: string, enum?: (string | number)[], optional?: boolean, default?: string | number | boolean}[], returnType?: string, returnDescription?: string, returnEnum?: (string | number)[], syntax?: string, example?: string, repeat?: {startIndex: number, groupSize: number, minGroups: number, countParam?: string}[], deprecated?: boolean, deprecatedReplacement?: string, deprecatedReason?: string, isConfirmed?: boolean, verificationBlocked?: boolean, verificationBlockedReason?: string, differsFromOfficialDocs?: boolean, officialDocsNote?: string, supportedInCloudPage?: boolean, supportedInEmail?: boolean}[]} */
 export const FUNCTIONS = [
     {
         name: 'Add',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'add',
         handlebarsExact: true,
@@ -120,6 +134,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AddMscrmListMember',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -158,6 +174,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AddObjectArrayItem',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -179,9 +197,14 @@ export const FUNCTIONS = [
         syntax: 'AddObjectArrayItem(apiObject, arrayProperty, itemToAdd)',
         example: "AddObjectArrayItem(@apiObject, 'Recipients', @recipient)",
         isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'AttachFile',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -256,10 +279,12 @@ export const FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'AttachFile targets the outgoing email at send time; it has no working invocation on a CloudPage. Every reached call — contentbuilder key, http URL, and the two-argument minimum form — aborted the page with HTTP 422 and no partial output, on the child QA BU (MID 518005426) and again on the parent BU (MID 7281698). The abort only happens when the call is actually reached: gating it behind an unmatched query-string branch leaves the page at HTTP 200, so the failure is a runtime abort of the reached call rather than a compile-time rejection. The official reference additionally documents that the capability must be provisioned per account, which cannot be observed from a full-access probe.',
+            'AttachFile targets the outgoing email at send time; it has no working invocation on a CloudPage. Every reached call — contentbuilder key, http URL, and the two-argument minimum form — aborted the page with HTTP 422 and no partial output, on the child BU and again on the parent BU. The abort only happens when the call is actually reached: gating it behind an unmatched query-string branch leaves the page at HTTP 200, so the failure is a runtime abort of the reached call rather than a compile-time rejection. An email-context render on the child BU sharpened the cause: the Email Preview API recognises and evaluates the function and fails with a precise message that the EMAIL_ATTACHMENTS business rule must be turned on before AttachFile can be used, so the block is an account-level provisioning gate rather than a broken function.',
     },
     {
         name: 'AttributeValue',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: 'personalizationResult',
         handlebarsExact: false,
@@ -290,6 +315,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEmployeeID',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -312,6 +339,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEmployeeNotificationAddress',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -329,7 +358,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Proven on the child BU MCDEV_Training_QA (MID 518005426); the parent BU was not needed. The official reference scopes the function to microsites that use sender authenticated redirection and explicitly says it is not for use with CloudPages. At runtime the opposite happened: an anonymous GET of a public CloudPage rendered at HTTP 200 and the call returned a well-formed, non-empty notification email address — Empty() answered false, Length() reported 29 characters and IsEmailAddress() accepted it. The value behaved as an ordinary string when used inline, nested inside Concat and compared against the empty string. The literal address is redacted here because it identifies an account user; only its shape is described.',
+            'Proven on the child BU; the parent BU was not needed. The official reference scopes the function to microsites that use sender authenticated redirection and explicitly says it is not for use with CloudPages. At runtime the opposite happened: an anonymous GET of a public CloudPage rendered at HTTP 200 and the call returned a well-formed, non-empty notification email address — Empty() answered false, Length() reported 29 characters and IsEmailAddress() accepted it. The value behaved as an ordinary string when used inline, nested inside Concat and compared against the empty string. The literal address is redacted here because it identifies an account user; only its shape is described.',
         sfmcGuideUrl:
             'https://sfmc.guide/engagement/ampscript/functions/authenticatedemployeenotificationaddress/',
         syntax: 'AuthenticatedEmployeeNotificationAddress()',
@@ -337,6 +366,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEmployeeUserName',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -360,6 +391,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedEnterpriseID',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -383,6 +416,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedMemberID',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -405,6 +440,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'AuthenticatedMemberName',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -427,6 +464,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BarcodeURL',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -515,6 +554,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Base64Decode',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -560,6 +601,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Base64Encode',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -596,6 +639,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BeginImpressionRegion',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -617,6 +662,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BuildOptionList',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -677,6 +724,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BuildRowsetFromJSON',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'jsonPath',
         handlebarsExact: false,
@@ -718,10 +767,12 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official syntax section states that a false third argument yields an empty rowset and a true one raises an exception; runtime on the child BU (MID 518005426, CloudPage GET) does the opposite. Malformed JSON with 1 rendered a rowset of zero rows, while the identical payload with 0 aborted the page with HTTP 422. The same page also proved that an unparsable payload, an unset variable, an empty string, [] and a path matching nothing all yield zero rows when 1 is passed. Note the official Errors section already describes the runtime ordering, so the page contradicts itself.',
+            'The official syntax section states that a false third argument yields an empty rowset and a true one raises an exception; runtime on the child BU (CloudPage GET) does the opposite. Malformed JSON with 1 rendered a rowset of zero rows, while the identical payload with 0 aborted the page with HTTP 422. The same page also proved that an unparsable payload, an unset variable, an empty string, [] and a path matching nothing all yield zero rows when 1 is passed. Note the official Errors section already describes the runtime ordering, so the page contradicts itself.',
     },
     {
         name: 'BuildRowSetFromString',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -755,6 +806,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'BuildRowSetFromXML',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -789,10 +842,12 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official syntax section states that a false third argument yields an empty rowset and a true one raises an exception; runtime on the child BU (MID 518005426, CloudPage GET) behaves the other way round. Unclosed XML parsed with 1 rendered a rowset of zero rows, whereas the identical payload with 0 aborted the page with HTTP 422. An empty string, an unset variable, an empty root element and an XPath matching nothing likewise gave zero rows under 1.',
+            'The official syntax section states that a false third argument yields an empty rowset and a true one raises an exception; runtime on the child BU (CloudPage GET) behaves the other way round. Unclosed XML parsed with 1 rendered a rowset of zero rows, whereas the identical payload with 0 aborted the page with HTTP 422. An empty string, an unset variable, an empty root element and an XPath matching nothing likewise gave zero rows under 1.',
     },
     {
         name: 'Char',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: 'char',
         handlebarsExact: true,
@@ -830,6 +885,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ClaimRow',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -895,10 +952,12 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Runtime-proven on a Marketing Cloud Engagement CloudPage (child BU MID 518005426) against a data extension built to the documented claimable schema (Text primary key, Text claimant column, required non-nullable Boolean claim column defaulting to False, nullable Date column). Each call passing a NEW claimant value claims the next unclaimed row and advances: four distinct claimants received C1, C2, C3, C4 in order, each row flipping to claimed with its claimant recorded and ClaimedDate auto-populated. Re-calling with a claimant value that already holds a row returns that same row rather than advancing (per-subscriber idempotency). The official reference states that ClaimRow returns an exception when no unclaimed rows remain; at runtime it instead returned an empty row that does not abort the page (Empty() on it is true), so a caller must guard with Empty() rather than expecting a raised error. Each claim was driven by a separate HTTP request carrying the claimant value as a RequestParameter — the prior single-render probe that reused one claimant value never advanced because of the idempotency rule, not a provisioning gap.',
+            'Runtime-proven on a Marketing Cloud Engagement CloudPage (child BU) against a data extension built to the documented claimable schema (Text primary key, Text claimant column, required non-nullable Boolean claim column defaulting to False, nullable Date column). Each call passing a NEW claimant value claims the next unclaimed row and advances: four distinct claimants received C1, C2, C3, C4 in order, each row flipping to claimed with its claimant recorded and ClaimedDate auto-populated. Re-calling with a claimant value that already holds a row returns that same row rather than advancing (per-subscriber idempotency). The official reference states that ClaimRow returns an exception when no unclaimed rows remain; at runtime it instead returned an empty row that does not abort the page (Empty() on it is true), so a caller must guard with Empty() rather than expecting a raised error. Each claim was driven by a separate HTTP request carrying the claimant value as a RequestParameter — the prior single-render probe that reused one claimant value never advanced because of the idempotency rule, not a provisioning gap.',
     },
     {
         name: 'ClaimRowValue',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -982,6 +1041,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CloudPagesURL',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1035,6 +1096,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Concat',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'concat',
         handlebarsExact: true,
@@ -1071,6 +1134,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentArea',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1139,6 +1204,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentAreaByName',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1205,6 +1272,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentBlockByID',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1268,6 +1337,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentBlockByKey',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'getContentBlock',
         handlebarsExact: false,
@@ -1332,6 +1403,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentBlockByName',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1396,6 +1469,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentImageByID',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1433,6 +1508,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ContentImageByKey',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1469,6 +1546,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CreateMSCRMRecord',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1521,6 +1600,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CreateObject',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1540,9 +1621,14 @@ export const FUNCTIONS = [
         syntax: 'CreateObject(objectName)',
         example: "%%=CreateObject('DataExtensionObject')=%%",
         isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'CreateSalesforceObject',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1557,7 +1643,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         officialDocsNote:
-            'The success path was runtime-proven on cred/DEV (MID 510007949), which has an active Marketing Cloud Connect integration to a real Salesforce org. Creating a benign Task with a single opaque field returned a real 18-character Salesforce ID (an 00T-prefixed Task ID), confirming the documented return shape. The fault path was also proven: an unknown object name and an unknown field name on a real object each aborted the CloudPage with HTTP 422 — the SOAP fault from the connected org propagates as an uncatchable page abort (AMPscript has no try/catch), exactly like RetrieveSalesforceObjects against an unknown object — so there is no testable error value, the function either returns an ID or aborts. AMPscript has no delete function for Salesforce objects, so the created Task remains as benign residue in the org. Catalog signature, returnType and repeat group all match the official reference and ampscript.guide, so differsFromOfficialDocs stays false.',
+            'The success path was runtime-proven on the child BU, which has an active Marketing Cloud Connect integration to a real Salesforce org. Creating a benign Task with a single opaque field returned a real 18-character Salesforce ID (an 00T-prefixed Task ID), confirming the documented return shape. The fault path was also proven: an unknown object name and an unknown field name on a real object each aborted the CloudPage with HTTP 422 — the SOAP fault from the connected org propagates as an uncatchable page abort (AMPscript has no try/catch), exactly like RetrieveSalesforceObjects against an unknown object — so there is no testable error value, the function either returns an ID or aborts. AMPscript has no delete function for Salesforce objects, so the created Task remains as benign residue in the org. Catalog signature, returnType and repeat group all match the official reference and ampscript.guide, so differsFromOfficialDocs stays false.',
         params: [
             {
                 name: 'objectName',
@@ -1594,6 +1680,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'CreateSmsConversation',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1604,12 +1692,10 @@ export const FUNCTIONS = [
         category: 'MobileConnect',
         description:
             'Initiates an SMS conversation with a contact from within a MobileConnect message. Returns true when a conversation is created inside a MobileConnect message context, and false in any other context (for example a CloudPage or email). The success path cannot be exercised outside a live MobileConnect send.',
-        isConfirmed: false,
-        verificationBlocked: true,
-        verificationBlockedReason: 'no-working-invocation',
+        isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            "Runtime-observed on cred/DEV (MID 510007949), the only BU available for this batch (no parent-BU escalation). Unlike Msg()/Noun()/Verb(), this is an ordinary function call, so it compiles and runs on a CloudPage: called there with a real short code, the authorized destination number and app 'MOBILECONNECT', it returned the literal boolean false (Empty() false) and the page rendered fully with no exception — no SMS was sent. Passing an invalid app value also returned false, so the CloudPage context masks any app-validation error. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour (true on success, exception on failure). The success path (true, real conversation creation) requires a live MobileConnect message context that does not exist on a CloudPage and cannot be captured on this tenant, so the function is recorded blocked for the success path while the CloudPage false-return is proven. The catalogued signature was also corrected here: the four parameters are originationNumber, destinationNumber, nextKeyword and app, and the return is a boolean, not void.",
+            "The out-of-context return is confirmed in two independent runtime contexts: a CloudPage on the child BU and an email render on the child BU. Being an ordinary function call (unlike Msg()/Noun()/Verb()), it compiles and evaluates in both: on the CloudPage, called with a real short code, an authorized destination number and app 'MOBILECONNECT', it returned the literal boolean false with the page rendering fully and no SMS sent; in an email body the same call rendered the literal False through the Email Preview API. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour (true on success, exception on failure). The success path (true, real conversation creation) requires a live MobileConnect message context and cannot be reproduced in a CloudPage or email; only the out-of-context false-return is exercisable, and it is proven. The catalogued signature was also corrected here: the four parameters are originationNumber, destinationNumber, nextKeyword and app, and the return is a boolean, not void.",
         params: [
             {
                 name: 'originationNumber',
@@ -1640,6 +1726,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DataExtensionRowCount',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1668,6 +1756,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DateAdd',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'dateAdd',
         handlebarsExact: true,
@@ -1710,6 +1800,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DateDiff',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'dateDiff',
         handlebarsExact: true,
@@ -1753,6 +1845,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DateParse',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1792,6 +1886,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DatePart',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1842,6 +1938,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DecryptSymmetric',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1906,6 +2004,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DeleteData',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1913,7 +2013,9 @@ export const FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/deletedata/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/deletedata/',
         isConfirmed: true,
-        differsFromOfficialDocs: false,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: DeleteData is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated DeleteData(...) was rejected with HTTP 400 errorcode 10005 ("DeleteData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the DeleteData/*Data write family cannot run inside a sendable email; use the DeleteDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -1953,6 +2055,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DeleteDE',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -1999,6 +2103,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DescribeMSCRMEntities',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2021,6 +2127,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'DescribeMSCRMEntityAttributes',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2043,6 +2151,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Divide',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'divide',
         handlebarsExact: true,
@@ -2068,6 +2178,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Domain',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2096,6 +2208,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Empty',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'isEmpty',
         handlebarsExact: true,
@@ -2125,6 +2239,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'EncryptSymmetric',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2184,6 +2300,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'EndImpressionRegion',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2214,6 +2332,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'EndSmsConversation',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2224,12 +2344,10 @@ export const FUNCTIONS = [
         category: 'MobileConnect',
         description:
             'Ends an active SMS conversation with a contact from within a MobileConnect message. Returns true when the conversation is ended inside a MobileConnect message context, and false in any other context (for example a CloudPage or email). The success path cannot be exercised outside a live MobileConnect send.',
-        isConfirmed: false,
-        verificationBlocked: true,
-        verificationBlockedReason: 'no-working-invocation',
+        isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Runtime-observed on cred/DEV (MID 510007949), the only BU available (no parent-BU escalation). This is an ordinary function call, so it compiles and runs on a CloudPage: called there with a real short code and the authorized destination number, it returned the literal boolean false (Empty() false) and the page rendered fully with no exception — no SMS was sent and no conversation state changed. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour (true on success, exception on failure). The success path (true, real conversation end) requires a live MobileConnect message context that cannot be captured on this tenant, so the function is recorded blocked for the success path while the CloudPage false-return is proven. The catalogued signature was corrected here: the two parameters are originationNumber and destinationNumber, and the return is a boolean, not void.',
+            'The out-of-context return is confirmed in two independent runtime contexts: a CloudPage on the child BU and an email render on the child BU. Being an ordinary function call, it compiles and evaluates in both: on the CloudPage, called with a real short code and the authorized destination number, it returned the literal boolean false with the page rendering fully, no SMS sent and no conversation state changed; in an email body the same call rendered the literal False through the Email Preview API. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour (true on success, exception on failure). The success path (true, real conversation end) requires a live MobileConnect message context and cannot be reproduced in a CloudPage or email; only the out-of-context false-return is exercisable, and it is proven. The catalogued signature was corrected here: the two parameters are originationNumber and destinationNumber, and the return is a boolean, not void.',
         params: [
             {
                 name: 'originationNumber',
@@ -2250,6 +2368,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ExecuteFilter',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2257,7 +2377,9 @@ export const FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/executefilter/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/executefilter/',
         isConfirmed: true,
-        differsFromOfficialDocs: false,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: ExecuteFilter is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated ExecuteFilter(...) was rejected with HTTP 400 errorcode 10004 ("ExecuteFilter Function is not valid in content. This function is only allowed in non sendable content."). It is a CloudPage / landing-page (non-sendable content) feature.',
         minArgs: 1,
         maxArgs: 1,
         category: 'Data Extension',
@@ -2277,6 +2399,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ExecuteFilterOrderedRows',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2284,7 +2408,9 @@ export const FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/executefilterorderedrows/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/executefilterorderedrows/',
         isConfirmed: true,
-        differsFromOfficialDocs: false,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: ExecuteFilterOrderedRows is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated ExecuteFilterOrderedRows(...) was rejected with HTTP 400 errorcode 10004 ("ExecuteFilterOrderedRows Function is not valid in content. This function is only allowed in non sendable content."). It is a CloudPage / landing-page (non-sendable content) feature.',
         minArgs: 3,
         maxArgs: 3,
         category: 'Data Extension',
@@ -2317,6 +2443,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Field',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'get',
         handlebarsExact: false,
@@ -2352,6 +2480,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Format',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'format',
         handlebarsExact: false,
@@ -2364,7 +2494,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Proven on the child BU MCDEV_Training_QA (MID 518005426). The official reference names two possible values for the third parameter, Date and Number, but at runtime only Date is usable. Passing the literal Number aborts the page with HTTP 422 and discards all output, whether or not a locale follows it — Format(1234.555, "C2", "Number") and Format(1234.555, "C2", "Number", "de-DE") both aborted, exactly like the invented value Banana. Date works in any capitalisation, and the empty string works and still allows a locale in the fourth parameter, so Format(1234.555, "C2", "", "de-DE") is the way to format a localised number. Number formatting also happens correctly with the third parameter omitted entirely, so the documented value is not merely optional, it is unusable.',
+            'Proven on the child BU. The official reference names two possible values for the third parameter, Date and Number, but at runtime only Date is usable. Passing the literal Number aborts the page with HTTP 422 and discards all output, whether or not a locale follows it — Format(1234.555, "C2", "Number") and Format(1234.555, "C2", "Number", "de-DE") both aborted, exactly like the invented value Banana. Date works in any capitalisation, and the empty string works and still allows a locale in the fourth parameter, so Format(1234.555, "C2", "", "de-DE") is the way to format a localised number. Number formatting also happens correctly with the third parameter omitted entirely, so the documented value is not merely optional, it is unusable.',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/format/',
         description:
             'Formats a number, a date or a string with a .NET format pattern. The third parameter only accepts Date or the empty string; the documented value Number aborts the page.',
@@ -2406,6 +2536,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'FormatCurrency',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'formatCurrency',
         handlebarsExact: false,
@@ -2460,6 +2592,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'FormatDate',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'format',
         handlebarsExact: false,
@@ -2473,7 +2607,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Proven on the child BU MCDEV_Training_QA (MID 518005426). The official reference presents one .NET-style custom-pattern table and shows it applied to the dateFormat argument, but at runtime the two format arguments use SEPARATE, case-INSENSITIVE token sets. In dateFormat, mm and MM both render the MONTH, so the documented pattern yyyy-MM-dd HH:mm:ss returned 2026-03-04 13:03:07 for the instant 2026-03-04 13:52:07 — the minutes position printed 03, the month. The same pattern moved to timeFormat returned 13:52:07 correctly, because there mm and MM mean minutes. Single-letter tokens also disagree with the doc: d rendered the whole short date 3/4/2026 rather than the day number, M rendered March 4 rather than 3, and h or H alone in timeFormat aborts the page with HTTP 422 instead of rendering an hour. The day-name tokens are off by one repetition — dddd rendered Wed where the doc promises Wednesday, ddddd rendered Wednesday, and ddd rendered the corrupted string We4ne74a26 in which digits from the date replaced letters of the day name.',
+            'Proven on the child BU. The official reference presents one .NET-style custom-pattern table and shows it applied to the dateFormat argument, but at runtime the two format arguments use SEPARATE, case-INSENSITIVE token sets. In dateFormat, mm and MM both render the MONTH, so the documented pattern yyyy-MM-dd HH:mm:ss returned 2026-03-04 13:03:07 for the instant 2026-03-04 13:52:07 — the minutes position printed 03, the month. The same pattern moved to timeFormat returned 13:52:07 correctly, because there mm and MM mean minutes. Single-letter tokens also disagree with the doc: d rendered the whole short date 3/4/2026 rather than the day number, M rendered March 4 rather than 3, and h or H alone in timeFormat aborts the page with HTTP 422 instead of rendering an hour. The day-name tokens are off by one repetition — dddd rendered Wed where the doc promises Wednesday, ddddd rendered Wednesday, and ddd rendered the corrupted string We4ne74a26 in which digits from the date replaced letters of the day name.',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/formatdate/',
         description:
             'Formats a date according to a date pattern, a time pattern and a locale. The two pattern arguments use separate, case-insensitive token sets: in the date pattern mm means month, and minutes are only reachable from the time pattern.',
@@ -2516,6 +2650,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'FormatNumber',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'formatNumber',
         handlebarsExact: true,
@@ -2558,6 +2694,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetJWT',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2599,6 +2737,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetJWTByKeyName',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2632,6 +2772,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetPortfolioItem',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2655,10 +2797,12 @@ export const FUNCTIONS = [
         isConfirmed: true,
         nonFunctionalAtRuntime: true,
         officialDocsNote:
-            'Classic Portfolio is retired on this tenant, so no Portfolio item exists to retrieve. A reached call with an external key that does not resolve aborted the page with HTTP 422 and no partial output, on both the child QA BU (MID 518005426) and the parent BU (MID 7281698); the same call gated behind an unmatched query-string branch left the page at HTTP 200, confirming a runtime abort of the reached call. No valid key could be sourced because Portfolio asset creation and applications were retired, so the documented success path could not be exercised here.',
+            'Classic Portfolio is retired on this tenant, so no Portfolio item exists to retrieve. A reached call with an external key that does not resolve aborted the page with HTTP 422 and no partial output, on both the child BU and the parent BU; the same call gated behind an unmatched query-string branch left the page at HTTP 200, confirming a runtime abort of the reached call. No valid key could be sourced because Portfolio asset creation and applications were retired, so the documented success path could not be exercised here.',
     },
     {
         name: 'GetPublishedSocialContent',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2677,11 +2821,14 @@ export const FUNCTIONS = [
         example: "%%=GetPublishedSocialContent('socialContentId')=%%",
         isConfirmed: true,
         nonFunctionalAtRuntime: true,
+        differsFromOfficialDocs: true,
         officialDocsNote:
-            'The community guide flags this as usable only inside Microsites and Landing Pages and only for content regions built in Classic Content, which is retired on this tenant. A reached call aborted the page with HTTP 422 and no partial output for both a string region name and a numeric region id, on the child QA BU (MID 518005426) and again on the parent BU (MID 7281698). The same call gated behind an unmatched query-string branch left the page at HTTP 200, confirming a runtime abort of the reached call rather than a compile-time failure. No Classic Content region exists here to source a resolvable identifier, so the documented success path could not be exercised.',
+            'The community guide flags this as usable only inside Microsites and Landing Pages and only for content regions built in Classic Content, which is retired on this tenant. A reached call aborted the page with HTTP 422 and no partial output for both a string region name and a numeric region id, on the child BU and again on the parent BU. The same call gated behind an unmatched query-string branch left the page at HTTP 200, confirming a runtime abort of the reached call rather than a compile-time failure. No Classic Content region exists here to source a resolvable identifier, so the documented success path could not be exercised. Email/send context: the send parser EXPLICITLY rejects this function with errorcode 10004 ("GetPublishedSocialContent Function is only allowed to be called from social sharing pages or landing pages") - a hard context restriction, stronger and different from the CloudPage runtime abort, which only occurs because no Classic Content region resolves.',
     },
     {
         name: 'GetSendTime',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2711,10 +2858,12 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         officialDocsNote:
-            'Runtime-verified. The function has a working invocation (arity 0 and 1) that renders a real date value in every argument spelling, and its observed behaviour is consistent with the official reference. Probed on the child BU MCDEV_Training_QA (MID 518005426): GetSendTime() rendered 8/8/2026 7:35:16 PM against Now()=8/8/2026 7:35:16 PM in the same render, with FormatDate(..., "ffffff") giving 507042 for both, so the two are the same instant to the microsecond rather than merely the same second. Every argument spelling (1, 0, true, false, "1", "0", "true", "false", and the non-flag word spring) was accepted at HTTP 200 and returned that same current time, and DateDiff(GetSendTime(1), Now(), "MI") was 0. The value is a real date (FormatDate gave 2026-08-08, DatePart gave 2026 and 7, DateAdd of three hours advanced it, DateDiff measured that gap as 3), it renders as a US short date plus a 12-hour clock (Length 19 for that instant), Empty() over it is False, and it sits on the system side of the clock (DateDiff to SystemDateToLocalDate was 480 minutes, identical to the same measurement over Now()); arity 2 aborts with HTTP 422. This matches the official reference\'s "during a send" row, which states both call forms return the current system time. The after-send value was also captured from a REAL send job via send-context UpsertDE writeback into a results DE: a User-Initiated Send (messaging-experimental/v1/email/send) rendered GetSendTime() as 8/15/2026 10:31:40 AM, identical to Now() in the same send, confirming the send-execution system time. A test send does not fire the writeback (upsert operations run only at send-completion), and the send must target at least one deliverable subscriber or it completes without running the body. The function is fully working and correctly catalogued as verified; it is not a Sender-Authenticated-Redirection / session-state function, so no authenticated-context caveat applies.',
+            'Runtime-verified. The function has a working invocation (arity 0 and 1) that renders a real date value in every argument spelling, and its observed behaviour is consistent with the official reference. Probed on the child BU: GetSendTime() rendered 8/8/2026 7:35:16 PM against Now()=8/8/2026 7:35:16 PM in the same render, with FormatDate(..., "ffffff") giving 507042 for both, so the two are the same instant to the microsecond rather than merely the same second. Every argument spelling (1, 0, true, false, "1", "0", "true", "false", and the non-flag word spring) was accepted at HTTP 200 and returned that same current time, and DateDiff(GetSendTime(1), Now(), "MI") was 0. The value is a real date (FormatDate gave 2026-08-08, DatePart gave 2026 and 7, DateAdd of three hours advanced it, DateDiff measured that gap as 3), it renders as a US short date plus a 12-hour clock (Length 19 for that instant), Empty() over it is False, and it sits on the system side of the clock (DateDiff to SystemDateToLocalDate was 480 minutes, identical to the same measurement over Now()); arity 2 aborts with HTTP 422. This matches the official reference\'s "during a send" row, which states both call forms return the current system time. The after-send value was also captured from a REAL send job via send-context UpsertDE writeback into a results DE: a User-Initiated Send (messaging-experimental/v1/email/send) rendered GetSendTime() as 8/15/2026 10:31:40 AM, identical to Now() in the same send, confirming the send-execution system time. A test send does not fire the writeback (upsert operations run only at send-completion), and the send must target at least one deliverable subscriber or it completes without running the body. The function is fully working and correctly catalogued as verified; it is not a Sender-Authenticated-Redirection / session-state function, so no authenticated-context caveat applies.',
     },
     {
         name: 'GetSocialPublishURL',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2771,6 +2920,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GetSocialPublishURLByName',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2829,6 +2980,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'GUID',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2851,6 +3004,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPGet',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2902,6 +3057,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPPost',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2914,7 +3071,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference labels the fourth argument as an output parameter holding the "status" of the request, but on a live Engagement CloudPage (child MID 518005426) that variable receives the response BODY, not the status. The HTTP status code is the function return value. A non-2xx response (proven with a 404) and an empty URL both abort the whole page rather than returning the status, so a failing status can never be read from the return value.',
+            'The official reference labels the fourth argument as an output parameter holding the "status" of the request, but on a live Engagement CloudPage (child BU) that variable receives the response BODY, not the status. The HTTP status code is the function return value. A non-2xx response (proven with a 404) and an empty URL both abort the whole page rather than returning the status, so a failing status can never be read from the return value.',
         description:
             'Performs an HTTP POST request and returns the HTTP status code. The response body is written to the optional output variable.',
         params: [
@@ -2975,6 +3132,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPPost2',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -2987,7 +3146,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference labels the fifth argument (response) as storing the "status" of the request, but on a live Engagement CloudPage (child MID 518005426) it receives the response BODY and the sixth argument (responseRowSet) receives the response HEADERS as a rowset (11 header rows observed). The HTTP status code is the function return value. The boolean exceptionOnError flag is accepted at position four.',
+            'The official reference labels the fifth argument (response) as storing the "status" of the request, but on a live Engagement CloudPage (child BU) it receives the response BODY and the sixth argument (responseRowSet) receives the response HEADERS as a rowset (11 header rows observed). The HTTP status code is the function return value. The boolean exceptionOnError flag is accepted at position four.',
         description:
             'Performs an HTTP POST and returns the HTTP status code. The response body and the response headers (as a rowset) are written to optional output variables.',
         params: [
@@ -3049,6 +3208,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPPostWithRetry',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3061,7 +3222,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference labels the responseStatus argument as storing the "status" of the request, but on a live Engagement CloudPage (child MID 518005426) it receives the response BODY and responseContentRowset receives the response HEADERS as a rowset (11 header rows observed). The HTTP status code is the function return value. The numRetries, reschedule and returnExceptionOnError arguments are all accepted at runtime; retry-on-failure is documented but was not forced here because a transient failure could not be induced safely against the echo endpoint.',
+            'The official reference labels the responseStatus argument as storing the "status" of the request, but on a live Engagement CloudPage (child BU) it receives the response BODY and responseContentRowset receives the response HEADERS as a rowset (11 header rows observed). The HTTP status code is the function return value. The numRetries, reschedule and returnExceptionOnError arguments are all accepted at runtime; retry-on-failure is documented but was not forced here because a transient failure could not be induced safely against the echo endpoint.',
         description:
             'Posts content to the specified URL with automatic retry logic on failure, and returns the HTTP status code. Similar to HTTPPost2 but adds configurable retries and rescheduling; the response body and headers (as a rowset) are written to optional output variables.',
         params: [
@@ -3143,13 +3304,15 @@ export const FUNCTIONS = [
     },
     {
         name: 'HTTPRequestHeader',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Runtime-verified on a live Marketing Cloud Engagement CloudPage (child BU MID 518005426). The official reference states this function can only retrieve the standard HTTP headers listed in RFC 7231, but at runtime it also returns the value of a non-standard custom request header: a request sent with an X-Amp-Probe header returned that exact value, so the RFC 7231 restriction is not enforced when reading headers. A header that is absent from the request (for example Referer when none was sent) returns the empty string, matching the documented note.',
+            'Runtime-verified on a live Marketing Cloud Engagement CloudPage (child BU). The official reference states this function can only retrieve the standard HTTP headers listed in RFC 7231, but at runtime it also returns the value of a non-standard custom request header: a request sent with an X-Amp-Probe header returned that exact value, so the RFC 7231 restriction is not enforced when reading headers. A header that is absent from the request (for example Referer when none was sent) returns the empty string, matching the documented note. Email/send-context finding: rendered through the Email Preview API against a seeded sendable row, an isolated HTTPRequestHeader("User-Agent") was rejected with HTTP 400 errorcode 10004 ("HTTPRequestHeader Function is not valid in content. This function is only allowed in content with an HTTP context."). So it works only where an inbound HTTP request exists (CloudPages / landing pages) and cannot be used inside a sendable email, which fits its purpose since request headers are a request-time value absent at send time.',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-request-header.html',
         guideUrl: 'https://ampscript.guide/httprequestheader/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/httprequestheader/',
@@ -3172,6 +3335,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IIf',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'iif',
         handlebarsExact: true,
@@ -3211,6 +3376,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Image',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3248,10 +3415,12 @@ export const FUNCTIONS = [
         deprecatedReason:
             'The classic Portfolio / Classic Content area this function reads from was retired in April 2023, so no image assets exist for it to reference on any current tenant, and every invocation aborts the page at runtime. Use ContentImageByKey or ContentImageByID against Content Builder image assets instead.',
         officialDocsNote:
-            'No working invocation was found on either the child QA BU (MID 518005426) or the parent BU (MID 7281698). Image resolves images from the legacy Portfolio, whose creation and applications have been retired; no Portfolio assets exist on either BU to reference. Every attempt aborted the CloudPage with HTTP 422 and no output: a literal URL, a Content Builder asset external key, and a plausible Portfolio-style key were all tried on the child BU, and a Portfolio-style key on the parent BU. Use ContentImageByKey or ContentImageByID against Content Builder image assets instead.',
+            'No working invocation was found on either the child BU or the parent BU. Image resolves images from the legacy Portfolio, whose creation and applications have been retired; no Portfolio assets exist on either BU to reference. Every attempt aborted the CloudPage with HTTP 422 and no output: a literal URL, a Content Builder asset external key, and a plausible Portfolio-style key were all tried on the child BU, and a Portfolio-style key on the parent BU. Use ContentImageByKey or ContentImageByID against Content Builder image assets instead.',
     },
     {
         name: 'IndexOf',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'indexOf',
         handlebarsExact: false,
@@ -3287,6 +3456,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InsertData',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3294,7 +3465,9 @@ export const FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/insertdata/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/insertdata/',
         isConfirmed: true,
-        differsFromOfficialDocs: false,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: InsertData is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated InsertData(...) was rejected with HTTP 400 errorcode 10005 ("InsertData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the InsertData/*Data write family cannot run inside a sendable email; use the InsertDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -3332,6 +3505,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InsertDE',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3378,6 +3553,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'InvokeCreate',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3420,9 +3597,14 @@ export const FUNCTIONS = [
         syntax: 'InvokeCreate(apiObject, @statusMessage, @errorCode[, createOptionsObject])',
         example: '%%=InvokeCreate(@apiObject, @statusMessage, @errorCode)=%%',
         isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'InvokeDelete',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3465,9 +3647,14 @@ export const FUNCTIONS = [
         syntax: 'InvokeDelete(apiObject, @statusMessage, @errorCode[, deleteOptionsObject])',
         example: '%%=InvokeDelete(@apiObject, @statusMessage, @errorCode)=%%',
         isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'InvokeExecute',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3502,9 +3689,14 @@ export const FUNCTIONS = [
         syntax: 'InvokeExecute(apiObject[, @statusMessage, @requestId])',
         example: '%%[ SET @rows = InvokeExecute(@apiObject, @statusMessage, @requestId) ]%%',
         isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'InvokePerform',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3538,9 +3730,14 @@ export const FUNCTIONS = [
         syntax: 'InvokePerform(apiObject, actionToPerform[, @statusMessage])',
         example: "%%=InvokePerform(@apiObject, 'Start', @statusMessage)=%%",
         isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'InvokeRetrieve',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3579,9 +3776,14 @@ export const FUNCTIONS = [
         syntax: 'InvokeRetrieve(apiObject[, @statusMessage, @requestId])',
         example: '%%[ SET @rows = InvokeRetrieve(@apiObject, @statusMessage, @requestId) ]%%',
         isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'InvokeUpdate',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3626,9 +3828,14 @@ export const FUNCTIONS = [
         syntax: 'InvokeUpdate(apiObject[, @statusMessage, @errorCode, updateOptions])',
         example: '%%=InvokeUpdate(@apiObject, @statusMessage, @errorCode)=%%',
         isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'IsCHTMLBrowser',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3638,10 +3845,12 @@ export const FUNCTIONS = [
         minArgs: 1,
         maxArgs: 1,
         isConfirmed: true,
-        differsFromOfficialDocs: false,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The official reference documents this as an AMPscript function without noting that it is restricted to non-sendable content. Email/send-context finding: rendered through the Email Preview API against a seeded sendable row, an isolated IsCHTMLBrowser("DoCoMo/2.0 N905i") was rejected with HTTP 400 errorcode 10004 ("IsCHTMLBrowser Function is not valid in content. This function is only allowed in non sendable content."). So it works only in non-sendable content (CloudPages / landing pages) and cannot be used inside a sendable email, which fits its purpose since a user-agent is a request-time value absent at send time.',
         category: 'Utility',
         description:
-            'Tests a user agent string for a compact HTML (cHTML) feature-phone browser. Feature-phone agents such as i-mode and KDDI handsets are recognised; modern desktop and mobile agents are not.',
+            'Tests a user agent string for a compact HTML (cHTML) feature-phone browser. Feature-phone agents such as i-mode and KDDI handsets are recognised; modern desktop and mobile agents are not. Only valid in non-sendable content (CloudPages / landing pages), not in sendable email.',
         params: [
             {
                 name: 'userAgent',
@@ -3658,6 +3867,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsEmailAddress',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3669,7 +3880,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference states that an address whose domain has no top-level domain is accepted, giving a call on a bare single-label domain as an example of a true result. On a live Engagement CloudPage on the child business unit (MID 518005426) that shape returned False, in a gate that printed its own start and done markers at HTTP 200 alongside a known-good control block. Every other example in the same table matched: the missing at sign, the double at sign, the missing local part and the missing second-level domain all returned False, and a well-formed address returned True. Surrounding whitespace is also rejected, which no source mentions.',
+            'The official reference states that an address whose domain has no top-level domain is accepted, giving a call on a bare single-label domain as an example of a true result. On a live Engagement CloudPage on the child business unit that shape returned False, in a gate that printed its own start and done markers at HTTP 200 alongside a known-good control block. Every other example in the same table matched: the missing at sign, the double at sign, the missing local part and the missing second-level domain all returned False, and a well-formed address returned True. Surrounding whitespace is also rejected, which no source mentions.',
         category: 'Utility',
         description:
             'Checks a value against email address syntax only; it never tests whether the mailbox or domain exists. Surrounding whitespace and a domain without a top-level domain are both rejected.',
@@ -3690,6 +3901,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsNull',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'isEmpty',
         handlebarsExact: false,
@@ -3716,12 +3929,14 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference shows a variable declared with VAR and never assigned, and states IsNull returns true for it. On a live Engagement CloudPage on the child business unit (MID 518005426) that exact shape returned False, in a gate that printed its own start and done markers at HTTP 200 alongside a known-good control block. The same False came back for an undeclared variable, an empty string, whitespace, 0, "0", "false", a real value, a date, an absent attribute, an absent request parameter and the subscriber-context tokens. Use Empty for a missing-value test.',
+            'The official reference shows a variable declared with VAR and never assigned, and states IsNull returns true for it. On a live Engagement CloudPage on the child business unit that exact shape returned False, in a gate that printed its own start and done markers at HTTP 200 alongside a known-good control block. The same False came back for an undeclared variable, an empty string, whitespace, 0, "0", "false", a real value, a date, an absent attribute, an absent request parameter and the subscriber-context tokens. Use Empty for a missing-value test.',
         syntax: 'IsNull(value)',
         example: '%%=IsNull(@value)=%%',
     },
     {
         name: 'IsNullDefault',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: 'fallback',
         handlebarsExact: false,
@@ -3755,6 +3970,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'IsPhoneNumber',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3784,6 +4001,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Length',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'length',
         handlebarsExact: true,
@@ -3812,6 +4031,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LiveContentMicrositeURL',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3827,7 +4048,7 @@ export const FUNCTIONS = [
         deprecatedReason:
             'Live Offers (Live Content) was removed from Marketing Cloud in 2019 and the Classic Microsites this URL points at were retired in June 2022, so there is no provisionable modern equivalent and every invocation aborts the page at runtime.',
         officialDocsNote:
-            "Attempted on both the child QA BU (MID 518005426) and the parent BU (MID 7281698). Every invocation shape aborted the CloudPage with HTTP 200 lost to a 422 page abort: the documented-valid LiveContentMicrositeURL('coupon','MyCoupon'), an unknown content type, and an empty external key all failed identically. The function resolves a Live Offers (Live Content) coupon by external key, and no such Live Content asset is provisioned on either BU, so no working invocation could be produced. Left blocked pending a tenant with a real Live Offers coupon.",
+            "Attempted on both the child BU and the parent BU. Every invocation shape aborted the CloudPage with HTTP 200 lost to a 422 page abort: the documented-valid LiveContentMicrositeURL('coupon','MyCoupon'), an unknown content type, and an empty external key all failed identically. The function resolves a Live Offers (Live Content) coupon by external key, and no such Live Content asset is provisioned on either BU, so no working invocation could be produced. Left blocked pending a tenant with a real Live Offers coupon.",
         params: [
             {
                 name: 'contentType',
@@ -3849,6 +4070,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LocalDateToSystemDate',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: 'timeZoneConversion',
         handlebarsExact: false,
@@ -3879,6 +4102,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LongSFID',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -3900,6 +4125,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Lookup',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'queryFirst',
         handlebarsExact: false,
@@ -3951,6 +4178,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupOrderedRows',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
@@ -4009,6 +4238,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupOrderedRowsCS',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
@@ -4066,6 +4297,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupRows',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
@@ -4109,6 +4342,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'LookupRowsCS',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
@@ -4152,6 +4387,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Lowercase',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'lowercase',
         handlebarsExact: true,
@@ -4179,6 +4416,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'MD5',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4218,6 +4457,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'MMS_Content_URL',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4232,7 +4473,7 @@ export const FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'Could not runtime-verify on the only available context (a CloudPage GET on cred/DEV, MID 510007949; no parent-BU escalation is configured on this tenant). Including an MMS_Content_URL(0) call in the injected content block aborted the whole page at compile time (HTTP 422) even when the call sat inside a non-matching IF branch, while an otherwise identical page with the call removed rendered HTTP 200. This matches the official reference, which states the function is usable only in MobileConnect and not in landing pages or other content types; there is no mobile-originated message context on a CloudPage to exercise it against.',
+            'Could not runtime-verify on the only available context (a CloudPage GET on the child BU; no parent-BU escalation is configured on this tenant). Including an MMS_Content_URL(0) call in the injected content block aborted the whole page at compile time (HTTP 422) even when the call sat inside a non-matching IF branch, while an otherwise identical page with the call removed rendered HTTP 200. This matches the official reference, which states the function is usable only in MobileConnect and not in landing pages or other content types; there is no mobile-originated message context on a CloudPage to exercise it against.',
         params: [
             {
                 name: 'position',
@@ -4248,6 +4489,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'MicrositeURL',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4297,6 +4540,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Mod',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'modulo',
         handlebarsExact: true,
@@ -4323,6 +4568,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Msg',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4337,7 +4584,7 @@ export const FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'Could not runtime-verify on the only available context (a CloudPage GET on cred/DEV, MID 510007949; no parent-BU escalation is configured on this tenant). A page containing a Msg(0) call aborted at compile time (HTTP 422) even when the call sat inside a non-matching IF branch, whereas the same page with no Msg construct rendered HTTP 200 — so the abort happens at parse time, before any runtime gate. This matches the official reference, which states the function is usable only in MobileConnect and not in landing pages or other content types; a CloudPage supplies no mobile-originated message to read.',
+            'Could not runtime-verify on the only available context (a CloudPage GET on the child BU; no parent-BU escalation is configured on this tenant). A page containing a Msg(0) call aborted at compile time (HTTP 422) even when the call sat inside a non-matching IF branch, whereas the same page with no Msg construct rendered HTTP 200 — so the abort happens at parse time, before any runtime gate. This matches the official reference, which states the function is usable only in MobileConnect and not in landing pages or other content types; a CloudPage supplies no mobile-originated message to read.',
         params: [
             {
                 name: 'index',
@@ -4352,6 +4599,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Multiply',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'multiply',
         handlebarsExact: true,
@@ -4376,6 +4625,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Noun',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4390,7 +4641,7 @@ export const FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'Could not runtime-verify on the only available context (a CloudPage GET on cred/DEV, MID 510007949; no parent-BU escalation on this tenant). Noun is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
+            'Could not runtime-verify on the only available context (a CloudPage GET on the child BU; no parent-BU escalation on this tenant). Noun is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
         params: [
             {
                 name: 'position',
@@ -4406,6 +4657,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Nouns',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4420,7 +4673,7 @@ export const FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'Could not runtime-verify on the only available context (a CloudPage GET on cred/DEV, MID 510007949; no parent-BU escalation on this tenant). Nouns is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
+            'Could not runtime-verify on the only available context (a CloudPage GET on the child BU; no parent-BU escalation on this tenant). Nouns is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
         params: [],
         returnType: 'string',
         returnDescription: 'All content that follows the keyword in the inbound message.',
@@ -4429,6 +4682,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Now',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'now',
         handlebarsExact: false,
@@ -4462,6 +4717,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Output',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: 67,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4469,7 +4726,7 @@ export const FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/output/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/output/',
         minArgs: 0,
-        maxArgs: Infinity,
+        maxArgs: INF,
         category: 'Utility',
         description:
             'Writes the result of a nested function call into the rendered content. A string literal, a bare variable or a number renders nothing at all, without raising an error.',
@@ -4478,20 +4735,30 @@ export const FUNCTIONS = [
                 name: 'content',
                 description:
                     'Function call whose result is written; a literal or bare variable renders nothing',
+                optional: true,
+            },
+            {
+                name: 'contentN',
+                description:
+                    'Additional function call whose result is written in turn; a literal or bare variable renders nothing',
+                optional: true,
             },
         ],
         returnType: 'void',
         returnDescription:
             'No value is returned, so the call cannot be nested inside another function; the result is written straight into the rendered content.',
-        syntax: 'Output(content)',
+        repeat: [{ startIndex: 0, groupSize: 1, minGroups: 0 }],
+        syntax: 'Output([content, ...])',
         example: "%%=Output(Concat('Hello ', @firstName))=%%",
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference states that a value which is not a function call, such as a string literal, makes the function return an error. On a live Engagement CloudPage on the child business unit (MID 518005426) a literal argument, a bare variable and a bare number each rendered nothing at all while the page still returned HTTP 200 and every surrounding marker printed, so no error surfaced anywhere. The same page also accepted zero arguments and up to three arguments, writing each one in turn.',
+            'The official reference states that a value which is not a function call, such as a string literal, makes the function return an error. On a live Engagement CloudPage on the child business unit a literal argument, a bare variable and a bare number each rendered nothing at all while the page still returned HTTP 200 and every surrounding marker printed, so no error surfaced anywhere. The same page also accepted zero arguments and up to three arguments, writing each one in turn.',
     },
     {
         name: 'OutputLine',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4499,7 +4766,7 @@ export const FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/outputline/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/outputline/',
         minArgs: 0,
-        maxArgs: Infinity,
+        maxArgs: INF,
         category: 'Utility',
         description:
             'Writes the result of a nested function call into the rendered content, followed by a carriage return and line feed. A string literal, a bare variable or a number renders only the line break. The break is not an HTML line break, so an HTML view keeps everything on one line unless the content sits inside a preformatted element.',
@@ -4508,18 +4775,28 @@ export const FUNCTIONS = [
                 name: 'content',
                 description:
                     'Function call whose result is written; a literal or bare variable renders only the line break',
+                optional: true,
+            },
+            {
+                name: 'contentN',
+                description:
+                    'Additional function call whose result is written in turn before the single trailing line break; a literal or bare variable renders only the line break',
+                optional: true,
             },
         ],
         returnType: 'void',
         returnDescription:
             'No value is returned, so the call cannot be nested inside another function; the result and a carriage return plus line feed are written straight into the rendered content.',
-        syntax: 'OutputLine(content)',
+        repeat: [{ startIndex: 0, groupSize: 1, minGroups: 0 }],
+        syntax: 'OutputLine([content, ...])',
         example: "%%=OutputLine(Concat('Hello ', @firstName))=%%",
         isConfirmed: true,
         differsFromOfficialDocs: false,
     },
     {
         name: 'ProperCase',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'properCase',
         handlebarsExact: true,
@@ -4545,6 +4822,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'QueryParameter',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4572,6 +4851,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RaiseError',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'raiseError',
         handlebarsExact: false,
@@ -4631,6 +4912,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Random',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'random',
         handlebarsExact: true,
@@ -4654,10 +4937,12 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference states the bounds may be decimal numbers. On the child QA BU (MID 518005426) every decimal bound aborted the CloudPage with HTTP 422 — Random(1.2,1.8), Random(1,2.5), Random(1.0,3.0) and the quoted form Random("1.5","3.5") all failed, while the equivalent whole-number and numeric-string calls returned values normally. The same decimal calls also aborted on the parent BU (MID 7281698), so this is not a child-BU limitation. Only whole-number bounds are usable at runtime.',
+            'The official reference states the bounds may be decimal numbers. On the child BU every decimal bound aborted the CloudPage with HTTP 422 — Random(1.2,1.8), Random(1,2.5), Random(1.0,3.0) and the quoted form Random("1.5","3.5") all failed, while the equivalent whole-number and numeric-string calls returned values normally. The same decimal calls also aborted on the parent BU, so this is not a child-BU limitation. Only whole-number bounds are usable at runtime.',
     },
     {
         name: 'RatingStars',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4679,10 +4964,12 @@ export const FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-test-data',
         officialDocsNote:
-            'No working CloudPage invocation was found. Any valid-arity call aborts the whole page with HTTP 422 at compile time, even when placed inside an unreached IF gate, so it cannot be probed behind a query-string switch. Two signature shapes were each deployed as the whole page: the catalog form RatingStars(4, 5, "https://example.com/star.png") and the ampscript.guide form RatingStars(5, "yellow", 25). Both returned HTTP 422 on the child BU (MID 518005426) and again on the parent BU (MID 7281698). The surrounding harness structure (RequestParameter gating, IF/ELSE/ENDIF) returned HTTP 200 once the RatingStars call was removed, confirming the abort is caused by the function itself, not the harness. RatingStars is an Einstein Email Recommendations helper that appears to resolve only inside the recommendations rendering context, which a bare CloudPage does not supply.',
+            'No working CloudPage invocation was found. Any valid-arity call aborts the whole page with HTTP 422 at compile time, even when placed inside an unreached IF gate, so it cannot be probed behind a query-string switch. Two signature shapes were each deployed as the whole page: the catalog form RatingStars(4, 5, "https://example.com/star.png") and the ampscript.guide form RatingStars(5, "yellow", 25). Both returned HTTP 422 on the child BU and again on the parent BU. The surrounding harness structure (RequestParameter gating, IF/ELSE/ENDIF) returned HTTP 200 once the RatingStars call was removed, confirming the abort is caused by the function itself, not the harness. RatingStars is an Einstein Email Recommendations helper that appears to resolve only inside the recommendations rendering context, which a bare CloudPage does not supply.',
     },
     {
         name: 'Redirect',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4701,10 +4988,14 @@ export const FUNCTIONS = [
         syntax: 'Redirect(url)',
         example: "Redirect('https://example.com')",
         isConfirmed: true,
-        differsFromOfficialDocs: false,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: Redirect is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated Redirect("https://sfmc.guide/robots.txt") was rejected with HTTP 400 errorcode 10005 ("Redirect Function is not valid in content. This function is only allowed in in content with an HTTP context."). It is a CloudPage / landing-page (non-sendable, HTTP-context) feature that emits a 302, and cannot be used inside a sendable email, where there is no HTTP response to redirect.',
     },
     {
         name: 'RedirectTo',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4727,6 +5018,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RegExMatch',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4736,7 +5029,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         minArgs: 3,
-        maxArgs: Infinity,
+        maxArgs: INF,
         category: 'String',
         description:
             'Returns the first occurrence of a regular expression match in a string, selected by capture group. Matching is case-sensitive unless the IgnoreCase option is passed.',
@@ -4774,6 +5067,7 @@ export const FUNCTIONS = [
         returnType: 'string',
         returnDescription:
             'The text of the selected capture group, or an empty string when the pattern does not match or the group does not exist.',
+        repeat: [{ startIndex: 3, groupSize: 1, minGroups: 0 }],
         syntax: 'RegExMatch(sourceString, regExPattern, returnValue[, regExOptions, ...])',
         example:
             'Var @couponCode, @regEx, @regExMatch\n' +
@@ -4783,6 +5077,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Replace',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'replace',
         handlebarsExact: false,
@@ -4815,6 +5111,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'ReplaceList',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4848,6 +5146,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RequestParameter',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4875,6 +5175,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveMSCRMRecords',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4923,6 +5225,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveMSCRMRecordsFetchXML',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4945,6 +5249,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveSalesforceJobSources',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -4974,6 +5280,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RetrieveSalesforceObjects',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
@@ -5040,6 +5348,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Row',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'get',
         handlebarsExact: false,
@@ -5065,6 +5375,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'RowCount',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'length',
         handlebarsExact: false,
@@ -5086,6 +5398,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SetObjectProperty',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5114,9 +5428,14 @@ export const FUNCTIONS = [
         syntax: 'SetObjectProperty(apiObject, propertyName, propertyValue)',
         example: "SetObjectProperty(@apiObject, 'LastName', 'Smith')",
         isConfirmed: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'SetSmsConversationNextKeyword',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5127,12 +5446,10 @@ export const FUNCTIONS = [
         category: 'MobileConnect',
         description:
             'Sets the keyword for the next path of an existing SMS conversation, applied when the contact next replies. Does not create a new conversation. Returns true when set inside a MobileConnect message context, and false in any other context (for example a CloudPage or email). The success path cannot be exercised outside a live MobileConnect send.',
-        isConfirmed: false,
-        verificationBlocked: true,
-        verificationBlockedReason: 'no-working-invocation',
+        isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Runtime-observed on cred/DEV (MID 510007949), the only BU available (no parent-BU escalation). This is an ordinary function call, so it compiles and runs on a CloudPage: called there with a real short code, the authorized destination number and a keyword, it returned the literal boolean false (Empty() false) and the page rendered fully with no exception — no SMS was sent and no conversation state changed. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour. The success path (true, keyword actually set) requires a live MobileConnect message context that cannot be captured on this tenant, so the function is recorded blocked for the success path while the CloudPage false-return is proven. The catalogued signature was corrected here: the three parameters are originationNumber, destinationNumber and keyword, and the return is a boolean, not void. A docUrl to the official reference was also added.',
+            'The out-of-context return is confirmed in two independent runtime contexts: a CloudPage on the child BU and an email render on the child BU. Being an ordinary function call, it compiles and evaluates in both: on the CloudPage, called with a real short code, the authorized destination number and a keyword, it returned the literal boolean false with the page rendering fully, no SMS sent and no conversation state changed; in an email body the same call rendered the literal False through the Email Preview API. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour. The success path (true, keyword actually set) requires a live MobileConnect message context and cannot be reproduced in a CloudPage or email; only the out-of-context false-return is exercisable, and it is proven. The catalogued signature was corrected here: the three parameters are originationNumber, destinationNumber and keyword, and the return is a boolean, not void. A docUrl to the official reference was also added.',
         params: [
             {
                 name: 'originationNumber',
@@ -5158,6 +5475,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SetStateMscrmRecord',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5203,6 +5522,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SHA1',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5242,6 +5563,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SHA256',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5281,6 +5604,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SHA512',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5320,6 +5645,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'StringToDate',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: null,
         mcnNotes:
@@ -5350,6 +5677,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'StringToHex',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5388,6 +5717,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Substring',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'substring',
         handlebarsExact: true,
@@ -5427,6 +5758,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Subtract',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'subtract',
         handlebarsExact: true,
@@ -5451,6 +5784,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'SystemDateToLocalDate',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: 'timeZoneConversion',
         handlebarsExact: false,
@@ -5481,6 +5816,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'TransformXML',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5503,6 +5840,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'TreatAsContent',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5532,6 +5871,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'TreatAsContentArea',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5564,6 +5905,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Trim',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'trim',
         handlebarsExact: true,
@@ -5588,6 +5931,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateData',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5595,7 +5940,9 @@ export const FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/updatedata/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/updatedata/',
         isConfirmed: true,
-        differsFromOfficialDocs: false,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: UpdateData is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated UpdateData(...) was rejected with HTTP 400 errorcode 10005 ("UpdateData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the UpdateData/*Data write family cannot run inside a sendable email; use the UpdateDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
@@ -5656,6 +6003,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateDE',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5724,6 +6073,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateMSCRMRecords',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5778,6 +6129,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpdateSingleSalesforceObject',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5793,7 +6146,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         officialDocsNote:
-            'The success token 1 was runtime-proven on cred/DEV (MID 510007949), which has an active Marketing Cloud Connect integration to a real Salesforce org: updating one field of a record created moments earlier in the same run (a benign Task) returned the literal 1 with the page rendering fully. The failure token 0 is NOT observable in CloudPage GET context: every safe induced failure (unknown object, a malformed ID, and a well-formed but non-existent Lead ID at both 15 and 18 characters, on a real field) aborted the whole page with HTTP 422 — the SOAP fault propagates as an uncatchable page abort (identical to CreateSalesforceObject and RetrieveSalesforceObjects against a bad target), so the documented 0 return never materialises to be read. returnEnum is therefore left unset: only 1 is provable here, and asserting a [0,1] enum would ship the unproven 0 token. returnType stays number and the 0/1 semantics are retained in the description as a documented fact attributed to the official reference. The 0-on-CloudPage-abort behaviour is a context observation, not a contradiction of the send/preview-context 0/1 contract, so differsFromOfficialDocs stays false.',
+            'The success token 1 was runtime-proven on the child BU, which has an active Marketing Cloud Connect integration to a real Salesforce org: updating one field of a record created moments earlier in the same run (a benign Task) returned the literal 1 with the page rendering fully. The failure token 0 is NOT observable in CloudPage GET context: every safe induced failure (unknown object, a malformed ID, and a well-formed but non-existent Lead ID at both 15 and 18 characters, on a real field) aborted the whole page with HTTP 422 — the SOAP fault propagates as an uncatchable page abort (identical to CreateSalesforceObject and RetrieveSalesforceObjects against a bad target), so the documented 0 return never materialises to be read. returnEnum is therefore left unset: only 1 is provable here, and asserting a [0,1] enum would ship the unproven 0 token. returnType stays number and the 0/1 semantics are retained in the description as a documented fact attributed to the official reference. The 0-on-CloudPage-abort behaviour is a context observation, not a contradiction of the send/preview-context 0/1 contract, so differsFromOfficialDocs stays false.',
         params: [
             {
                 name: 'objectName',
@@ -5824,6 +6177,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Uppercase',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: 'uppercase',
         handlebarsExact: true,
@@ -5852,6 +6207,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertContact',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5866,7 +6223,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         officialDocsNote:
-            'Both return tokens were runtime-proven on cred/DEV (MID 510007949). The success status 0 was proven by creating a brand-new mobile contact keyed on an opaque, unreachable phone number in a reserved test range with a documented system attribute (_ZipCode); calling the same key a second time with a different value updated that contact and again returned 0, so both the create and update branches of the upsert return 0. The error status 1 was proven three independent ways (unsupported channel, unsupported match attribute, non-numeric phone) and again by passing an attribute name that is not a defined MobileConnect attribute — each returned 1 with the page rendering fully and no write performed. The return is a status code (0 success / 1 error), not a count of records. The phone-number argument accepts both an integer literal and a numeric string (both returned 0 for a successful create). runtime matches the official reference, so differsFromOfficialDocs stays false.',
+            'Both return tokens were runtime-proven on the child BU. The success status 0 was proven by creating a brand-new mobile contact keyed on an opaque, unreachable phone number in a reserved test range with a documented system attribute (_ZipCode); calling the same key a second time with a different value updated that contact and again returned 0, so both the create and update branches of the upsert return 0. The error status 1 was proven three independent ways (unsupported channel, unsupported match attribute, non-numeric phone) and again by passing an attribute name that is not a defined MobileConnect attribute — each returned 1 with the page rendering fully and no write performed. The return is a status code (0 success / 1 error), not a count of records. The phone-number argument accepts both an integer literal and a numeric string (both returned 0 for a successful create). runtime matches the official reference, so differsFromOfficialDocs stays false.',
         params: [
             {
                 name: 'channel',
@@ -5914,6 +6271,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertData',
+        supportedInCloudPage: true,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -5921,7 +6280,9 @@ export const FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/upsertdata/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/upsertdata/',
         isConfirmed: true,
-        differsFromOfficialDocs: false,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'Email/send-context finding: UpsertData is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated UpsertData(...) was rejected with HTTP 400 errorcode 10005 ("UpsertData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the UpsertData/*Data write family cannot run inside a sendable email; use the UpsertDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
@@ -5992,6 +6353,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertDE',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -6070,6 +6433,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'UpsertMSCRMRecord',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -6142,6 +6507,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'URLEncode',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -6186,6 +6553,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'Verb',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -6200,7 +6569,7 @@ export const FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'Could not runtime-verify on the only available context (a CloudPage GET on cred/DEV, MID 510007949; no parent-BU escalation on this tenant). Verb is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
+            'Could not runtime-verify on the only available context (a CloudPage GET on the child BU; no parent-BU escalation on this tenant). Verb is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
         params: [],
         returnType: 'string',
         returnDescription: 'The keyword (first word) of the inbound mobile-originated message.',
@@ -6209,6 +6578,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'v',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -6235,6 +6606,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'WAT',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -6271,10 +6644,14 @@ export const FUNCTIONS = [
         example: "%%=WAT('Omniture', '1234', '5678')=%%",
         isConfirmed: false,
         verificationBlocked: true,
-        verificationBlockedReason: 'no-working-invocation',
+        verificationBlockedReason: 'no-test-data',
+        officialDocsNote:
+            'On a CloudPage every invocation aborted at HTTP 422 on both the child BU and the parent BU. An email-context render on the parent BU changed the picture: the Email Preview API RECOGNISES and evaluates the function and fails with a precise message that the named tracking parameter set does not exist (Tracking Parameter Name: Omniture). So WAT is not a broken function — it resolves a Web Analytics Tracking parameter set that must first be configured on the account (a Salesforce-support / Sender Profile setup), and none exists on these BUs to resolve. The block is a missing-test-data gate, not a broken invocation.',
     },
     {
         name: 'WATP',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -6303,6 +6680,8 @@ export const FUNCTIONS = [
     },
     {
         name: 'WrapLongURL',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
         mcnSince: null,
         handlebarsEquivalent: null,
         mcnNotes: null,
@@ -6316,7 +6695,7 @@ export const FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference states that a URL longer than 975 characters comes back as a shortened link that redirects through the platform. On a live Engagement CloudPage on the child business unit (MID 518005426) a 1048-character URL was returned byte for byte unchanged at the same length, twice in one render, and the same held for a 27-character URL, an empty string and a string that is not a URL at all. The community guide notes that shortening only happens on a send, which the official page does not mention.',
+            'The official reference states that a URL longer than 975 characters comes back as a shortened link that redirects through the platform. On a live Engagement CloudPage on the child business unit a 1048-character URL was returned byte for byte unchanged at the same length, twice in one render, and the same held for a 27-character URL, an empty string and a string that is not a URL at all. The community guide notes that shortening only happens on a send, which the official page does not mention.',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/wraplongurl/',
         params: [{ name: 'url', description: 'URL to shorten', type: 'string|number' }],
         returnType: 'string',
