@@ -1,0 +1,151 @@
+// AUTO-SPLIT from the original single-file src/index.js. Data moved verbatim.
+// AMPscript FUNCTIONS — category: Social (3 entries).
+
+import { INF } from '../constants.js';
+
+export const SOCIAL_FUNCTIONS = [
+    {
+        name: 'GetPublishedSocialContent',
+        supportedInCloudPage: false,
+        supportedInEmail: false,
+        mcnSince: null,
+        handlebarsEquivalent: null,
+        mcnNotes: null,
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-social/mc-ampscript-reference-social-get-published-social-content.html',
+        guideUrl: 'https://ampscript.guide/getpublishedsocialcontent/',
+        minArgs: 1,
+        maxArgs: 1,
+        category: 'Social',
+        description: 'Retrieves published social media content by its identifier.',
+        params: [
+            { name: 'socialContentId', description: 'Social content ID', type: 'string|number' },
+        ],
+        returnType: 'string',
+        returnDescription: 'The published social content for the supplied identifier.',
+        syntax: 'GetPublishedSocialContent(socialContentId)',
+        example: "%%=GetPublishedSocialContent('socialContentId')=%%",
+        isConfirmed: true,
+        nonFunctionalAtRuntime: true,
+        differsFromOfficialDocs: true,
+        officialDocsNote:
+            'The community guide flags this as usable only inside Microsites and Landing Pages and only for content regions built in Classic Content, which is retired on this tenant. A reached call aborted the page with HTTP 422 and no partial output for both a string region name and a numeric region id, on the child BU and again on the parent BU. The same call gated behind an unmatched query-string branch left the page at HTTP 200, confirming a runtime abort of the reached call rather than a compile-time failure. No Classic Content region exists here to source a resolvable identifier, so the documented success path could not be exercised. Email/send context: the send parser EXPLICITLY rejects this function with errorcode 10004 ("GetPublishedSocialContent Function is only allowed to be called from social sharing pages or landing pages") - a hard context restriction, stronger and different from the CloudPage runtime abort, which only occurs because no Classic Content region resolves.',
+    },
+    {
+        name: 'GetSocialPublishURL',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
+        mcnSince: null,
+        handlebarsEquivalent: null,
+        mcnNotes: null,
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-social/mc-ampscript-reference-social-get-social-publish-url.html',
+        guideUrl: 'https://ampscript.guide/getsocialpublishurl/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/getsocialpublishurl/',
+        minArgs: 2,
+        maxArgs: INF,
+        category: 'Social',
+        isConfirmed: true,
+        description:
+            'Returns HTML for sharing a content region on a supported social network via Social Forward. Optionally accepts repeating key/value parameter pairs.',
+        params: [
+            {
+                name: 'socialNetworkCode',
+                description: 'The number code of the social network to share to',
+                type: 'string|number',
+            },
+            {
+                name: 'contentRegion',
+                description: 'The name of the content region to share on the social network',
+                type: 'string',
+            },
+            {
+                name: 'socialNetworkParamKey1',
+                description: 'The key of a parameter to pass to the target social network',
+                type: 'string',
+                optional: true,
+            },
+            {
+                name: 'socialNetworkParamValue1',
+                description: 'The value of a parameter to pass to the target social network',
+                type: 'string',
+                optional: true,
+            },
+            {
+                name: 'socialNetworkParamKeyN',
+                description: 'Additional parameter key',
+                type: 'string',
+                optional: true,
+            },
+            {
+                name: 'socialNetworkParamValueN',
+                description: 'Additional parameter value',
+                type: 'string',
+                optional: true,
+            },
+        ],
+        returnType: 'string',
+        returnDescription: 'HTML that publishes the social-forward content for the region.',
+        repeat: [{ startIndex: 2, groupSize: 2, minGroups: 0 }],
+        syntax: 'GetSocialPublishURL(socialNetworkCode, contentRegion[, socialNetworkParamKey1, socialNetworkParamValue1, ...])',
+        example: "%%=GetSocialPublishURL(1, 'Shared content region 1')=%%",
+    },
+    {
+        name: 'GetSocialPublishURLByName',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
+        mcnSince: null,
+        handlebarsEquivalent: null,
+        mcnNotes: null,
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-social/mc-ampscript-reference-social-get-social-publish-url-by-name.html',
+        guideUrl: 'https://ampscript.guide/getsocialpublishurlbyname/',
+        sfmcGuideUrl:
+            'https://sfmc.guide/engagement/ampscript/functions/getsocialpublishurlbyname/',
+        minArgs: 3,
+        maxArgs: INF,
+        category: 'Social',
+        isConfirmed: true,
+        description:
+            'Returns HTML for sharing a content region on a supported social network (identified by name) via Social Forward. Optionally accepts repeating key/value parameter pairs.',
+        params: [
+            {
+                name: 'socialNetworkName',
+                description: 'The name of the social network to share to',
+                type: 'string',
+            },
+            { name: 'countryCode', description: 'An ISO country code', type: 'string' },
+            {
+                name: 'contentRegion',
+                description: 'The name of the content region to share on the social network',
+                type: 'string',
+            },
+            {
+                name: 'socialNetworkParamKey1',
+                description: 'The key of a parameter to pass to the target social network',
+                type: 'string',
+                optional: true,
+            },
+            {
+                name: 'socialNetworkParamValue1',
+                description: 'The value of a parameter to pass to the target social network',
+                type: 'string',
+                optional: true,
+            },
+            {
+                name: 'socialNetworkParamKeyN',
+                description: 'Additional parameter key',
+                type: 'string',
+                optional: true,
+            },
+            {
+                name: 'socialNetworkParamValueN',
+                description: 'Additional parameter value',
+                type: 'string',
+                optional: true,
+            },
+        ],
+        returnType: 'string',
+        returnDescription: 'HTML that publishes the social-forward content for the named region.',
+        repeat: [{ startIndex: 3, groupSize: 2, minGroups: 0 }],
+        syntax: 'GetSocialPublishURLByName(socialNetworkName, countryCode, contentRegion[, socialNetworkParamKey1, socialNetworkParamValue1, ...])',
+        example: "%%=GetSocialPublishURLByName('Facebook', 'US', 'Shared content region 1')=%%",
+    },
+];

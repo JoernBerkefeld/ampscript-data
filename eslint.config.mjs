@@ -102,10 +102,11 @@ export default [
         },
     },
     {
-        // src/index.js is a data catalog: the literal "UTF-8" is the documented
-        // AMPscript charSet value, not a Node encoding identifier. Auto-fixing it to
-        // "utf8" would corrupt the completion/validation data, so the rule is disabled here.
-        files: ['src/index.js'],
+        // The data catalog files are documentation, not runtime encoding usage: the
+        // literal "UTF-8" is the documented AMPscript charSet value, not a Node encoding
+        // identifier. Auto-fixing it to "utf8" would corrupt the completion/validation
+        // data, so the rule is disabled for the catalog source.
+        files: ['src/**/*.js'],
         rules: {
             'unicorn/text-encoding-identifier-case': 'off',
         },

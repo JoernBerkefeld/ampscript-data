@@ -1,0 +1,230 @@
+// AUTO-SPLIT from the original single-file src/index.js. Data moved verbatim.
+// AMPscript FUNCTIONS — category: Sales and Service Cloud (5 entries).
+
+import { INF } from '../constants.js';
+
+export const SALES_SERVICE_CLOUD_FUNCTIONS = [
+    {
+        name: 'CreateSalesforceObject',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
+        mcnSince: null,
+        handlebarsEquivalent: null,
+        mcnNotes: null,
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-create-object.html',
+        guideUrl: 'https://ampscript.guide/createsalesforceobject/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/createsalesforceobject/',
+        minArgs: 4,
+        maxArgs: INF,
+        category: 'Sales and Service Cloud',
+        description:
+            'Creates a new record in a connected Salesforce Sales or Service Cloud object via Marketing Cloud Connect and returns the 18-character ID of the created record. Requires an active Marketing Cloud Connect integration; the field names must be valid API names on the target object, and a fault (unknown object or field) aborts the whole page rather than returning an error value.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        officialDocsNote:
+            'The success path was runtime-proven on the child BU, which has an active Marketing Cloud Connect integration to a real Salesforce org. Creating a benign Task with a single opaque field returned a real 18-character Salesforce ID (an 00T-prefixed Task ID), confirming the documented return shape. The fault path was also proven: an unknown object name and an unknown field name on a real object each aborted the CloudPage with HTTP 422 — the SOAP fault from the connected org propagates as an uncatchable page abort (AMPscript has no try/catch), exactly like RetrieveSalesforceObjects against an unknown object — so there is no testable error value, the function either returns an ID or aborts. AMPscript has no delete function for Salesforce objects, so the created Task remains as benign residue in the org. Catalog signature, returnType and repeat group all match the official reference and ampscript.guide, so differsFromOfficialDocs stays false.',
+        params: [
+            {
+                name: 'objectName',
+                description: 'The API name of the Salesforce object to insert the record into',
+                type: 'string',
+            },
+            {
+                name: 'numFields',
+                description:
+                    'The number of fields to insert. Must match the number of name-value pairs specified',
+                type: 'number',
+            },
+            {
+                name: 'fieldName1',
+                description: 'The name of the field to insert in the object',
+                type: 'string',
+            },
+            { name: 'fieldValue1', description: 'The value to insert for the field' },
+            {
+                name: 'fieldNameN',
+                mcnSince: null,
+                mcnNotes: null,
+                description: 'Additional field name',
+                type: 'string',
+                optional: true,
+            },
+            { name: 'fieldValueN', description: 'Additional field value', optional: true },
+        ],
+        returnType: 'string',
+        returnDescription: 'The 18-character ID of the newly created Salesforce object record.',
+        repeat: [{ startIndex: 2, groupSize: 2, minGroups: 1, countParam: 'numFields' }],
+        syntax: 'CreateSalesforceObject(objectName, numFields, fieldName1, fieldValue1[, fieldNameN, fieldValueN, ...])',
+        example: "%%=CreateSalesforceObject('Contact', 1, 'LastName', 'Smith')=%%",
+    },
+    {
+        name: 'LongSFID',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
+        mcnSince: null,
+        handlebarsEquivalent: null,
+        mcnNotes: null,
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-long-sfid.html',
+        guideUrl: 'https://ampscript.guide/longsfid/',
+        sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/longsfid/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        minArgs: 1,
+        maxArgs: 1,
+        category: 'Sales and Service Cloud',
+        description:
+            'Converts a 15-character case-sensitive Salesforce ID to the 18-character case-insensitive version.',
+        params: [{ name: 'sfid15', description: '15-character Salesforce ID', type: 'string' }],
+        returnType: 'string',
+        returnDescription: 'The 18-character Salesforce ID derived from the 15-character ID.',
+        syntax: 'LongSFID(sfid15)',
+        example: "%%=LongSFID('001A000000ABCDE')=%%",
+    },
+    {
+        name: 'RetrieveSalesforceJobSources',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
+        mcnSince: null,
+        handlebarsEquivalent: null,
+        mcnNotes: null,
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-retrieve-job-sources.html',
+        guideUrl: 'https://ampscript.guide/retrievesalesforcejobsources/',
+        sfmcGuideUrl:
+            'https://sfmc.guide/engagement/ampscript/functions/retrievesalesforcejobsources/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        minArgs: 1,
+        maxArgs: 1,
+        category: 'Sales and Service Cloud',
+        description:
+            'Retrieves the source records (SourceID, SourceType, IsInclusionSource) that made up the audience of a Salesforce-triggered send, matched by its numeric job ID, and returns them as a rowset. Requires an active Marketing Cloud Connect integration. A job ID with no matching sources returns an empty rowset rather than an error; the function reports nothing about the job status.',
+        params: [
+            {
+                name: 'jobId',
+                description: 'The numeric job ID of the Salesforce send',
+                type: 'number',
+            },
+        ],
+        returnType: 'rowset',
+        returnDescription:
+            'A rowset of the send sources (SourceID, SourceType, IsInclusionSource); an empty rowset when the job ID has no matching sources.',
+        syntax: 'RetrieveSalesforceJobSources(jobId)',
+        example: '%%[ SET @rows = RetrieveSalesforceJobSources(@jobId) ]%%',
+    },
+    {
+        name: 'RetrieveSalesforceObjects',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
+        mcnSince: 67,
+        handlebarsEquivalent: 'query',
+        handlebarsExact: false,
+        mcnNotes: null,
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-retrieve-objects.html',
+        guideUrl: 'https://ampscript.guide/retrievesalesforceobjects/',
+        sfmcGuideUrl:
+            'https://sfmc.guide/engagement/ampscript/functions/retrievesalesforceobjects/',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        minArgs: 5,
+        maxArgs: INF,
+        category: 'Sales and Service Cloud',
+        description:
+            'Retrieves records from a connected Salesforce Sales or Service Cloud object via Marketing Cloud Connect and returns them as a rowset. Requires an active Marketing Cloud Connect integration; a call against an unknown object name aborts the page.',
+        params: [
+            {
+                name: 'objectName',
+                description: 'The API name of the Salesforce object to retrieve information from',
+                type: 'string',
+            },
+            {
+                name: 'fieldsToRetrieve',
+                description: 'A comma-separated list of fields to retrieve information from',
+                type: 'string',
+            },
+            {
+                name: 'queryFieldName1',
+                description: 'The name of the field to filter on',
+                type: 'string',
+            },
+            {
+                name: 'queryFieldOperator1',
+                description: 'The comparison operator to use for the filter',
+                type: 'string',
+                enum: ['=', '!=', '<', '<=', '>', '>='],
+            },
+            { name: 'queryFieldValue1', description: 'The value to filter on' },
+            {
+                name: 'queryFieldNameN',
+                description: 'Additional filter field name (joined with AND)',
+                type: 'string',
+                optional: true,
+            },
+            {
+                name: 'queryFieldOperatorN',
+                description: 'Additional comparison operator',
+                type: 'string',
+                enum: ['=', '!=', '<', '<=', '>', '>='],
+                optional: true,
+            },
+            {
+                name: 'queryFieldValueN',
+                description: 'Additional filter value',
+                optional: true,
+            },
+        ],
+        returnType: 'rowset',
+        returnDescription: 'A rowset of matching Salesforce object records.',
+        repeat: [{ startIndex: 2, groupSize: 3, minGroups: 1 }],
+        syntax: 'RetrieveSalesforceObjects(objectName, fieldsToRetrieve, queryFieldName1, queryFieldOperator1, queryFieldValue1[, queryFieldNameN, queryFieldOperatorN, queryFieldValueN, ...])',
+        example:
+            "%%[ SET @rows = RetrieveSalesforceObjects('Contact', 'Id,Email', 'LastName', '=', 'Smith') ]%%",
+    },
+    {
+        name: 'UpdateSingleSalesforceObject',
+        supportedInCloudPage: true,
+        supportedInEmail: true,
+        mcnSince: null,
+        handlebarsEquivalent: null,
+        mcnNotes: null,
+        docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-update-single-object.html',
+        guideUrl: 'https://ampscript.guide/updatesinglesalesforceobject/',
+        sfmcGuideUrl:
+            'https://sfmc.guide/engagement/ampscript/functions/updatesinglesalesforceobject/',
+        minArgs: 4,
+        maxArgs: INF,
+        category: 'Sales and Service Cloud',
+        description:
+            'Updates a single record in a connected Salesforce Sales or Service Cloud object via Marketing Cloud Connect. Accepts one or more field name and value pairs. Returns 1 on success; per the official reference it returns 0 on failure, but on a CloudPage a failed update (unknown object, malformed or non-existent record ID) instead surfaces the SOAP fault as an uncatchable page abort rather than returning 0.',
+        isConfirmed: true,
+        differsFromOfficialDocs: false,
+        officialDocsNote:
+            'The success token 1 was runtime-proven on the child BU, which has an active Marketing Cloud Connect integration to a real Salesforce org: updating one field of a record created moments earlier in the same run (a benign Task) returned the literal 1 with the page rendering fully. The failure token 0 is NOT observable in CloudPage GET context: every safe induced failure (unknown object, a malformed ID, and a well-formed but non-existent Lead ID at both 15 and 18 characters, on a real field) aborted the whole page with HTTP 422 — the SOAP fault propagates as an uncatchable page abort (identical to CreateSalesforceObject and RetrieveSalesforceObjects against a bad target), so the documented 0 return never materialises to be read. returnEnum is therefore left unset: only 1 is provable here, and asserting a [0,1] enum would ship the unproven 0 token. returnType stays number and the 0/1 semantics are retained in the description as a documented fact attributed to the official reference. The 0-on-CloudPage-abort behaviour is a context observation, not a contradiction of the send/preview-context 0/1 contract, so differsFromOfficialDocs stays false.',
+        params: [
+            {
+                name: 'objectName',
+                description: 'The API name of the Salesforce object to update',
+                type: 'string',
+            },
+            { name: 'idToUpdate', description: 'The ID of the record to update', type: 'string' },
+            {
+                name: 'fieldName1',
+                description: 'The name of the first field to update',
+                type: 'string',
+            },
+            { name: 'fieldValue1', description: 'The value to assign to the first named field' },
+            {
+                name: 'fieldNameN',
+                description: 'Additional field name',
+                type: 'string',
+                optional: true,
+            },
+            { name: 'fieldValueN', description: 'Additional field value', optional: true },
+        ],
+        returnType: 'number',
+        returnDescription:
+            '1 when the record was updated successfully (runtime-proven). Per the official reference a failed update returns 0, but on a CloudPage a failure aborts the page (HTTP 422) instead of returning 0, so the 0 token is not observable in that context.',
+        repeat: [{ startIndex: 2, groupSize: 2, minGroups: 1 }],
+        syntax: 'UpdateSingleSalesforceObject(objectName, idToUpdate, fieldName1, fieldValue1[, fieldNameN, fieldValueN, ...])',
+        example: "%%=UpdateSingleSalesforceObject('Contact', @recordId, 'LastName', 'Smith')=%%",
+    },
+];
