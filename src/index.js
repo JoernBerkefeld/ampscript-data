@@ -69,5 +69,5 @@ export { AMPSCRIPT_OPERATORS } from './operators.js';
 export { AMPSCRIPT_GLOBALS } from './globals.js';
 export { PERSONALIZATION_STRINGS, isSystemPersonalizationString } from './personalization.js';
 
-// Shared constants (only the public enum is re-exported).
-export { VERIFICATION_BLOCKED_REASONS } from './constants.js';
+// Shared constants.
+export { BOOLEAN_LIKE_LITERAL_VALUES, VERIFICATION_BLOCKED_REASONS } from './constants.js';

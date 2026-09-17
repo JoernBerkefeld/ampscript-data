@@ -13,6 +13,7 @@ import {
     AMPSCRIPT_OPERATORS,
     AMPSCRIPT_GLOBALS,
     PERSONALIZATION_STRINGS,
+    BOOLEAN_LIKE_LITERAL_VALUES,
     VERIFICATION_BLOCKED_REASONS,
     isEmailExcluded,
     isMcnSupported,
@@ -91,6 +92,23 @@ test('FUNCTIONS: every param has name and description', () => {
             );
         }
     }
+});
+
+test('RaiseError preserveDataExt has the exact runtime-verified value constraint', () => {
+    const raiseError = functionLookup.get('raiseerror');
+    assert.ok(raiseError, 'RaiseError must exist');
+    const skipSubscriber = raiseError.params.find(
+        (parameter) => parameter.name === 'skipSubscriber',
+    );
+    const preserveDataExtension = raiseError.params.find(
+        (parameter) => parameter.name === 'preserveDataExt',
+    );
+    assert.ok(skipSubscriber, 'RaiseError skipSubscriber parameter must exist');
+    assert.ok(preserveDataExtension, 'RaiseError preserveDataExt parameter must exist');
+    assert.ok(!Object.hasOwn(skipSubscriber, 'enum'));
+    assert.equal(preserveDataExtension.enum, BOOLEAN_LIKE_LITERAL_VALUES);
+    assert.deepEqual(preserveDataExtension.enum, [true, false, 1, 0, 'true', 'false', '1', '0']);
+    assert.ok(Object.isFrozen(BOOLEAN_LIKE_LITERAL_VALUES));
 });
 
 test('FUNCTIONS: optional boolean flags are booleans when present', () => {

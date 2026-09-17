@@ -6,6 +6,22 @@
  */
 export const INF = Infinity;
 
+/**
+ * Boolean-like literal values accepted by AMPscript flag parameters.
+ *
+ * @type {readonly (boolean|number|string)[]}
+ */
+export const BOOLEAN_LIKE_LITERAL_VALUES = Object.freeze([
+    true,
+    false,
+    1,
+    0,
+    'true',
+    'false',
+    '1',
+    '0',
+]);
+
 // ── Verification-blocked reasons ─────────────────────────────────────────────
 // Fixed enum of concrete technical/environmental reasons why a runtime verification
 // was ATTEMPTED but could not complete. Set on an entry as `verificationBlockedReason`

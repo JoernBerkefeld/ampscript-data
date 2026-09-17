@@ -1,7 +1,7 @@
 // AUTO-SPLIT from the original single-file src/index.js. Data moved verbatim.
 // AMPscript FUNCTIONS — category: Utility (32 entries).
 
-import { INF } from '../constants.js';
+import { BOOLEAN_LIKE_LITERAL_VALUES, INF } from '../constants.js';
 
 export const UTILITY_FUNCTIONS = [
     {
@@ -895,8 +895,9 @@ export const UTILITY_FUNCTIONS = [
                 mcnSince: null,
                 mcnNotes: null,
                 description:
-                    "If true, the function retains information written to data extensions before the error occurs, even if the subscriber is skipped. If false, the function doesn't retain data extension information recorded before the error. This parameter applies to information that is inserted, updated, upserted, or deleted using AMPscript functions",
-                type: 'boolean',
+                    "If true, the function retains information written to data extensions before the error occurs, even if the subscriber is skipped. If false, the function doesn't retain data extension information recorded before the error. Boolean-like numbers and quoted representations are accepted as well; in Email Preview, bare true and false tokens resolve as field references, so use 1, 0, or a quoted representation for literals. This parameter applies to information that is inserted, updated, upserted, or deleted using AMPscript functions",
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
         ],
