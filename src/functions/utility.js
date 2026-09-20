@@ -77,11 +77,11 @@ export const UTILITY_FUNCTIONS = [
         params: [],
         returnType: 'string',
         returnDescription:
-            'The notification address as a string, usable directly in Concat and in comparisons. On the business unit tested it was a real email address on a registered domain, and it was non-empty even without a signed-in visitor.',
+            'The notification address as a string, usable directly in Concat and in comparisons. It is a real email address on a registered domain, and it is non-empty even without a signed-in visitor.',
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Proven on the child BU; the parent BU was not needed. The official reference scopes the function to microsites that use sender authenticated redirection and explicitly says it is not for use with CloudPages. At runtime the opposite happened: an anonymous GET of a public CloudPage rendered at HTTP 200 and the call returned a well-formed, non-empty notification email address — Empty() answered false, Length() reported 29 characters and IsEmailAddress() accepted it. The value behaved as an ordinary string when used inline, nested inside Concat and compared against the empty string. The literal address is redacted here because it identifies an account user; only its shape is described.',
+            'The official reference scopes the function to microsites that use sender authenticated redirection and explicitly says it is not for use with CloudPages. In practice the opposite happens: on a public CloudPage the call returns a well-formed, non-empty notification email address — Empty() answers false, Length() reports 29 characters and IsEmailAddress() accepts it. The value behaves as an ordinary string when used inline, nested inside Concat and compared against the empty string. The literal address is redacted here because it identifies an account user; only its shape is described.',
         sfmcGuideUrl:
             'https://sfmc.guide/engagement/ampscript/functions/authenticatedemployeenotificationaddress/',
         syntax: 'AuthenticatedEmployeeNotificationAddress()',
@@ -104,7 +104,7 @@ export const UTILITY_FUNCTIONS = [
         params: [],
         returnType: 'string',
         returnDescription:
-            'The username as a string, usable directly in Concat and in comparisons. On the business unit tested it was shaped like an email address and was non-empty even without a signed-in visitor.',
+            'The username as a string, usable directly in Concat and in comparisons. It is shaped like an email address and is non-empty even without a signed-in visitor.',
         isConfirmed: true,
         differsFromOfficialDocs: false,
         sfmcGuideUrl:
@@ -317,7 +317,7 @@ export const UTILITY_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Proven on the child BU. The official reference names two possible values for the third parameter, Date and Number, but at runtime only Date is usable. Passing the literal Number aborts the page with HTTP 422 and discards all output, whether or not a locale follows it — Format(1234.555, "C2", "Number") and Format(1234.555, "C2", "Number", "de-DE") both aborted, exactly like the invented value Banana. Date works in any capitalisation, and the empty string works and still allows a locale in the fourth parameter, so Format(1234.555, "C2", "", "de-DE") is the way to format a localised number. Number formatting also happens correctly with the third parameter omitted entirely, so the documented value is not merely optional, it is unusable.',
+            'The official reference names two possible values for the third parameter, Date and Number, but at runtime only Date is usable. Passing the literal Number aborts the page with HTTP 422 and discards all output, whether or not a locale follows it — Format(1234.555, "C2", "Number") and Format(1234.555, "C2", "Number", "de-DE") both abort, exactly like the invented value Banana. Date works in any capitalisation, and the empty string works and still allows a locale in the fourth parameter, so Format(1234.555, "C2", "", "de-DE") is the way to format a localised number. Number formatting also happens correctly with the third parameter omitted entirely, so the documented value is not merely optional, it is unusable.',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/format/',
         description:
             'Formats a number, a date or a string with a .NET format pattern. The third parameter only accepts Date or the empty string; the documented value Number aborts the page.',
@@ -537,7 +537,7 @@ export const UTILITY_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference documents this as an AMPscript function without noting that it is restricted to non-sendable content. Email/send-context finding: rendered through the Email Preview API against a seeded sendable row, an isolated IsCHTMLBrowser("DoCoMo/2.0 N905i") was rejected with HTTP 400 errorcode 10004 ("IsCHTMLBrowser Function is not valid in content. This function is only allowed in non sendable content."). So it works only in non-sendable content (CloudPages / landing pages) and cannot be used inside a sendable email, which fits its purpose since a user-agent is a request-time value absent at send time.',
+            'The official reference documents this as an AMPscript function without noting that it is restricted to non-sendable content. Email/send-context finding: an isolated IsCHTMLBrowser("DoCoMo/2.0 N905i") is rejected in sendable email content with HTTP 400 errorcode 10004 ("IsCHTMLBrowser Function is not valid in content. This function is only allowed in non sendable content."). So it works only in non-sendable content (CloudPages / landing pages) and cannot be used inside a sendable email, which fits its purpose since a user-agent is a request-time value absent at send time.',
         category: 'Utility',
         description:
             'Tests a user agent string for a compact HTML (cHTML) feature-phone browser. Feature-phone agents such as i-mode and KDDI handsets are recognised; modern desktop and mobile agents are not. Only valid in non-sendable content (CloudPages / landing pages), not in sendable email.',
@@ -570,7 +570,7 @@ export const UTILITY_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference states that an address whose domain has no top-level domain is accepted, giving a call on a bare single-label domain as an example of a true result. On a live Engagement CloudPage on the child business unit that shape returned False, in a gate that printed its own start and done markers at HTTP 200 alongside a known-good control block. Every other example in the same table matched: the missing at sign, the double at sign, the missing local part and the missing second-level domain all returned False, and a well-formed address returned True. Surrounding whitespace is also rejected, which no source mentions.',
+            'The official reference states that an address whose domain has no top-level domain is accepted, giving a call on a bare single-label domain as an example of a true result. On a CloudPage that shape returns False. Every other example in the same table matches: the missing at sign, the double at sign, the missing local part and the missing second-level domain all return False, and a well-formed address returns True. Surrounding whitespace is also rejected, which no source mentions.',
         category: 'Utility',
         description:
             'Checks a value against email address syntax only; it never tests whether the mailbox or domain exists. Surrounding whitespace and a domain without a top-level domain are both rejected.',
@@ -619,7 +619,7 @@ export const UTILITY_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference shows a variable declared with VAR and never assigned, and states IsNull returns true for it. On a live Engagement CloudPage on the child business unit that exact shape returned False, in a gate that printed its own start and done markers at HTTP 200 alongside a known-good control block. The same False came back for an undeclared variable, an empty string, whitespace, 0, "0", "false", a real value, a date, an absent attribute, an absent request parameter and the subscriber-context tokens. Use Empty for a missing-value test.',
+            'The official reference shows a variable declared with VAR and never assigned, and states IsNull returns true for it. On a CloudPage that exact shape returns False. The same False comes back for an undeclared variable, an empty string, whitespace, 0, "0", "false", a real value, a date, an absent attribute, an absent request parameter and the subscriber-context tokens. Use Empty for a missing-value test.',
         syntax: 'IsNull(value)',
         example: '%%=IsNull(@value)=%%',
     },
@@ -778,7 +778,7 @@ export const UTILITY_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference states that a value which is not a function call, such as a string literal, makes the function return an error. On a live Engagement CloudPage on the child business unit a literal argument, a bare variable and a bare number each rendered nothing at all while the page still returned HTTP 200 and every surrounding marker printed, so no error surfaced anywhere. The same page also accepted zero arguments and up to three arguments, writing each one in turn.',
+            'The official reference states that a value which is not a function call, such as a string literal, makes the function return an error. On a CloudPage a literal argument, a bare variable and a bare number each render nothing at all while the page still returns HTTP 200, so no error surfaces anywhere. The function also accepts zero arguments and up to three arguments, writing each one in turn.',
     },
     {
         name: 'OutputLine',
@@ -872,6 +872,7 @@ export const UTILITY_FUNCTIONS = [
                 description:
                     'If true, the function skips only the subscriber for which the error was raised, and proceeds with the rest of the email job. If false, the function stops the entire email job when an error is raised. The default value is false.',
                 type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
             {
@@ -895,7 +896,7 @@ export const UTILITY_FUNCTIONS = [
                 mcnSince: null,
                 mcnNotes: null,
                 description:
-                    "If true, the function retains information written to data extensions before the error occurs, even if the subscriber is skipped. If false, the function doesn't retain data extension information recorded before the error. Boolean-like numbers and quoted representations are accepted as well; in Email Preview, bare true and false tokens resolve as field references, so use 1, 0, or a quoted representation for literals. This parameter applies to information that is inserted, updated, upserted, or deleted using AMPscript functions",
+                    "If true, the function retains information written to data extensions before the error occurs, even if the subscriber is skipped. If false, the function doesn't retain data extension information recorded before the error. Boolean-like numbers and quoted representations are accepted as well; in an email preview, bare true and false tokens resolve as field references, so use 1, 0, or a quoted representation for literals. This parameter applies to information that is inserted, updated, upserted, or deleted using AMPscript functions",
                 type: 'string|boolean|number',
                 enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
@@ -933,7 +934,7 @@ export const UTILITY_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: Redirect is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated Redirect("https://sfmc.guide/robots.txt") was rejected with HTTP 400 errorcode 10005 ("Redirect Function is not valid in content. This function is only allowed in in content with an HTTP context."). It is a CloudPage / landing-page (non-sendable, HTTP-context) feature that emits a 302, and cannot be used inside a sendable email, where there is no HTTP response to redirect.',
+            'Email/send-context finding: Redirect is not valid in sendable email content. An isolated Redirect("https://sfmc.guide/robots.txt") is rejected with HTTP 400 errorcode 10005 ("Redirect Function is not valid in content. This function is only allowed in content with an HTTP context."). It is a CloudPage / landing-page (non-sendable, HTTP-context) feature that emits a 302, and cannot be used inside a sendable email, where there is no HTTP response to redirect.',
     },
     {
         name: 'RedirectTo',
@@ -1058,7 +1059,7 @@ export const UTILITY_FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-test-data',
         officialDocsNote:
-            'On a CloudPage every invocation aborted at HTTP 422 on both the child BU and the parent BU. An email-context render on the parent BU changed the picture: the Email Preview API RECOGNISES and evaluates the function and fails with a precise message that the named tracking parameter set does not exist (Tracking Parameter Name: Omniture). So WAT is not a broken function — it resolves a Web Analytics Tracking parameter set that must first be configured on the account (a Salesforce-support / Sender Profile setup), and none exists on these BUs to resolve. The block is a missing-test-data gate, not a broken invocation.',
+            'On a CloudPage every invocation aborts at HTTP 422. In an email context, however, the function is recognised and evaluated, and fails with a precise message that the named tracking parameter set does not exist (Tracking Parameter Name: Omniture). So WAT is not a broken function — it resolves a Web Analytics Tracking parameter set that must first be configured on the account (a Salesforce-support / Sender Profile setup), and none exists to resolve. The block is missing configuration, not a broken invocation.',
     },
     {
         name: 'WATP',
@@ -1107,7 +1108,7 @@ export const UTILITY_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference states that a URL longer than 975 characters comes back as a shortened link that redirects through the platform. On a live Engagement CloudPage on the child business unit a 1048-character URL was returned byte for byte unchanged at the same length, twice in one render, and the same held for a 27-character URL, an empty string and a string that is not a URL at all. The community guide notes that shortening only happens on a send, which the official page does not mention.',
+            'The official reference states that a URL longer than 975 characters comes back as a shortened link that redirects through the platform. On a CloudPage a 1048-character URL is returned byte for byte unchanged at the same length, twice in one render, and the same holds for a 27-character URL, an empty string and a string that is not a URL at all. The community guide notes that shortening only happens on a send, which the official page does not mention.',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/wraplongurl/',
         params: [{ name: 'url', description: 'URL to shorten', type: 'string|number' }],
         returnType: 'string',

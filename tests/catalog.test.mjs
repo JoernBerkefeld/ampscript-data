@@ -94,7 +94,7 @@ test('FUNCTIONS: every param has name and description', () => {
     }
 });
 
-test('RaiseError preserveDataExt has the exact runtime-verified value constraint', () => {
+test('RaiseError boolean flags reference the shared BOOLEAN_LIKE_LITERAL_VALUES array', () => {
     const raiseError = functionLookup.get('raiseerror');
     assert.ok(raiseError, 'RaiseError must exist');
     const skipSubscriber = raiseError.params.find(
@@ -105,10 +105,110 @@ test('RaiseError preserveDataExt has the exact runtime-verified value constraint
     );
     assert.ok(skipSubscriber, 'RaiseError skipSubscriber parameter must exist');
     assert.ok(preserveDataExtension, 'RaiseError preserveDataExt parameter must exist');
-    assert.ok(!Object.hasOwn(skipSubscriber, 'enum'));
-    assert.equal(preserveDataExtension.enum, BOOLEAN_LIKE_LITERAL_VALUES);
-    assert.deepEqual(preserveDataExtension.enum, [true, false, 1, 0, 'true', 'false', '1', '0']);
+    for (const parameter of [skipSubscriber, preserveDataExtension]) {
+        assert.equal(parameter.type, 'string|boolean|number');
+        assert.equal(parameter.enum, BOOLEAN_LIKE_LITERAL_VALUES);
+    }
+    assert.deepEqual(BOOLEAN_LIKE_LITERAL_VALUES, [true, false, 1, 0, 'true', 'false', '1', '0']);
     assert.ok(Object.isFrozen(BOOLEAN_LIKE_LITERAL_VALUES));
+});
+
+test('every runtime-verified boolean flag parameter references the shared enum', () => {
+    const expected = {
+        Field: ['exceptionIfNotFound'],
+        BuildRowsetFromJSON: ['returnEmptyOnError'],
+        BuildRowSetFromXML: ['returnEmptyOnError'],
+        Base64Decode: ['abortOnFailure'],
+        BarcodeURL: ['showText', 'transparentBG'],
+        ContentArea: ['errorOnMissingContentArea'],
+        ContentAreaByName: ['errorOnMissingContentArea'],
+        ContentBlockByID: ['errorOnMissingContentBlock'],
+        ContentBlockByKey: ['errorOnMissingContentBlock'],
+        ContentBlockByName: ['errorOnMissingContentBlock'],
+        HTTPGet: ['continueOnError'],
+        HTTPPost2: ['exceptionOnError'],
+        HTTPPostWithRetry: ['returnExceptionOnError'],
+        RaiseError: ['skipSubscriber', 'preserveDataExt'],
+        DateParse: ['useUtc'],
+        GetSendTime: ['boolAllSubscribers'],
+        Now: ['persistFormat'],
+        URLEncode: ['encodeAllChars', 'encodeAllStrings'],
+    };
+    for (const [functionName, parameterNames] of Object.entries(expected)) {
+        const function_ = functionLookup.get(functionName.toLowerCase());
+        assert.ok(function_, `${functionName} must exist`);
+        for (const parameterName of parameterNames) {
+            const parameter = function_.params.find(
+                (parameter) => parameter.name === parameterName,
+            );
+            assert.ok(parameter, `${functionName}.${parameterName} must exist`);
+            assert.equal(
+                parameter.enum,
+                BOOLEAN_LIKE_LITERAL_VALUES,
+                `${functionName}.${parameterName} must reference the shared frozen enum`,
+            );
+            assert.equal(
+                parameter.type,
+                'string|boolean|number',
+                `${functionName}.${parameterName} must be widened to the boolean-like union`,
+            );
+        }
+    }
+});
+
+test('user-directed boolean-like parameters reference the shared enum without claiming proof', () => {
+    // These were widened to the shared eight-value enum BY USER DIRECTION on the strength of
+    // ACCEPTANCE only (all eight literal spellings were accepted without rejection), not on a
+    // behavioural on/off proof. The verification DB records each as ASSUMED / acceptance-only.
+    const directed = {
+        HTTPPostWithRetry: ['reschedule'],
+        AttachFile: ['viewOnWeb', 'contentDispositionAttachment'],
+    };
+    for (const [functionName, parameterNames] of Object.entries(directed)) {
+        const function_ = functionLookup.get(functionName.toLowerCase());
+        assert.ok(function_, `${functionName} must exist`);
+        for (const parameterName of parameterNames) {
+            const parameter = function_.params.find(
+                (parameter) => parameter.name === parameterName,
+            );
+            assert.ok(parameter, `${functionName}.${parameterName} must exist`);
+            assert.equal(
+                parameter.enum,
+                BOOLEAN_LIKE_LITERAL_VALUES,
+                `${functionName}.${parameterName} must reference the shared frozen enum`,
+            );
+            assert.equal(
+                parameter.type,
+                'string|boolean|number',
+                `${functionName}.${parameterName} must be widened to the boolean-like union`,
+            );
+        }
+    }
+    assert.deepEqual(BOOLEAN_LIKE_LITERAL_VALUES, [true, false, 1, 0, 'true', 'false', '1', '0']);
+    assert.ok(Object.isFrozen(BOOLEAN_LIKE_LITERAL_VALUES));
+});
+
+test('branch-result and unclassifiable parameters carry no enum', () => {
+    const withoutEnum = [
+        ['IIf', 'expression', 'boolean'],
+        ['IIf', 'trueValue', 'string|number|boolean|date'],
+        ['IIf', 'falseValue', 'string|number|boolean|date'],
+        ['Empty', 'value', 'string|number|boolean|date'],
+        ['IsNull', 'value', 'string|number|boolean|date'],
+        ['IsNullDefault', 'value', 'string|number|boolean|date'],
+        ['IsNullDefault', 'defaultValue', 'string|number|boolean|date'],
+    ];
+    for (const [functionName, parameterName, type] of withoutEnum) {
+        const function_ = functionLookup.get(functionName.toLowerCase());
+        assert.ok(function_, `${functionName} must exist`);
+        const parameter = function_.params.find((parameter) => parameter.name === parameterName);
+        assert.ok(parameter, `${functionName}.${parameterName} must exist`);
+        assert.equal(parameter.type, type, `${functionName}.${parameterName} keeps its type`);
+        assert.ok(
+            !Object.hasOwn(parameter, 'enum'),
+            `${functionName}.${parameterName} must not carry an enum`,
+        );
+    }
 });
 
 test('FUNCTIONS: optional boolean flags are booleans when present', () => {

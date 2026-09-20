@@ -136,7 +136,7 @@ export const MATH_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference states the bounds may be decimal numbers. On the child BU every decimal bound aborted the CloudPage with HTTP 422 — Random(1.2,1.8), Random(1,2.5), Random(1.0,3.0) and the quoted form Random("1.5","3.5") all failed, while the equivalent whole-number and numeric-string calls returned values normally. The same decimal calls also aborted on the parent BU, so this is not a child-BU limitation. Only whole-number bounds are usable at runtime.',
+            'The official reference states the bounds may be decimal numbers. On a CloudPage every decimal bound aborts with HTTP 422 — Random(1.2,1.8), Random(1,2.5), Random(1.0,3.0) and the quoted form Random("1.5","3.5") all fail, while the equivalent whole-number and numeric-string calls return values normally. This is a function limitation, not an environment one. Only whole-number bounds are usable at runtime.',
     },
     {
         name: 'Subtract',

@@ -21,7 +21,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            "The out-of-context return is confirmed in two independent runtime contexts: a CloudPage on the child BU and an email render on the child BU. Being an ordinary function call (unlike Msg()/Noun()/Verb()), it compiles and evaluates in both: on the CloudPage, called with a real short code, an authorized destination number and app 'MOBILECONNECT', it returned the literal boolean false with the page rendering fully and no SMS sent; in an email body the same call rendered the literal False through the Email Preview API. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour (true on success, exception on failure). The success path (true, real conversation creation) requires a live MobileConnect message context and cannot be reproduced in a CloudPage or email; only the out-of-context false-return is exercisable, and it is proven. The catalogued signature was also corrected here: the four parameters are originationNumber, destinationNumber, nextKeyword and app, and the return is a boolean, not void.",
+            "Outside a MobileConnect message context, the function returns false. Being an ordinary function call (unlike Msg()/Noun()/Verb()), it compiles and evaluates in both a CloudPage and an email body: on a CloudPage, called with a real short code, an authorized destination number and app 'MOBILECONNECT', it returns the literal boolean false with the page rendering fully and no SMS sent; in an email body the same call renders the literal False. This matches the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour (true on success, exception on failure). The success path (true, real conversation creation) requires a live MobileConnect message context; a CloudPage or email render returns only the out-of-context false. The catalogued signature was also corrected here: the four parameters are originationNumber, destinationNumber, nextKeyword and app, and the return is a boolean, not void.",
         params: [
             {
                 name: 'originationNumber',
@@ -46,7 +46,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         ],
         returnType: 'boolean',
         returnDescription:
-            'true when a conversation is created inside a MobileConnect message context; false in any other context (proven on a CloudPage). Fails with an exception in-context if unsuccessful.',
+            'true when a conversation is created inside a MobileConnect message context; false in any other context, including a CloudPage. Fails with an exception in-context if unsuccessful.',
         syntax: 'CreateSmsConversation(originationNumber, destinationNumber, nextKeyword, app)',
         example: '%%=CreateSmsConversation("12345", MOBILE_NUMBER, "KEYWORD", "MOBILECONNECT")=%%',
     },
@@ -67,7 +67,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The out-of-context return is confirmed in two independent runtime contexts: a CloudPage on the child BU and an email render on the child BU. Being an ordinary function call, it compiles and evaluates in both: on the CloudPage, called with a real short code and the authorized destination number, it returned the literal boolean false with the page rendering fully, no SMS sent and no conversation state changed; in an email body the same call rendered the literal False through the Email Preview API. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour (true on success, exception on failure). The success path (true, real conversation end) requires a live MobileConnect message context and cannot be reproduced in a CloudPage or email; only the out-of-context false-return is exercisable, and it is proven. The catalogued signature was corrected here: the two parameters are originationNumber and destinationNumber, and the return is a boolean, not void.',
+            'Outside a MobileConnect message context, the function returns false. Being an ordinary function call, it compiles and evaluates in both a CloudPage and an email body: on a CloudPage, called with a real short code and the authorized destination number, it returns the literal boolean false with the page rendering fully, no SMS sent and no conversation state changed; in an email body the same call renders the literal False. This matches the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour (true on success, exception on failure). The success path (true, real conversation end) requires a live MobileConnect message context; a CloudPage or email render returns only the out-of-context false. The catalogued signature was corrected here: the two parameters are originationNumber and destinationNumber, and the return is a boolean, not void.',
         params: [
             {
                 name: 'originationNumber',
@@ -82,7 +82,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         ],
         returnType: 'boolean',
         returnDescription:
-            'true when the conversation is ended inside a MobileConnect message context; false in any other context (proven on a CloudPage). Fails with an exception in-context if unsuccessful.',
+            'true when the conversation is ended inside a MobileConnect message context; false in any other context, including a CloudPage. Fails with an exception in-context if unsuccessful.',
         syntax: 'EndSmsConversation(originationNumber, destinationNumber)',
         example: '%%=EndSmsConversation("12345", MOBILE_NUMBER)=%%',
     },
@@ -104,7 +104,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'Could not runtime-verify on the only available context (a CloudPage GET on the child BU; no parent-BU escalation is configured on this tenant). Including an MMS_Content_URL(0) call in the injected content block aborted the whole page at compile time (HTTP 422) even when the call sat inside a non-matching IF branch, while an otherwise identical page with the call removed rendered HTTP 200. This matches the official reference, which states the function is usable only in MobileConnect and not in landing pages or other content types; there is no mobile-originated message context on a CloudPage to exercise it against.',
+            'An MMS_Content_URL(0) call aborts the whole page at compile time (HTTP 422) even when inside a non-matching IF branch, while an otherwise identical page with the call removed renders HTTP 200. This matches the official reference, which states the function is usable only in MobileConnect and not in landing pages or other content types; a CloudPage supplies no mobile-originated message context to exercise it against.',
         params: [
             {
                 name: 'position',
@@ -136,7 +136,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'Could not runtime-verify on the only available context (a CloudPage GET on the child BU; no parent-BU escalation is configured on this tenant). A page containing a Msg(0) call aborted at compile time (HTTP 422) even when the call sat inside a non-matching IF branch, whereas the same page with no Msg construct rendered HTTP 200 — so the abort happens at parse time, before any runtime gate. This matches the official reference, which states the function is usable only in MobileConnect and not in landing pages or other content types; a CloudPage supplies no mobile-originated message to read.',
+            'A page containing a Msg(0) call aborts at compile time (HTTP 422) even when the call sits inside a non-matching IF branch, whereas the same page with no Msg construct renders HTTP 200 — so the abort happens at parse time, before any runtime evaluation. This matches the official reference, which states the function is usable only in MobileConnect and not in landing pages or other content types; a CloudPage supplies no mobile-originated message to read.',
         params: [
             {
                 name: 'index',
@@ -167,7 +167,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'Could not runtime-verify on the only available context (a CloudPage GET on the child BU; no parent-BU escalation on this tenant). Noun is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
+            'Noun is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
         params: [
             {
                 name: 'position',
@@ -199,7 +199,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'Could not runtime-verify on the only available context (a CloudPage GET on the child BU; no parent-BU escalation on this tenant). Nouns is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
+            'Nouns is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
         params: [],
         returnType: 'string',
         returnDescription: 'All content that follows the keyword in the inbound message.',
@@ -223,7 +223,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The out-of-context return is confirmed in two independent runtime contexts: a CloudPage on the child BU and an email render on the child BU. Being an ordinary function call, it compiles and evaluates in both: on the CloudPage, called with a real short code, the authorized destination number and a keyword, it returned the literal boolean false with the page rendering fully, no SMS sent and no conversation state changed; in an email body the same call rendered the literal False through the Email Preview API. This confirms the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour. The success path (true, keyword actually set) requires a live MobileConnect message context and cannot be reproduced in a CloudPage or email; only the out-of-context false-return is exercisable, and it is proven. The catalogued signature was corrected here: the three parameters are originationNumber, destinationNumber and keyword, and the return is a boolean, not void. A docUrl to the official reference was also added.',
+            'Outside a MobileConnect message context, the function returns false. Being an ordinary function call, it compiles and evaluates in both a CloudPage and an email body: on a CloudPage, called with a real short code, the authorized destination number and a keyword, it returns the literal boolean false with the page rendering fully, no SMS sent and no conversation state changed; in an email body the same call renders the literal False. This matches the ampscript.guide claim that the function returns false outside a MobileConnect message context; the official Salesforce reference omits this and describes only the in-context behaviour. The success path (true, keyword actually set) requires a live MobileConnect message context; a CloudPage or email render returns only the out-of-context false. The catalogued signature was corrected here: the three parameters are originationNumber, destinationNumber and keyword, and the return is a boolean, not void. A docUrl to the official reference was also added.',
         params: [
             {
                 name: 'originationNumber',
@@ -243,7 +243,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         ],
         returnType: 'boolean',
         returnDescription:
-            'true when the next keyword is set inside a MobileConnect message context; false in any other context (proven on a CloudPage). Fails with an exception in-context if unsuccessful.',
+            'true when the next keyword is set inside a MobileConnect message context; false in any other context, including a CloudPage. Fails with an exception in-context if unsuccessful.',
         syntax: 'SetSmsConversationNextKeyword(originationNumber, destinationNumber, keyword)',
         example: '%%=SetSmsConversationNextKeyword("12345", MOBILE_NUMBER, "EXAMPLE")=%%',
     },
@@ -265,7 +265,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         officialDocsNote:
-            'Both return tokens were runtime-proven on the child BU. The success status 0 was proven by creating a brand-new mobile contact keyed on an opaque, unreachable phone number in a reserved test range with a documented system attribute (_ZipCode); calling the same key a second time with a different value updated that contact and again returned 0, so both the create and update branches of the upsert return 0. The error status 1 was proven three independent ways (unsupported channel, unsupported match attribute, non-numeric phone) and again by passing an attribute name that is not a defined MobileConnect attribute — each returned 1 with the page rendering fully and no write performed. The return is a status code (0 success / 1 error), not a count of records. The phone-number argument accepts both an integer literal and a numeric string (both returned 0 for a successful create). runtime matches the official reference, so differsFromOfficialDocs stays false.',
+            'Both return tokens are observable. The success status 0 occurs when creating a new mobile contact keyed on an unreachable phone number with a documented system attribute (_ZipCode); calling the same key a second time with a different value updates that contact and again returns 0, so both the create and update branches of the upsert return 0. The error status 1 occurs in three independent cases (unsupported channel, unsupported match attribute, non-numeric phone) and also when passing an attribute name that is not a defined MobileConnect attribute — each returns 1 with the page rendering fully and no write performed. The return is a status code (0 success / 1 error), not a count of records. The phone-number argument accepts both an integer literal and a numeric string (both return 0 for a successful create). Runtime matches the official reference, so differsFromOfficialDocs stays false.',
         params: [
             {
                 name: 'channel',
@@ -306,7 +306,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         returnType: 'number',
         returnEnum: [0, 1],
         returnDescription:
-            'A status code: 0 when the upsert succeeds (both creating a new contact and updating an existing one), 1 when an error occurs. Both tokens were proven at runtime.',
+            'A status code: 0 when the upsert succeeds (both creating a new contact and updating an existing one), 1 when an error occurs.',
         repeat: [{ startIndex: 3, groupSize: 2, minGroups: 1 }],
         syntax: 'UpsertContact(channel, attribute, phoneNumber, keyToUpsert1, valueToUpsert1[, keyToUpsertN, valueToUpsertN, ...])',
         example: "%%=UpsertContact('mobile', 'phone', 14255550142, '_ZipCode', '98026')=%%",
@@ -329,7 +329,7 @@ export const MOBILECONNECT_FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'Could not runtime-verify on the only available context (a CloudPage GET on the child BU; no parent-BU escalation on this tenant). Verb is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
+            'Verb is chained off Msg(0), and any page containing a Msg(0) construct aborts at compile time (HTTP 422) on a CloudPage while an otherwise identical page without it renders HTTP 200. This matches the official reference, which restricts the function to MobileConnect and forbids landing pages / other content types; a CloudPage supplies no mobile-originated message to parse.',
         params: [],
         returnType: 'string',
         returnDescription: 'The keyword (first word) of the inbound mobile-originated message.',

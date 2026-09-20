@@ -28,15 +28,15 @@ export const BOOLEAN_LIKE_LITERAL_VALUES = Object.freeze([
 // together with `verificationBlocked: true` and `isConfirmed: false`. The specific
 // evidence (error text, invocation shapes tried) belongs in `officialDocsNote`, not here.
 //
-//   - no-working-invocation  probing found no invocation shape that works; document
+//   - no-working-invocation  no invocation shape that works was found; document
 //                         exactly what was tried in officialDocsNote.
 //   - needs-auth-context  requires an authenticated / session / subscriber state that
-//                         the probe context (e.g. a plain CloudPage) cannot supply
+//                         a plain CloudPage cannot supply
 //   - no-test-data        requires pre-existing data or an integration that is not
 //                         provisioned on the BU
 //   - classic-only-no-assets  only works with classic (legacy) assets and none exist
 //                         on the BU to test against
-//   - destructive-unsafe  cannot be exercised without unacceptable side effects
+//   - destructive-unsafe  cannot be observed without unacceptable side effects
 /**
 @type {readonly string[]}
  */

@@ -22,7 +22,7 @@ export const SALES_SERVICE_CLOUD_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         officialDocsNote:
-            'The success path was runtime-proven on the child BU, which has an active Marketing Cloud Connect integration to a real Salesforce org. Creating a benign Task with a single opaque field returned a real 18-character Salesforce ID (an 00T-prefixed Task ID), confirming the documented return shape. The fault path was also proven: an unknown object name and an unknown field name on a real object each aborted the CloudPage with HTTP 422 — the SOAP fault from the connected org propagates as an uncatchable page abort (AMPscript has no try/catch), exactly like RetrieveSalesforceObjects against an unknown object — so there is no testable error value, the function either returns an ID or aborts. AMPscript has no delete function for Salesforce objects, so the created Task remains as benign residue in the org. Catalog signature, returnType and repeat group all match the official reference and ampscript.guide, so differsFromOfficialDocs stays false.',
+            'With an active Marketing Cloud Connect integration to a Salesforce org, the success path returns a real 18-character Salesforce ID (an 00T-prefixed Task ID), confirming the documented return shape. The fault path behaves differently: an unknown object name and an unknown field name on a real object each abort the CloudPage with HTTP 422 — the SOAP fault from the connected org propagates as an uncatchable page abort (AMPscript has no try/catch), exactly like RetrieveSalesforceObjects against an unknown object — so there is no observable error value, the function either returns an ID or aborts. AMPscript has no delete function for Salesforce objects, so a created record remains as benign residue in the org. Catalog signature, returnType and repeat group all match the official reference and ampscript.guide, so differsFromOfficialDocs stays false.',
         params: [
             {
                 name: 'objectName',
@@ -198,7 +198,7 @@ export const SALES_SERVICE_CLOUD_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         officialDocsNote:
-            'The success token 1 was runtime-proven on the child BU, which has an active Marketing Cloud Connect integration to a real Salesforce org: updating one field of a record created moments earlier in the same run (a benign Task) returned the literal 1 with the page rendering fully. The failure token 0 is NOT observable in CloudPage GET context: every safe induced failure (unknown object, a malformed ID, and a well-formed but non-existent Lead ID at both 15 and 18 characters, on a real field) aborted the whole page with HTTP 422 — the SOAP fault propagates as an uncatchable page abort (identical to CreateSalesforceObject and RetrieveSalesforceObjects against a bad target), so the documented 0 return never materialises to be read. returnEnum is therefore left unset: only 1 is provable here, and asserting a [0,1] enum would ship the unproven 0 token. returnType stays number and the 0/1 semantics are retained in the description as a documented fact attributed to the official reference. The 0-on-CloudPage-abort behaviour is a context observation, not a contradiction of the send/preview-context 0/1 contract, so differsFromOfficialDocs stays false.',
+            'With an active Marketing Cloud Connect integration to a Salesforce org, a successful update returns the literal 1 with the page rendering fully. The failure token 0 does not occur in a CloudPage context: a failed update (unknown object, a malformed ID, or a well-formed but non-existent Lead ID at 15 or 18 characters, on a real field) aborts the whole page with HTTP 422 — the SOAP fault propagates as an uncatchable page abort (identical to CreateSalesforceObject and RetrieveSalesforceObjects against a bad target), so the documented 0 return never materialises to be read. The 0/1 contract therefore applies to the send/preview context, not to CloudPages.',
         params: [
             {
                 name: 'objectName',
@@ -222,7 +222,7 @@ export const SALES_SERVICE_CLOUD_FUNCTIONS = [
         ],
         returnType: 'number',
         returnDescription:
-            '1 when the record was updated successfully (runtime-proven). Per the official reference a failed update returns 0, but on a CloudPage a failure aborts the page (HTTP 422) instead of returning 0, so the 0 token is not observable in that context.',
+            '1 when the record was updated successfully. Per the official reference a failed update returns 0, but on a CloudPage a failure aborts the page (HTTP 422) instead of returning 0, so the 0 token does not occur in that context.',
         repeat: [{ startIndex: 2, groupSize: 2, minGroups: 1 }],
         syntax: 'UpdateSingleSalesforceObject(objectName, idToUpdate, fieldName1, fieldValue1[, fieldNameN, fieldValueN, ...])',
         example: "%%=UpdateSingleSalesforceObject('Contact', @recordId, 'LastName', 'Smith')=%%",

@@ -1,6 +1,8 @@
 // AUTO-SPLIT from the original single-file src/index.js. Data moved verbatim.
 // AMPscript FUNCTIONS — category: Encryption and Encoding (12 entries).
 
+import { BOOLEAN_LIKE_LITERAL_VALUES } from '../constants.js';
+
 export const ENCRYPTION_ENCODING_FUNCTIONS = [
     {
         name: 'Base64Decode',
@@ -37,8 +39,9 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
                 mcnSince: null,
                 mcnNotes: null,
                 description:
-                    'Flag reserved for send-time failure handling; 0, 1, true and false are all accepted and none of them changes the value a successful decode returns',
-                type: 'number|boolean',
+                    'If truthy, a payload that cannot be decoded aborts the page; if falsy, the same malformed input returns an empty string at HTTP 200. Only a failed decode is affected. Accepts 1/0, true/false, or those spellings quoted',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
         ],
@@ -526,6 +529,7 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
                 description:
                     'When switched on, every reserved character of the query string is percent-encoded and spaces become plus signs; when off, only spaces are encoded, as %20. Accepts 1/0, true/false, or those spellings quoted. Defaults to off',
                 type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
                 default: false,
             },
@@ -534,6 +538,7 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
                 description:
                     'When switched on, the whole input is encoded even if it is not a URL; when off, only the part after a question mark is encoded. Accepts 1/0, true/false, or those spellings quoted. Defaults to off',
                 type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
         ],

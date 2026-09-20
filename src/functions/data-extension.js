@@ -1,7 +1,7 @@
 // AUTO-SPLIT from the original single-file src/index.js. Data moved verbatim.
 // AMPscript FUNCTIONS — category: Data Extension (21 entries).
 
-import { INF } from '../constants.js';
+import { BOOLEAN_LIKE_LITERAL_VALUES, INF } from '../constants.js';
 
 export const DATA_EXTENSION_FUNCTIONS = [
     {
@@ -73,7 +73,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Runtime-proven on a Marketing Cloud Engagement CloudPage (child BU) against a data extension built to the documented claimable schema (Text primary key, Text claimant column, required non-nullable Boolean claim column defaulting to False, nullable Date column). Each call passing a NEW claimant value claims the next unclaimed row and advances: four distinct claimants received C1, C2, C3, C4 in order, each row flipping to claimed with its claimant recorded and ClaimedDate auto-populated. Re-calling with a claimant value that already holds a row returns that same row rather than advancing (per-subscriber idempotency). The official reference states that ClaimRow returns an exception when no unclaimed rows remain; at runtime it instead returned an empty row that does not abort the page (Empty() on it is true), so a caller must guard with Empty() rather than expecting a raised error. Each claim was driven by a separate HTTP request carrying the claimant value as a RequestParameter — the prior single-render probe that reused one claimant value never advanced because of the idempotency rule, not a provisioning gap.',
+            'In a CloudPage context, against a data extension built to the documented claimable schema (Text primary key, Text claimant column, required non-nullable Boolean claim column defaulting to False, nullable Date column): each call passing a new claimant value claims the next unclaimed row and advances — four distinct claimants receive C1, C2, C3, C4 in order, each row flipping to claimed with its claimant recorded and ClaimedDate auto-populated. Re-calling with a claimant value that already holds a row returns that same row rather than advancing (per-subscriber idempotency). The official reference states that ClaimRow returns an exception when no unclaimed rows remain; at runtime it instead returns an empty row that does not abort the page (Empty() on it is true), so a caller must guard with Empty() rather than expecting a raised error. Reusing one claimant value never advances, because of the idempotency rule rather than a provisioning gap.',
     },
     {
         name: 'ClaimRowValue',
@@ -203,7 +203,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: DeleteData is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated DeleteData(...) was rejected with HTTP 400 errorcode 10005 ("DeleteData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the DeleteData/*Data write family cannot run inside a sendable email; use the DeleteDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
+            'Email/send-context finding: DeleteData is not valid in sendable email content. An isolated DeleteData(...) is rejected with HTTP 400 errorcode 10005 ("DeleteData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the DeleteData/*Data write family cannot run inside a sendable email; use the DeleteDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -302,7 +302,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: ExecuteFilter is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated ExecuteFilter(...) was rejected with HTTP 400 errorcode 10004 ("ExecuteFilter Function is not valid in content. This function is only allowed in non sendable content."). It is a CloudPage / landing-page (non-sendable content) feature.',
+            'Email/send-context finding: ExecuteFilter is not valid in sendable email content. An isolated ExecuteFilter(...) is rejected with HTTP 400 errorcode 10004 ("ExecuteFilter Function is not valid in content. This function is only allowed in non sendable content."). It is a CloudPage / landing-page (non-sendable content) feature.',
         minArgs: 1,
         maxArgs: 1,
         category: 'Data Extension',
@@ -333,7 +333,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: ExecuteFilterOrderedRows is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated ExecuteFilterOrderedRows(...) was rejected with HTTP 400 errorcode 10004 ("ExecuteFilterOrderedRows Function is not valid in content. This function is only allowed in non sendable content."). It is a CloudPage / landing-page (non-sendable content) feature.',
+            'Email/send-context finding: ExecuteFilterOrderedRows is not valid in sendable email content. An isolated ExecuteFilterOrderedRows(...) is rejected with HTTP 400 errorcode 10004 ("ExecuteFilterOrderedRows Function is not valid in content. This function is only allowed in non sendable content."). It is a CloudPage / landing-page (non-sendable content) feature.',
         minArgs: 3,
         maxArgs: 3,
         category: 'Data Extension',
@@ -391,7 +391,8 @@ export const DATA_EXTENSION_FUNCTIONS = [
                 mcnNotes: null,
                 description:
                     "If true, the function returns an exception if the specified field doesn't exist. If false, the function returns an empty string if the field doesn't exist. The default value is true.",
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
                 default: true,
             },
@@ -414,7 +415,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: InsertData is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated InsertData(...) was rejected with HTTP 400 errorcode 10005 ("InsertData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the InsertData/*Data write family cannot run inside a sendable email; use the InsertDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
+            'Email/send-context finding: InsertData is not valid in sendable email content. An isolated InsertData(...) is rejected with HTTP 400 errorcode 10005 ("InsertData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the InsertData/*Data write family cannot run inside a sendable email; use the InsertDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
         minArgs: 3,
         maxArgs: INF,
         category: 'Data Extension',
@@ -823,7 +824,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: UpdateData is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated UpdateData(...) was rejected with HTTP 400 errorcode 10005 ("UpdateData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the UpdateData/*Data write family cannot run inside a sendable email; use the UpdateDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
+            'Email/send-context finding: UpdateData is not valid in sendable email content. An isolated UpdateData(...) is rejected with HTTP 400 errorcode 10005 ("UpdateData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the UpdateData/*Data write family cannot run inside a sendable email; use the UpdateDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',
@@ -965,7 +966,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: UpsertData is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated UpsertData(...) was rejected with HTTP 400 errorcode 10005 ("UpsertData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the UpsertData/*Data write family cannot run inside a sendable email; use the UpsertDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
+            'Email/send-context finding: UpsertData is not valid in sendable email content. An isolated UpsertData(...) is rejected with HTTP 400 errorcode 10005 ("UpsertData Function is not valid in content. This function is only allowed in a non batch context."). A send is a batch operation, so the UpsertData/*Data write family cannot run inside a sendable email; use the UpsertDE variant instead, which the send parser accepts in sendable content. This is a CloudPage / landing-page (non-batch) feature.',
         minArgs: 6,
         maxArgs: INF,
         category: 'Data Extension',

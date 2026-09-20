@@ -1,6 +1,8 @@
 // AUTO-SPLIT from the original single-file src/index.js. Data moved verbatim.
 // AMPscript FUNCTIONS — category: Date and Time (10 entries).
 
+import { BOOLEAN_LIKE_LITERAL_VALUES } from '../constants.js';
+
 export const DATE_TIME_FUNCTIONS = [
     {
         name: 'DateAdd',
@@ -122,6 +124,7 @@ export const DATE_TIME_FUNCTIONS = [
                 description:
                     'If true, return the instant in UTC; otherwise in the account time zone. Accepts 1/0, true/false, or those spellings quoted, and is not validated',
                 type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
                 default: false,
             },
@@ -201,7 +204,7 @@ export const DATE_TIME_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Proven on the child BU. The official reference presents one .NET-style custom-pattern table and shows it applied to the dateFormat argument, but at runtime the two format arguments use SEPARATE, case-INSENSITIVE token sets. In dateFormat, mm and MM both render the MONTH, so the documented pattern yyyy-MM-dd HH:mm:ss returned 2026-03-04 13:03:07 for the instant 2026-03-04 13:52:07 — the minutes position printed 03, the month. The same pattern moved to timeFormat returned 13:52:07 correctly, because there mm and MM mean minutes. Single-letter tokens also disagree with the doc: d rendered the whole short date 3/4/2026 rather than the day number, M rendered March 4 rather than 3, and h or H alone in timeFormat aborts the page with HTTP 422 instead of rendering an hour. The day-name tokens are off by one repetition — dddd rendered Wed where the doc promises Wednesday, ddddd rendered Wednesday, and ddd rendered the corrupted string We4ne74a26 in which digits from the date replaced letters of the day name.',
+            'The official reference presents one .NET-style custom-pattern table and shows it applied to the dateFormat argument, but at runtime the two format arguments use SEPARATE, case-INSENSITIVE token sets. In dateFormat, mm and MM both render the MONTH, so the documented pattern yyyy-MM-dd HH:mm:ss returned 2026-03-04 13:03:07 for the instant 2026-03-04 13:52:07 — the minutes position printed 03, the month. The same pattern moved to timeFormat returned 13:52:07 correctly, because there mm and MM mean minutes. Single-letter tokens also disagree with the doc: d rendered the whole short date 3/4/2026 rather than the day number, M rendered March 4 rather than 3, and h or H alone in timeFormat aborts the page with HTTP 422 instead of rendering an hour. The day-name tokens are off by one repetition — dddd rendered Wed where the doc promises Wednesday, ddddd rendered Wednesday, and ddd rendered the corrupted string We4ne74a26 in which digits from the date replaced letters of the day name.',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/formatdate/',
         description:
             'Formats a date according to a date pattern, a time pattern and a locale. The two pattern arguments use separate, case-insensitive token sets: in the date pattern mm means month, and minutes are only reachable from the time pattern.',
@@ -264,6 +267,7 @@ export const DATE_TIME_FUNCTIONS = [
                 description:
                     'If true, return the job start or publish time instead of the individual subscriber send-completed time; outside a send context it makes no difference. Accepts 1/0, true/false, or those spellings quoted, and is not validated',
                 type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
         ],
@@ -275,7 +279,7 @@ export const DATE_TIME_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         officialDocsNote:
-            'Runtime-verified. The function has a working invocation (arity 0 and 1) that renders a real date value in every argument spelling, and its observed behaviour is consistent with the official reference. Probed on the child BU: GetSendTime() rendered 8/8/2026 7:35:16 PM against Now()=8/8/2026 7:35:16 PM in the same render, with FormatDate(..., "ffffff") giving 507042 for both, so the two are the same instant to the microsecond rather than merely the same second. Every argument spelling (1, 0, true, false, "1", "0", "true", "false", and the non-flag word spring) was accepted at HTTP 200 and returned that same current time, and DateDiff(GetSendTime(1), Now(), "MI") was 0. The value is a real date (FormatDate gave 2026-08-08, DatePart gave 2026 and 7, DateAdd of three hours advanced it, DateDiff measured that gap as 3), it renders as a US short date plus a 12-hour clock (Length 19 for that instant), Empty() over it is False, and it sits on the system side of the clock (DateDiff to SystemDateToLocalDate was 480 minutes, identical to the same measurement over Now()); arity 2 aborts with HTTP 422. This matches the official reference\'s "during a send" row, which states both call forms return the current system time. The after-send value was also captured from a REAL send job via send-context UpsertDE writeback into a results DE: a User-Initiated Send (messaging-experimental/v1/email/send) rendered GetSendTime() as 8/15/2026 10:31:40 AM, identical to Now() in the same send, confirming the send-execution system time. A test send does not fire the writeback (upsert operations run only at send-completion), and the send must target at least one deliverable subscriber or it completes without running the body. The function is fully working and correctly catalogued as verified; it is not a Sender-Authenticated-Redirection / session-state function, so no authenticated-context caveat applies.',
+            'GetSendTime() has a working invocation (arity 0 and 1) that renders a real date value in every argument spelling, and its behaviour matches the official reference. Outside a send context, it returns the current system time: on a CloudPage it renders the same instant as Now() — both resolve to the same microsecond (FormatDate(..., "ffffff") is 507042 for each) rather than merely the same second. Every argument spelling (1, 0, true, false, "1", "0", "true", "false", and the non-flag word spring) returns that same current time, and DateDiff(GetSendTime(1), Now(), "MI") is 0. The value is a real date (FormatDate gives 2026-08-08, DatePart gives 2026 and 7, DateAdd of three hours advances it, DateDiff measures that gap as 3), it renders as a US short date plus a 12-hour clock (Length 19 for that instant), Empty() over it is False, and it is the system-side instant (DateDiff to SystemDateToLocalDate is 480 minutes, the same as over Now()); arity 2 aborts with HTTP 422. This matches the official reference\'s "during a send" row, which states both call forms return the current system time. Inside a send job it is the send-execution system time: a send-context UpsertDE writeback into a results DE records the same instant as Now() in that send (upsert operations run only at send-completion, so a send must target at least one deliverable subscriber for the body to run). The function is fully working; it is not a Sender-Authenticated-Redirection / session-state function, so no authenticated-context caveat applies.',
     },
     {
         name: 'LocalDateToSystemDate',
@@ -335,6 +339,7 @@ export const DATE_TIME_FUNCTIONS = [
                 description:
                     'In a send context, a true value returns the send job start or publish time instead of the current time; on a CloudPage it makes no difference. Accepts 1/0, true/false, or those spellings quoted',
                 type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
         ],
@@ -359,7 +364,7 @@ export const DATE_TIME_FUNCTIONS = [
         maxArgs: 1,
         category: 'Date and Time',
         description:
-            'Converts a date string to a date value. Behaves identically to DateParse for every input format tested, but takes no second argument, so DateParse is the only one of the two that can return the instant in UTC. A string the parser cannot read aborts the page instead of returning a sentinel, and an ambiguous day-first string such as 5/8/2026 is silently read month-first rather than rejected.',
+            'Converts a date string to a date value. Behaves identically to DateParse for every input format, but takes no second argument, so DateParse is the only one of the two that can return the instant in UTC. A string the parser cannot read aborts the page instead of returning a sentinel, and an ambiguous day-first string such as 5/8/2026 is silently read month-first rather than rejected.',
         params: [
             {
                 name: 'dateString',

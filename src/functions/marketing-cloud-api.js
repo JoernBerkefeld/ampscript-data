@@ -29,7 +29,7 @@ export const MARKETING_CLOUD_API_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. An isolated CreateObject(...) is rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'CreateObject',
@@ -56,7 +56,7 @@ export const MARKETING_CLOUD_API_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. An isolated CreateObject(...) is rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'InvokeCreate',
@@ -106,7 +106,7 @@ export const MARKETING_CLOUD_API_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. An isolated CreateObject(...) is rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'InvokeDelete',
@@ -156,7 +156,7 @@ export const MARKETING_CLOUD_API_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. An isolated CreateObject(...) is rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'InvokeExecute',
@@ -198,7 +198,7 @@ export const MARKETING_CLOUD_API_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. An isolated CreateObject(...) is rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'InvokePerform',
@@ -239,7 +239,7 @@ export const MARKETING_CLOUD_API_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. An isolated CreateObject(...) is rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'InvokeRetrieve',
@@ -285,7 +285,7 @@ export const MARKETING_CLOUD_API_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. An isolated CreateObject(...) is rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'InvokeUpdate',
@@ -337,7 +337,7 @@ export const MARKETING_CLOUD_API_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. An isolated CreateObject(...) is rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
     {
         name: 'SetObjectProperty',
@@ -373,6 +373,6 @@ export const MARKETING_CLOUD_API_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. Rendered through the Email Preview API against a seeded sendable row, an isolated CreateObject(...) was rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
+            'Email/send-context finding: the WSProxy object model is not valid in sendable email content. An isolated CreateObject(...) is rejected with HTTP 400 errorcode 10004 ("CreateObject Function is not valid in content. This function is only allowed in non sendable content."). Because this function is part of that object model (or depends on a CreateObject request object), it is a CloudPage / landing-page (non-sendable content) feature and cannot be used inside a sendable email.',
     },
 ];

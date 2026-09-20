@@ -1,7 +1,7 @@
 // AUTO-SPLIT from the original single-file src/index.js. Data moved verbatim.
 // AMPscript FUNCTIONS — category: HTTP (5 entries).
 
-import { INF } from '../constants.js';
+import { BOOLEAN_LIKE_LITERAL_VALUES, INF } from '../constants.js';
 
 export const HTTP_FUNCTIONS = [
     {
@@ -30,7 +30,8 @@ export const HTTP_FUNCTIONS = [
                 mcnSince: null,
                 mcnNotes: null,
                 description: 'If true, ignore errors encountered during the GET operation',
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
             {
@@ -73,7 +74,7 @@ export const HTTP_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference labels the fourth argument as an output parameter holding the "status" of the request, but on a live Engagement CloudPage (child BU) that variable receives the response BODY, not the status. The HTTP status code is the function return value. A non-2xx response (proven with a 404) and an empty URL both abort the whole page rather than returning the status, so a failing status can never be read from the return value.',
+            'The official reference labels the fourth argument as an output parameter holding the "status" of the request, but on an Engagement CloudPage that variable receives the response BODY, not the status. The HTTP status code is the function return value. A non-2xx response (for example a 404) and an empty URL both abort the whole page rather than returning the status, so a failing status can never be read from the return value.',
         description:
             'Performs an HTTP POST request and returns the HTTP status code. The response body is written to the optional output variable.',
         params: [
@@ -148,7 +149,7 @@ export const HTTP_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference labels the fifth argument (response) as storing the "status" of the request, but on a live Engagement CloudPage (child BU) it receives the response BODY and the sixth argument (responseRowSet) receives the response HEADERS as a rowset (11 header rows observed). The HTTP status code is the function return value. The boolean exceptionOnError flag is accepted at position four.',
+            'The official reference labels the fifth argument (response) as storing the "status" of the request, but on an Engagement CloudPage it receives the response BODY and the sixth argument (responseRowSet) receives the response HEADERS as a rowset (11 header rows). The HTTP status code is the function return value. The boolean exceptionOnError flag is accepted at position four.',
         description:
             'Performs an HTTP POST and returns the HTTP status code. The response body and the response headers (as a rowset) are written to optional output variables.',
         params: [
@@ -159,7 +160,8 @@ export const HTTP_FUNCTIONS = [
                 name: 'exceptionOnError',
                 description:
                     'If `true`, raise an exception when the request fails; if `false`, continue after an error',
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
             {
@@ -224,7 +226,7 @@ export const HTTP_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official reference labels the responseStatus argument as storing the "status" of the request, but on a live Engagement CloudPage (child BU) it receives the response BODY and responseContentRowset receives the response HEADERS as a rowset (11 header rows observed). The HTTP status code is the function return value. The numRetries, reschedule and returnExceptionOnError arguments are all accepted at runtime; retry-on-failure is documented but was not forced here because a transient failure could not be induced safely against the echo endpoint.',
+            'The official reference labels the responseStatus argument as storing the "status" of the request, but on an Engagement CloudPage it receives the response BODY and responseContentRowset receives the response HEADERS as a rowset (11 header rows). The HTTP status code is the function return value. The numRetries, reschedule and returnExceptionOnError arguments are all accepted at runtime; retry-on-failure is documented but not observable in practice, because a transient failure cannot be induced safely. The reschedule boolean-like enum is acceptance-only: all eight literal spellings are accepted without rejection, but the documented effect is an out-of-band retry after 15 minutes, so no on/off behavioural difference occurs within a render.',
         description:
             'Posts content to the specified URL with automatic retry logic on failure, and returns the HTTP status code. Similar to HTTPPost2 but adds configurable retries and rescheduling; the response body and headers (as a rowset) are written to optional output variables.',
         params: [
@@ -250,7 +252,8 @@ export const HTTP_FUNCTIONS = [
                 name: 'reschedule',
                 description:
                     'Whether the request is rescheduled (retried after 15 minutes) if it still fails after all retries',
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
                 default: false,
             },
@@ -258,7 +261,8 @@ export const HTTP_FUNCTIONS = [
                 name: 'returnExceptionOnError',
                 description:
                     'If true, raise an exception on error; if false, continue after an error',
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
             {
@@ -314,7 +318,7 @@ export const HTTP_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'Runtime-verified on a live Marketing Cloud Engagement CloudPage (child BU). The official reference states this function can only retrieve the standard HTTP headers listed in RFC 7231, but at runtime it also returns the value of a non-standard custom request header: a request sent with an X-Amp-Probe header returned that exact value, so the RFC 7231 restriction is not enforced when reading headers. A header that is absent from the request (for example Referer when none was sent) returns the empty string, matching the documented note. Email/send-context finding: rendered through the Email Preview API against a seeded sendable row, an isolated HTTPRequestHeader("User-Agent") was rejected with HTTP 400 errorcode 10004 ("HTTPRequestHeader Function is not valid in content. This function is only allowed in content with an HTTP context."). So it works only where an inbound HTTP request exists (CloudPages / landing pages) and cannot be used inside a sendable email, which fits its purpose since request headers are a request-time value absent at send time.',
+            'The official reference states this function can only retrieve the standard HTTP headers listed in RFC 7231, but at runtime it also returns the value of a non-standard custom request header: a request sent with a custom header returns that exact value, so the RFC 7231 restriction is not enforced when reading headers. A header that is absent from the request (for example Referer when none was sent) returns the empty string, matching the documented note. In sendable email content an isolated HTTPRequestHeader("User-Agent") is rejected with HTTP 400 errorcode 10004 ("HTTPRequestHeader Function is not valid in content. This function is only allowed in content with an HTTP context."). So it works only where an inbound HTTP request exists (CloudPages / landing pages) and cannot be used inside a sendable email, which fits its purpose since request headers are a request-time value absent at send time.',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-request-header.html',
         guideUrl: 'https://ampscript.guide/httprequestheader/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/httprequestheader/',

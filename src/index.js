@@ -32,17 +32,17 @@
  *       difference.
  *   - officialDocsNote?: string — human-readable evidence: what the official docs claim, what
  *       the runtime actually did, and what was tried.
- *   - supportedInCloudPage?: boolean — RUNTIME-PROVEN runtime-context flag (orthogonal to the
+ *   - supportedInCloudPage?: boolean — runtime-context flag (orthogonal to the
  *       Engagement/Next PLATFORM flags mcnSince/mcnNotes). true when a live CloudPage/landing-page
- *       probe rendered the function successfully; false when the function was actually probed in a
- *       CloudPage context and proven NOT to work there (the reached call aborts the page, or the
- *       parser refuses it). ABSENT means the function was never probed in that context — absence
+ *       render evaluated the function successfully; false when the function was actually evaluated in a
+ *       CloudPage context and confirmed NOT to work there (the reached call aborts the page, or the
+ *       parser refuses it). ABSENT means the function was never evaluated in that context — absence
  *       MUST NOT be read as unsupported. Never defaults to false.
  *   - supportedInEmail?: boolean — same semantics for the email/send context: true when a live
- *       email/send probe rendered/evaluated the function successfully (a data/connector/asset gate
+ *       email/send render evaluated the function successfully (a data/connector/asset requirement
  *       that still lets the function itself run counts as supported); false when the send-content
- *       parser proved it does not work there (rejected as not valid in sendable content, or the
- *       engine does not recognise it). ABSENT means never probed — not unsupported. Never defaults
+ *       parser confirmed it does not work there (rejected as not valid in sendable content, or the
+ *       engine does not recognise it). ABSENT means never evaluated — not unsupported. Never defaults
  *       to false.
  */
 

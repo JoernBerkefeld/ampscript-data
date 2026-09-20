@@ -1,7 +1,7 @@
 // AUTO-SPLIT from the original single-file src/index.js. Data moved verbatim.
 // AMPscript FUNCTIONS — category: Content (21 entries).
 
-import { INF } from '../constants.js';
+import { BOOLEAN_LIKE_LITERAL_VALUES, INF } from '../constants.js';
 
 export const CONTENT_FUNCTIONS = [
     {
@@ -42,7 +42,8 @@ export const CONTENT_FUNCTIONS = [
                 name: 'viewOnWeb',
                 description:
                     'If `true` or `1`, a link to the file is included when a recipient selects the "View as a Web Page" link in the email. If `false` or `0`, the link is omitted. You can only use this parameter if the value of the first parameter is `http`.',
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
             {
@@ -70,7 +71,8 @@ export const CONTENT_FUNCTIONS = [
                 name: 'contentDispositionAttachment',
                 description:
                     'If `true` or `1`, the function changes the value of the `content-disposition` header for the attachment to `attachment`. If `false` or `0`, the value of this header is set to `inline`.',
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
         ],
@@ -82,7 +84,7 @@ export const CONTENT_FUNCTIONS = [
         verificationBlocked: true,
         verificationBlockedReason: 'no-working-invocation',
         officialDocsNote:
-            'AttachFile targets the outgoing email at send time; it has no working invocation on a CloudPage. Every reached call — contentbuilder key, http URL, and the two-argument minimum form — aborted the page with HTTP 422 and no partial output, on the child BU and again on the parent BU. The abort only happens when the call is actually reached: gating it behind an unmatched query-string branch leaves the page at HTTP 200, so the failure is a runtime abort of the reached call rather than a compile-time rejection. An email-context render on the child BU sharpened the cause: the Email Preview API recognises and evaluates the function and fails with a precise message that the EMAIL_ATTACHMENTS business rule must be turned on before AttachFile can be used, so the block is an account-level provisioning gate rather than a broken function.',
+            'AttachFile targets the outgoing email at send time; it has no working invocation on a CloudPage. Every call that is reached — contentbuilder key, http URL, and the two-argument minimum form — aborts the page with HTTP 422 and no partial output. The abort happens only when the call is actually reached: inside a non-matching branch the page renders at HTTP 200, so the failure is a runtime abort of the reached call rather than a compile-time rejection. In an email context the function is recognised and evaluated, and the render fails with a precise message that the EMAIL_ATTACHMENTS business rule must be turned on before AttachFile can be used, so the block is account-level provisioning rather than a broken function. Because that rule is disabled, the viewOnWeb and contentDispositionAttachment boolean-like enums cannot be exercised and are marked assumed (acceptance-only) — the account-level requirement blocks any behavioural check of these two flags.',
     },
     {
         name: 'BarcodeURL',
@@ -143,7 +145,8 @@ export const CONTENT_FUNCTIONS = [
                 name: 'showText',
                 description:
                     "If `true` or `1`, the function includes the text of `valueToConvert` under the barcode. If `false` or `0`, the function doesn't include the text of `valueToConvert` under the barcode. The default value is `false`.",
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
             {
@@ -163,7 +166,8 @@ export const CONTENT_FUNCTIONS = [
                 name: 'transparentBG',
                 description:
                     'If `true` or `1`, the barcode includes a transparent background. Otherwise, the background is white. The default value is `false`.',
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
             },
         ],
@@ -293,7 +297,8 @@ export const CONTENT_FUNCTIONS = [
                 mcnNotes: null,
                 description:
                     'Pass 1 or true to get an empty rowset when the payload or path cannot be parsed; 0 or false makes the same input abort the page',
-                type: 'boolean|number',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
             },
         ],
         returnType: 'rowset',
@@ -304,7 +309,7 @@ export const CONTENT_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official syntax section states that a false third argument yields an empty rowset and a true one raises an exception; runtime on the child BU (CloudPage GET) does the opposite. Malformed JSON with 1 rendered a rowset of zero rows, while the identical payload with 0 aborted the page with HTTP 422. The same page also proved that an unparsable payload, an unset variable, an empty string, [] and a path matching nothing all yield zero rows when 1 is passed. Note the official Errors section already describes the runtime ordering, so the page contradicts itself.',
+            'The official syntax section states that a false third argument yields an empty rowset and a true one raises an exception; on a CloudPage, runtime does the opposite. Malformed JSON with 1 yields a rowset of zero rows, while the identical payload with 0 aborts the page with HTTP 422. An unparsable payload, an unset variable, an empty string, [] and a path matching nothing likewise yield zero rows when 1 is passed. Note the official Errors section already describes this runtime ordering, so the reference contradicts itself.',
     },
     {
         name: 'BuildRowSetFromString',
@@ -368,7 +373,8 @@ export const CONTENT_FUNCTIONS = [
                 mcnNotes: null,
                 description:
                     'Pass 1 or true to get an empty rowset when the payload or path cannot be parsed; 0 or false makes the same input abort the page',
-                type: 'boolean|number',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
             },
         ],
         returnType: 'rowset',
@@ -379,7 +385,7 @@ export const CONTENT_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: true,
         officialDocsNote:
-            'The official syntax section states that a false third argument yields an empty rowset and a true one raises an exception; runtime on the child BU (CloudPage GET) behaves the other way round. Unclosed XML parsed with 1 rendered a rowset of zero rows, whereas the identical payload with 0 aborted the page with HTTP 422. An empty string, an unset variable, an empty root element and an XPath matching nothing likewise gave zero rows under 1.',
+            'The official syntax section states that a false third argument yields an empty rowset and a true one raises an exception; on a CloudPage, runtime behaves the other way round. Unclosed XML parsed with 1 yields a rowset of zero rows, whereas the identical payload with 0 aborts the page with HTTP 422. An empty string, an unset variable, an empty root element and an XPath matching nothing likewise yield zero rows under 1.',
     },
     {
         name: 'ContentArea',
@@ -417,7 +423,8 @@ export const CONTENT_FUNCTIONS = [
                 mcnNotes: null,
                 description:
                     "Determines whether the function returns an error when the system can't locate the specified content area or returns an invalid content area. A value of true returns an error. Defaults to true.",
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
                 default: true,
             },
@@ -485,7 +492,8 @@ export const CONTENT_FUNCTIONS = [
                 mcnNotes: null,
                 description:
                     "Determines whether the function returns an error when the system can't locate the specified content area or returns an invalid content area. A value of true returns an error. Defaults to true.",
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
                 default: true,
             },
@@ -554,7 +562,8 @@ export const CONTENT_FUNCTIONS = [
                 mcnNotes: null,
                 description:
                     "If true, the function returns an error if the content block can't be found. If false, the function doesn't return an error. The default value is true",
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
                 default: true,
             },
@@ -620,7 +629,8 @@ export const CONTENT_FUNCTIONS = [
                 mcnNotes: null,
                 description:
                     "If true, the function returns an error if the content block can't be found. If false, the function doesn't return an error. The default value is true",
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
                 default: true,
             },
@@ -686,7 +696,8 @@ export const CONTENT_FUNCTIONS = [
                 mcnNotes: null,
                 description:
                     "If true, the function returns an error if the content block can't be found. If false, the function doesn't return an error. The default value is true",
-                type: 'boolean',
+                type: 'string|boolean|number',
+                enum: BOOLEAN_LIKE_LITERAL_VALUES,
                 optional: true,
                 default: true,
             },
@@ -852,7 +863,7 @@ export const CONTENT_FUNCTIONS = [
         isConfirmed: true,
         nonFunctionalAtRuntime: true,
         officialDocsNote:
-            'Classic Portfolio is retired on this tenant, so no Portfolio item exists to retrieve. A reached call with an external key that does not resolve aborted the page with HTTP 422 and no partial output, on both the child BU and the parent BU; the same call gated behind an unmatched query-string branch left the page at HTTP 200, confirming a runtime abort of the reached call. No valid key could be sourced because Portfolio asset creation and applications were retired, so the documented success path could not be exercised here.',
+            'Classic Portfolio is retired, so no Portfolio item is available to retrieve. A reached call with an external key that does not resolve aborts the page with HTTP 422 and no partial output; gating the same call behind an unmatched query-string branch leaves the page at HTTP 200, confirming a runtime abort of the reached call. No valid key can be sourced because Portfolio asset creation and applications are retired, so the documented success path cannot be exercised.',
     },
     {
         name: 'Image',
@@ -893,9 +904,9 @@ export const CONTENT_FUNCTIONS = [
         nonFunctionalAtRuntime: true,
         deprecated: true,
         deprecatedReason:
-            'The classic Portfolio / Classic Content area this function reads from was retired in April 2023, so no image assets exist for it to reference on any current tenant, and every invocation aborts the page at runtime. Use ContentImageByKey or ContentImageByID against Content Builder image assets instead.',
+            'The classic Portfolio / Classic Content area this function reads from was retired in April 2023, so no image assets exist for it to reference on any current account, and every invocation aborts the page at runtime. Use ContentImageByKey or ContentImageByID against Content Builder image assets instead.',
         officialDocsNote:
-            'No working invocation was found on either the child BU or the parent BU. Image resolves images from the legacy Portfolio, whose creation and applications have been retired; no Portfolio assets exist on either BU to reference. Every attempt aborted the CloudPage with HTTP 422 and no output: a literal URL, a Content Builder asset external key, and a plausible Portfolio-style key were all tried on the child BU, and a Portfolio-style key on the parent BU. Use ContentImageByKey or ContentImageByID against Content Builder image assets instead.',
+            'No working invocation exists. Image resolves images from the legacy Portfolio, whose creation and applications have been retired; no Portfolio assets exist to reference. Every invocation aborts the CloudPage with HTTP 422 and no output: a literal URL, a Content Builder asset external key, and a plausible Portfolio-style key all fail. Use ContentImageByKey or ContentImageByID against Content Builder image assets instead.',
     },
     {
         name: 'LiveContentMicrositeURL',
@@ -916,7 +927,7 @@ export const CONTENT_FUNCTIONS = [
         deprecatedReason:
             'Live Offers (Live Content) was removed from Marketing Cloud in 2019 and the Classic Microsites this URL points at were retired in June 2022, so there is no provisionable modern equivalent and every invocation aborts the page at runtime.',
         officialDocsNote:
-            "Attempted on both the child BU and the parent BU. Every invocation shape aborted the CloudPage with HTTP 200 lost to a 422 page abort: the documented-valid LiveContentMicrositeURL('coupon','MyCoupon'), an unknown content type, and an empty external key all failed identically. The function resolves a Live Offers (Live Content) coupon by external key, and no such Live Content asset is provisioned on either BU, so no working invocation could be produced. Left blocked pending a tenant with a real Live Offers coupon.",
+            "Every invocation shape aborts the CloudPage (HTTP 200 lost to a 422 page abort): the documented-valid LiveContentMicrositeURL('coupon','MyCoupon'), an unknown content type, and an empty external key all fail identically. The function resolves a Live Offers (Live Content) coupon by external key, and no such Live Content asset is provisioned, so no working invocation exists. It requires a real Live Offers coupon.",
         params: [
             {
                 name: 'contentType',
