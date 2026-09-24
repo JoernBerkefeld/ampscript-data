@@ -32,6 +32,7 @@ import {
     isMcnSupported,
     getMcnApiVersion,
     getMcnNotes,
+    BOOLEAN_LIKE_LITERAL_VALUES,
     VERIFICATION_BLOCKED_REASONS,
 } from 'ampscript-data';
 ```
@@ -89,6 +90,18 @@ if (entry.validArities) {
 ```
 
 The array is always strictly ascending integers and includes both `minArgs` (first element) and `maxArgs` (last element). When absent, the arity range is purely contiguous — which is currently the case for every AMPscript function.
+
+#### Boolean-like flag values
+
+Boolean-like function parameters use a shared frozen enum covering the eight accepted AMPscript literal forms:
+
+```js
+import { BOOLEAN_LIKE_LITERAL_VALUES } from 'ampscript-data';
+
+// [true, false, 1, 0, 'true', 'false', '1', '0']
+```
+
+These parameters use the `string|boolean|number` type and reference this array through their `enum` field.
 
 #### Optional: verification state
 
