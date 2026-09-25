@@ -347,6 +347,62 @@ test('VERIFICATION_BLOCKED_REASONS is a frozen non-empty string enum', () => {
     }
 });
 
+test('MC Next API 68 catalog slice is exact and helpers expose it case-insensitively', () => {
+    const expectedNames = [
+        'DatePart',
+        'Char',
+        'RegExMatch',
+        'StringToHex',
+        'Base64Decode',
+        'Base64Encode',
+        'Domain',
+        'GUID',
+        'IsEmailAddress',
+        'LookupRows',
+        'LookupOrderedRows',
+        'ClaimRow',
+        'ClaimRowValue',
+        'BuildRowSetFromString',
+        'BuildRowSetFromXML',
+        'BeginImpressionRegion',
+        'EndImpressionRegion',
+        'MD5',
+        'SHA1',
+        'SHA256',
+        'SHA512',
+        'IsNullDefault',
+        'URLEncode',
+    ];
+    const expectedNotes =
+        'MC Next uses a different regex engine that excludes .NET-only constructs. Options must be literal comma-separated text and can only be IgnoreCase, Multiline, Singleline, IgnorePatternWhitespace, or ExplicitCapture.';
+
+    assert.equal(expectedNames.length, 23);
+    assert.deepEqual(
+        new Set(
+            FUNCTIONS.filter((function_) => function_.mcnSince === 68).map(
+                (function_) => function_.name,
+            ),
+        ),
+        new Set(expectedNames),
+        'API 68 functions must match the catalog slice exactly',
+    );
+    for (const name of expectedNames) {
+        assert.equal(getMcnApiVersion(name), 68, `${name}: API version`);
+        assert.equal(getMcnApiVersion(name.toLowerCase()), 68, `${name}: lowercase API version`);
+        assert.equal(isMcnSupported(name), true, `${name}: MC Next support`);
+        assert.equal(
+            isMcnSupported(name.toLowerCase()),
+            true,
+            `${name}: lowercase MC Next support`,
+        );
+        assert.equal(
+            getMcnNotes(name),
+            name === 'RegExMatch' ? expectedNotes : null,
+            `${name}: MC Next notes`,
+        );
+    }
+});
+
 test('helper functions behave case-insensitively on known inputs', () => {
     // isMcnSupported / getMcnApiVersion agree with each other
     assert.equal(isMcnSupported('Add'), true);

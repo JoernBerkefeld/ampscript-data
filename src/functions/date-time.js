@@ -139,7 +139,7 @@ export const DATE_TIME_FUNCTIONS = [
         name: 'DatePart',
         supportedInCloudPage: true,
         supportedInEmail: true,
-        mcnSince: null,
+        mcnSince: 68,
         handlebarsEquivalent: null,
         mcnNotes: null,
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-part.html',
