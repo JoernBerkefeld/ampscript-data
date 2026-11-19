@@ -209,7 +209,8 @@ export const STRING_FUNCTIONS = [
         supportedInCloudPage: true,
         supportedInEmail: true,
         mcnSince: 68,
-        handlebarsEquivalent: null,
+        handlebarsEquivalent: 'regExMatch',
+        handlebarsExact: false,
         mcnNotes:
             'MC Next uses a different regex engine that excludes .NET-only constructs. Options must be literal comma-separated text and can only be IgnoreCase, Multiline, Singleline, IgnorePatternWhitespace, or ExplicitCapture.',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-regex-match.html',

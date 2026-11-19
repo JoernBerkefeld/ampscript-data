@@ -375,6 +375,13 @@ test('MC Next API 68 catalog slice is exact and helpers expose it case-insensiti
     ];
     const expectedNotes =
         'MC Next uses a different regex engine that excludes .NET-only constructs. Options must be literal comma-separated text and can only be IgnoreCase, Multiline, Singleline, IgnorePatternWhitespace, or ExplicitCapture.';
+    // These four carry a note on how their approximate Handlebars counterpart differs.
+    const handlebarsNoted = new Set([
+        'ClaimRowValue',
+        'BeginImpressionRegion',
+        'EndImpressionRegion',
+        'URLEncode',
+    ]);
 
     assert.equal(expectedNames.length, 23);
     assert.deepEqual(
@@ -395,12 +402,69 @@ test('MC Next API 68 catalog slice is exact and helpers expose it case-insensiti
             true,
             `${name}: lowercase MC Next support`,
         );
+        if (handlebarsNoted.has(name)) {
+            assert.match(getMcnNotes(name), /Handlebars/, `${name}: Handlebars note`);
+        } else {
+            assert.equal(
+                getMcnNotes(name),
+                name === 'RegExMatch' ? expectedNotes : null,
+                `${name}: MC Next notes`,
+            );
+        }
+    }
+});
+
+test('handlebarsExact is set exactly when a Handlebars helper is linked', () => {
+    for (const function_ of FUNCTIONS) {
+        const isLinked =
+            typeof function_.handlebarsEquivalent === 'string' &&
+            function_.handlebarsEquivalent.length > 0;
+        assert.ok(
+            isLinked || function_.handlebarsEquivalent === null,
+            `${function_.name}: handlebarsEquivalent is a helper name or null`,
+        );
         assert.equal(
-            getMcnNotes(name),
-            name === 'RegExMatch' ? expectedNotes : null,
-            `${name}: MC Next notes`,
+            Object.hasOwn(function_, 'handlebarsExact'),
+            isLinked,
+            `${function_.name}: handlebarsExact belongs to a linked function only`,
         );
     }
+});
+
+test('MC Next API 68 functions link to their Handlebars helpers', () => {
+    // [function, helper, exact] - exact only where the helper takes the same positional arguments.
+    const expectedLinks = [
+        ['BuildRowSetFromString', 'buildRowSetFromString', true],
+        ['DatePart', 'datePart', true],
+        ['Domain', 'domain', true],
+        ['GUID', 'guid', true],
+        ['IsEmailAddress', 'isEmailAddress', true],
+        ['IsNullDefault', 'isNullDefault', true],
+        // the helper takes the encoding / charset / flags as named options
+        ['Base64Decode', 'base64Decode', false],
+        ['Base64Encode', 'base64Encode', false],
+        ['MD5', 'md5', false],
+        ['SHA1', 'sha1', false],
+        ['SHA256', 'sha256', false],
+        ['SHA512', 'sha512', false],
+        ['StringToHex', 'stringToHex', false],
+        ['RegExMatch', 'regExMatch', false],
+        ['BuildRowSetFromXML', 'buildRowSetFromXml', false],
+        // named arguments only
+        ['ClaimRow', 'claimRow', false],
+        ['ClaimRowValue', 'claimRow', false],
+        // one block helper replaces the begin / end pair
+        ['BeginImpressionRegion', 'impressionRegion', false],
+        ['EndImpressionRegion', 'impressionRegion', false],
+        ['URLEncode', 'encodeURIComponent', false],
+    ];
+    for (const [name, helper, exact] of expectedLinks) {
+        const function_ = functionLookup.get(name.toLowerCase());
+        assert.ok(function_, `${name} must exist`);
+        assert.equal(function_.handlebarsEquivalent, helper, `${name}: helper`);
+        assert.equal(function_.handlebarsExact, exact, `${name}: exact`);
+    }
+    assert.match(getMcnNotes('URLEncode'), /encodeURI /, 'URLEncode names the whole-string helper');
 });
 
 test('helper functions behave case-insensitively on known inputs', () => {
