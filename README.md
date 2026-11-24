@@ -57,6 +57,7 @@ for (const fn of FUNCTIONS) {
     console.log(fn.docUrl);      // URL to official Salesforce developer docs
     console.log(fn.guideUrl);    // URL to ampscript.guide reference page
     console.log(fn.sfmcGuideUrl); // URL to our own sfmc.guide reference page (only when published)
+    console.log(fn.sfmcGuideNextUrl); // URL to our own sfmc.guide page for Marketing Cloud Next (only when published)
     console.log(fn.mcnSince);    // API version when MCN support was added (null = MCE only)
     console.log(fn.mcnNotes);    // behavioral differences on MCN (null = none)
     console.log(fn.handlebarsEquivalent); // MCN Handlebars helper name, or null when none exists
@@ -74,6 +75,16 @@ entry.sfmcGuideUrl; // 'https://sfmc.guide/engagement/ampscript/functions/add/'
 ```
 
 The URL is always `https://sfmc.guide/engagement/ampscript/functions/<lowercase-name>/`, and an entry carrying it is always `isConfirmed: true`.
+
+#### Optional: `sfmcGuideNextUrl`
+
+The same for Marketing Cloud Next: the URL of our own sfmc.guide page for the function in Next. It is set on exactly the functions that Next supports (`mcnSince` set), each of which has such a page:
+
+```js
+functionLookup.get('add').sfmcGuideNextUrl; // 'https://sfmc.guide/next/ampscript/functions/add/'
+```
+
+The URL is always `https://sfmc.guide/next/ampscript/functions/<lowercase-name>/`.
 
 #### Optional: `validArities`
 

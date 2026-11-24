@@ -52,6 +52,7 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         example: "%%=Base64Decode('SGVsbG8=')=%%",
         isConfirmed: true,
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/base64decode/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/base64decode/',
     },
     {
         name: 'Base64Encode',
@@ -91,6 +92,7 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         example: "%%=Base64Encode('Hello')=%%",
         isConfirmed: true,
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/base64encode/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/base64encode/',
     },
     {
         name: 'DecryptSymmetric',
@@ -308,6 +310,7 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-md5.html',
         guideUrl: 'https://ampscript.guide/md5/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/md5/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/md5/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
@@ -350,6 +353,7 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha1.html',
         guideUrl: 'https://ampscript.guide/sha1/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/sha1/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/sha1/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
@@ -392,6 +396,7 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha256.html',
         guideUrl: 'https://ampscript.guide/sha256/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/sha256/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/sha256/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
@@ -434,6 +439,7 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha512.html',
         guideUrl: 'https://ampscript.guide/sha512/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/sha512/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/sha512/',
         minArgs: 1,
         maxArgs: 2,
         category: 'Encryption and Encoding',
@@ -505,6 +511,7 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/stringtohex/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/stringtohex/',
     },
     {
         name: 'URLEncode',
@@ -525,6 +532,7 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/urlencode/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/urlencode/',
         params: [
             {
                 name: 'urlToEncode',

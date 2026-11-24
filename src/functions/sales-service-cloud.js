@@ -123,6 +123,7 @@ export const SALES_SERVICE_CLOUD_FUNCTIONS = [
         guideUrl: 'https://ampscript.guide/retrievesalesforceobjects/',
         sfmcGuideUrl:
             'https://sfmc.guide/engagement/ampscript/functions/retrievesalesforceobjects/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/retrievesalesforceobjects/',
         isConfirmed: true,
         differsFromOfficialDocs: false,
         minArgs: 5,

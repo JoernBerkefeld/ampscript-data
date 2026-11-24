@@ -489,3 +489,21 @@ test('helper functions behave case-insensitively on known inputs', () => {
     assert.equal(isSystemPersonalizationString('_SubscriberKey'), true);
     assert.equal(isSystemPersonalizationString('definitely_not_a_personalization_string'), false);
 });
+
+test('sfmcGuideNextUrl is canonical and set exactly for functions Marketing Cloud Next supports', () => {
+    for (const entry of FUNCTIONS) {
+        if (entry.mcnSince == null) {
+            assert.equal(
+                entry.sfmcGuideNextUrl,
+                undefined,
+                `${entry.name} is not in Next but has sfmcGuideNextUrl`,
+            );
+            continue;
+        }
+        assert.equal(
+            entry.sfmcGuideNextUrl,
+            `https://sfmc.guide/next/ampscript/functions/${entry.name.toLowerCase()}/`,
+            `${entry.name} is in Next but has no canonical sfmcGuideNextUrl`,
+        );
+    }
+});

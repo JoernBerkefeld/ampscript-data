@@ -15,6 +15,7 @@ export const DATE_TIME_FUNCTIONS = [
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-add.html',
         guideUrl: 'https://ampscript.guide/dateadd/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/dateadd/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/dateadd/',
         isConfirmed: true,
         differsFromOfficialDocs: false,
         minArgs: 3,
@@ -92,6 +93,7 @@ export const DATE_TIME_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/datediff/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/datediff/',
     },
     {
         name: 'DateParse',
@@ -110,6 +112,7 @@ export const DATE_TIME_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/dateparse/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/dateparse/',
         params: [
             {
                 name: 'dateString',
@@ -153,6 +156,7 @@ export const DATE_TIME_FUNCTIONS = [
         isConfirmed: true,
         differsFromOfficialDocs: false,
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/datepart/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/datepart/',
         params: [
             {
                 name: 'dateString',
@@ -207,6 +211,7 @@ export const DATE_TIME_FUNCTIONS = [
         officialDocsNote:
             'The official reference presents one .NET-style custom-pattern table and shows it applied to the dateFormat argument, but at runtime the two format arguments use SEPARATE, case-INSENSITIVE token sets. In dateFormat, mm and MM both render the MONTH, so the documented pattern yyyy-MM-dd HH:mm:ss returned 2026-03-04 13:03:07 for the instant 2026-03-04 13:52:07 — the minutes position printed 03, the month. The same pattern moved to timeFormat returned 13:52:07 correctly, because there mm and MM mean minutes. Single-letter tokens also disagree with the doc: d rendered the whole short date 3/4/2026 rather than the day number, M rendered March 4 rather than 3, and h or H alone in timeFormat aborts the page with HTTP 422 instead of rendering an hour. The day-name tokens are off by one repetition — dddd rendered Wed where the doc promises Wednesday, ddddd rendered Wednesday, and ddd rendered the corrupted string We4ne74a26 in which digits from the date replaced letters of the day name.',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/formatdate/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/formatdate/',
         description:
             'Formats a date according to a date pattern, a time pattern and a locale. The two pattern arguments use separate, case-insensitive token sets: in the date pattern mm means month, and minutes are only reachable from the time pattern.',
         params: [
@@ -325,6 +330,7 @@ export const DATE_TIME_FUNCTIONS = [
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-now.html',
         guideUrl: 'https://ampscript.guide/now/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/now/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/now/',
         minArgs: 0,
         maxArgs: 1,
         category: 'Date and Time',
@@ -361,6 +367,7 @@ export const DATE_TIME_FUNCTIONS = [
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-string-to-date.html',
         guideUrl: 'https://ampscript.guide/stringtodate/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/stringtodate/',
+        sfmcGuideNextUrl: 'https://sfmc.guide/next/ampscript/functions/stringtodate/',
         minArgs: 1,
         maxArgs: 1,
         category: 'Date and Time',
