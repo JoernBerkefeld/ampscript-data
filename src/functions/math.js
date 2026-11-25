@@ -9,7 +9,9 @@ export const MATH_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'add',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'On Next a quoted numeric argument such as Add("15", "27") or a negative literal such as Add(-5, 3) makes the email fail to render, while unquoted non-negative numbers work. Integer sums wrap at 32 bits: Add(2147483647, 1) renders -2147483648.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-add.html',
         guideUrl: 'https://ampscript.guide/add/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/add/',
@@ -36,7 +38,12 @@ export const MATH_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'divide',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'Only the string "true" is read as 1 on Next, so Divide("true", 1) renders 1 where Engagement aborts; other text such as "abc" still fails.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The quotient of the two operands, rounded to two decimal places in the tested cases (10 divided by 3 gives 3.33). A zero divisor makes the email fail to render instead of yielding the infinity symbol or NaN, so check the divisor first.',
+        mcnExample: '%%=Divide(10, 3)=%% <!-- Next renders: 3.33 -->',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-divide.html',
         guideUrl: 'https://ampscript.guide/divide/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/divide/',
@@ -64,7 +71,9 @@ export const MATH_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'modulo',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'On Next a zero divisor, a quoted argument such as Mod("10", "3"), and Mod(3, 10) all make the email fail to render. A decimal result is printed without Engagement\'s rounding noise (Mod(-500.123, 12.456) gives -1.883) but a whole result from a decimal divisor keeps a trailing .0 (Mod(10, 3.5) gives 3.0).',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-mod.html',
         guideUrl: 'https://ampscript.guide/mod/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/mod/',
@@ -93,7 +102,12 @@ export const MATH_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'multiply',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'Only the string "true" is read as 1 on Next, so Multiply("true", 1) renders 1 where Engagement aborts; other text such as "abc" still fails.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The product of the two operands; a product with more than two decimal places was rounded to two in the tested cases (1.5 times 2.25 gives 3.38).',
+        mcnExample: '%%=Multiply(1.5, 2.25)=%% <!-- Next renders: 3.38 -->',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-multiply.html',
         guideUrl: 'https://ampscript.guide/multiply/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/multiply/',
@@ -120,7 +134,9 @@ export const MATH_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'random',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'On Next decimal bounds render instead of aborting (Random(1, 2.5) gave 2, Random(1.2, 1.8) gave 1), while bounds in reverse order such as Random(3, 1) or quoted bounds such as Random("1", "2") make the email fail to render.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-random.html',
         guideUrl: 'https://ampscript.guide/random/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/random/',
@@ -150,7 +166,9 @@ export const MATH_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'subtract',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'On Next a quoted numeric argument such as Subtract("50", "15") or a negative literal such as Subtract(-5, 3) makes the email fail to render, while unquoted non-negative numbers work.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-math/mc-ampscript-reference-math-subtract.html',
         guideUrl: 'https://ampscript.guide/subtract/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/subtract/',

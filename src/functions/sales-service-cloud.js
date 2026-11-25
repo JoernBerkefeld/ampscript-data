@@ -118,7 +118,9 @@ export const SALES_SERVICE_CLOUD_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'On Next, Empty() over a rowset with no matching records returns false (Engagement True); test RowCount(@rows) == 0 instead.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-retrieve-objects.html',
         guideUrl: 'https://ampscript.guide/retrievesalesforceobjects/',
         sfmcGuideUrl:

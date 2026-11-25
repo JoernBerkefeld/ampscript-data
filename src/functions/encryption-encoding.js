@@ -11,7 +11,9 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'base64Decode',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'Next accepts a value whose trailing = padding is missing: Base64Decode("SGVsbG8") returns "Hello" where Engagement stops the email.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-base64-decode.html',
         guideUrl: 'https://ampscript.guide/base64decode/',
         minArgs: 1,
@@ -61,7 +63,9 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'base64Encode',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'Next rejects the encoding names UTF-16BE and ISO-8859-1 when the email is saved; UTF-8, UTF-16, UTF-32 and ASCII give the same Base64 as Engagement.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-base64-encode.html',
         guideUrl: 'https://ampscript.guide/base64encode/',
         minArgs: 1,
@@ -306,7 +310,9 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'md5',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'Next rejects the charSet names UTF-16BE, UTF-32, ASCII and ISO-8859-1 when the email is saved; only UTF-8 and UTF-16 (any letter case) are accepted, with the same digests as Engagement.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-md5.html',
         guideUrl: 'https://ampscript.guide/md5/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/md5/',
@@ -349,7 +355,9 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'sha1',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'Next rejects charSet "ASCII" when the email is saved; UTF-8 and UTF-16 give the same digests as Engagement.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha1.html',
         guideUrl: 'https://ampscript.guide/sha1/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/sha1/',
@@ -392,7 +400,9 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'sha256',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'Next rejects charSet "ASCII" when the email is saved; UTF-8 and UTF-16 give the same digests as Engagement.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha256.html',
         guideUrl: 'https://ampscript.guide/sha256/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/sha256/',
@@ -435,7 +445,9 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'sha512',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'Next rejects charSet "ASCII" when the email is saved; UTF-8 and UTF-16 give the same digests as Engagement.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-encryption/mc-ampscript-reference-encryption-sha512.html',
         guideUrl: 'https://ampscript.guide/sha512/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/sha512/',
@@ -478,7 +490,9 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'stringToHex',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'Next rejects the charSet names UTF-16BE, UTF-32, ASCII and ISO-8859-1 when the email is saved; UTF-8 and UTF-16 give the same hex as Engagement.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-to-hex.html',
         guideUrl: 'https://ampscript.guide/stringtohex/',
         minArgs: 1,
@@ -521,7 +535,12 @@ export const ENCRYPTION_ENCODING_FUNCTIONS = [
         handlebarsEquivalent: 'encodeURIComponent',
         handlebarsExact: false,
         mcnNotes:
-            'In Handlebars, encodeURIComponent encodes only what follows the address, such as a query string, which is what this function does by default; use encodeURI to encode a whole string. Neither helper takes the two switches of this function.',
+            'In Handlebars, encodeURIComponent encodes only what follows the address, such as a query string, which is what this function does by default; use encodeURI to encode a whole string. Neither helper takes the two switches of this function. With both switches off, Next gives the same result as Engagement. A switch value of 2 counts as on in Next, so URLEncode("spring sale", 2, 2) gives "spring%20sale" where Engagement leaves the text unchanged.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The URL-encoded input. With encodeAllChars on, Next keeps the URL structure (?, = and &), percent-encodes other reserved characters with uppercase hex and writes spaces as %20, never as plus signs.',
+        mcnExample:
+            "%%=URLEncode('https://example.org/go?promo=spring sale&tags=a,b', 1)=%% <!-- Next renders: https://example.org/go?promo=spring%20sale&tags=a%2Cb -->",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-http/mc-ampscript-reference-http-url-encode.html',
         guideUrl: 'https://ampscript.guide/urlencode/',
         minArgs: 1,

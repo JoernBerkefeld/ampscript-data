@@ -60,6 +60,7 @@ for (const fn of FUNCTIONS) {
     console.log(fn.sfmcGuideNextUrl); // URL to our own sfmc.guide page for Marketing Cloud Next (only when published)
     console.log(fn.mcnSince);    // API version when MCN support was added (null = MCE only)
     console.log(fn.mcnNotes);    // behavioral differences on MCN (null = none)
+    console.log(fn.mcnBehavior); // 'same' | 'differs' | 'untested' in a Next email (only when run there)
     console.log(fn.handlebarsEquivalent); // MCN Handlebars helper name, or null when none exists
     console.log(fn.handlebarsExact);      // true = drop-in replacement, false = same job, different call shape
 }
@@ -85,6 +86,23 @@ functionLookup.get('add').sfmcGuideNextUrl; // 'https://sfmc.guide/next/ampscrip
 ```
 
 The URL is always `https://sfmc.guide/next/ampscript/functions/<lowercase-name>/`.
+
+#### Optional: `mcnBehavior`, `mcnReturnDescription`, `mcnExample`
+
+What a live Marketing Cloud Next email proved about the function, compared with Engagement:
+
+- `mcnBehavior` — `'same'`, `'differs'` or `'untested'`. Set only on functions that were run in a Next email.
+- `mcnReturnDescription` — replaces `returnDescription` for Next when the normal result looks different there, for example a date printed as `2026-01-22T00:00:00`.
+- `mcnExample` — a Next example that goes with `mcnReturnDescription`; set whenever it is.
+- `mcnNotes` holds differences that only show for some inputs, such as Next printing a result where Engagement stops the email.
+
+Every function with `mcnBehavior: 'differs'` has `mcnReturnDescription` or `mcnNotes`.
+
+```js
+const dateAdd = functionLookup.get('dateadd');
+dateAdd.mcnBehavior; // 'differs'
+dateAdd.mcnReturnDescription ?? dateAdd.returnDescription; // what to show for Next
+```
 
 #### Optional: `validArities`
 

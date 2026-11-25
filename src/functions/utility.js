@@ -248,6 +248,7 @@ export const UTILITY_FUNCTIONS = [
         handlebarsEquivalent: 'domain',
         handlebarsExact: true,
         mcnNotes: null,
+        mcnBehavior: 'same',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-domain.html',
         guideUrl: 'https://ampscript.guide/domain/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/domain/',
@@ -279,7 +280,12 @@ export const UTILITY_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'isEmpty',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'Next rejects at save a call whose argument is a literal or a function call, such as Empty(""), Empty(0) or Empty(Now()), with an AMPscript syntax error; hold the value in a variable first.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'Lowercase true when the value is empty or missing, otherwise lowercase false.',
+        mcnExample: "%%[ SET @myVar = '' ]%%%%=Empty(@myVar)=%% <!-- Next renders: true -->",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-empty.html',
         guideUrl: 'https://ampscript.guide/empty/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/empty/',
@@ -311,7 +317,12 @@ export const UTILITY_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'format',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'The documented third-parameter value Number renders on Next (Format(1234.555, "C2", "Number") gives $1,234.56) where Engagement aborts; an invented value such as Banana still fails. A single-argument call is rejected at save.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The formatted value from a different number and date formatter: E gives 1.234555E03, P keeps three decimals, negatives under C2 take a leading minus instead of brackets, a non-breaking space precedes the de-DE euro sign, fr-FR long dates read "mercredi, mars 4, 2026", and custom patterns such as #,##0.00 return the number unformatted.',
+        mcnExample: "%%=Format(1234.555, '#,##0.00')=%% <!-- Next renders: 1234.555 -->",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-string/mc-ampscript-reference-string-format.html',
         guideUrl: 'https://ampscript.guide/format/',
         minArgs: 2,
@@ -368,7 +379,13 @@ export const UTILITY_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'formatCurrency',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'An empty or unknown locale ("" or zz-ZZ) renders the raw number 1234.555 without currency formatting, and the language-only locale de shows the generic sign ¤ instead of €. A single-argument call is rejected at save.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The amount in the locale default format only: the decimal-places and symbol arguments are ignored, negatives take a leading minus instead of brackets, a non-breaking space separates symbol and amount (de-DE, de-CH, pt-BR), fr-FR groups with a narrow non-breaking space, ja-JP uses the full-width yen sign, and 2.345 in en-US gives $2.34.',
+        mcnExample:
+            "%%=FormatCurrency(1234.555, 'de-DE', 3)=%% <!-- Next renders: 1.234,56 € (non-breaking space, 3 ignored) -->",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-formatCurrency.html',
         guideUrl: 'https://ampscript.guide/formatcurrency/',
         minArgs: 2,
@@ -425,7 +442,12 @@ export const UTILITY_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'formatNumber',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'An unrecognised pattern such as qqqq returns the unformatted number on Next, where Engagement echoes the pattern itself. A single-argument call is rejected at save.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The number formatted with the standard patterns only: halves round to even (2.5 with N0 gives 2, -2.5 gives -2, 1.005 with N2 gives 1.00), E gives 1.234555E03, P keeps three decimals, negatives under C2 take a leading minus, fr-FR groups with a narrow non-breaking space, ja-JP uses the full-width yen sign, and custom patterns such as #,##0.00, 0000 or #0.00;(#0.00) return the input unformatted.',
+        mcnExample: "%%=FormatNumber(2.5, 'N0')=%% <!-- Next renders: 2 -->",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-formatNumber.html',
         guideUrl: 'https://ampscript.guide/formatnumber/',
         minArgs: 2,
@@ -471,6 +493,7 @@ export const UTILITY_FUNCTIONS = [
         handlebarsEquivalent: 'guid',
         handlebarsExact: true,
         mcnNotes: null,
+        mcnBehavior: 'same',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-guid.html',
         guideUrl: 'https://ampscript.guide/guid/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/guid/',
@@ -496,7 +519,9 @@ export const UTILITY_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'iif',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'On Next a plain non-empty string condition such as "0", "hello" or three spaces selects the true branch, where Engagement selects the false branch. Both branches are evaluated: a RaiseError in the branch not taken still makes the render fail (HTTP 500), so an aborting call is safe in neither branch.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-iif.html',
         guideUrl: 'https://ampscript.guide/iif/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/iif/',
@@ -571,7 +596,12 @@ export const UTILITY_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'isEmailAddress',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'An address whose domain has no dot, such as tomas.q@example, returns true on Next, where Engagement returns False. Surrounding whitespace is still rejected.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'Lowercase true when the value is a syntactically valid email address, otherwise lowercase false.',
+        mcnExample: "%%=IsEmailAddress('test@example.com')=%% <!-- Next renders: true -->",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-email-address.html',
         guideUrl: 'https://ampscript.guide/isemailaddress/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/isemailaddress/',
@@ -607,7 +637,12 @@ export const UTILITY_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'isEmpty',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'IsNull(Concat(@value)) is rejected at save with an AMPscript syntax error, while IsNull(Now()) saves and renders false.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'Lowercase true for an undeclared variable, a declared but unset variable or an empty string, otherwise lowercase false; whitespace, 0, "0" and "false" are not null.',
+        mcnExample: '%%[ VAR @value ]%%%%=IsNull(@value)=%% <!-- Next renders: true -->',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-is-null.html',
         guideUrl: 'https://ampscript.guide/isnull/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/isnull/',
@@ -643,6 +678,11 @@ export const UTILITY_FUNCTIONS = [
         handlebarsEquivalent: 'isNullDefault',
         handlebarsExact: true,
         mcnNotes: null,
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The original value, or the default when the value is an empty string, an unset variable or an undeclared variable, so it works as a general fallback on Next.',
+        mcnExample:
+            "%%[ VAR @name ]%%%%=IsNullDefault(@name, 'Friend')=%% <!-- Next renders: Friend -->",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-sites/mc-ampscript-reference-sites-is-null-default.html',
         guideUrl: 'https://ampscript.guide/isnulldefault/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/isnulldefault/',
@@ -759,7 +799,9 @@ export const UTILITY_FUNCTIONS = [
         supportedInEmail: false,
         mcnSince: 67,
         handlebarsEquivalent: null,
-        mcnNotes: null,
+        mcnNotes:
+            'Next rejects at save any Output call with a nested function argument, such as Output(Concat("x")), even inside a branch that never runs, and also the zero-argument form; multi-argument calls were only tested with nested functions. A string literal, a variable or a number saves and renders nothing, where an Engagement email rejects Output by name.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-output.html',
         guideUrl: 'https://ampscript.guide/output/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/output/',
@@ -800,7 +842,9 @@ export const UTILITY_FUNCTIONS = [
         supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: null,
-        mcnNotes: null,
+        mcnNotes:
+            'Next rejects at save any OutputLine call with a nested function argument, such as OutputLine(Concat("A")), as well as the zero-argument form; multi-argument calls were only tested with nested functions. A string literal, a variable or a number saves and writes only a bare line feed, not the carriage return plus line feed Engagement writes.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-output-line.html',
         guideUrl: 'https://ampscript.guide/outputline/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/outputline/',
@@ -870,6 +914,7 @@ export const UTILITY_FUNCTIONS = [
         handlebarsEquivalent: 'raiseError',
         handlebarsExact: false,
         mcnNotes: null,
+        mcnBehavior: 'same',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-raise-error.html',
         guideUrl: 'https://ampscript.guide/raiseerror/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/raiseerror/',
@@ -1012,6 +1057,7 @@ export const UTILITY_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: null,
         mcnNotes: null,
+        mcnBehavior: 'same',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-utilities/mc-ampscript-reference-utilities-v.html',
         guideUrl: 'https://ampscript.guide/v/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/v/',

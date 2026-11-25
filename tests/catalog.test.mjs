@@ -404,10 +404,13 @@ test('MC Next API 68 catalog slice is exact and helpers expose it case-insensiti
         );
         if (handlebarsNoted.has(name)) {
             assert.match(getMcnNotes(name), /Handlebars/, `${name}: Handlebars note`);
+        } else if (name === 'RegExMatch') {
+            assert.ok(getMcnNotes(name).startsWith(expectedNotes), `${name}: MC Next notes`);
         } else {
-            assert.equal(
-                getMcnNotes(name),
-                name === 'RegExMatch' ? expectedNotes : null,
+            // Next behaviour proven in a Next email may add a note; otherwise there is none.
+            const notes = getMcnNotes(name);
+            assert.ok(
+                notes === null || (typeof notes === 'string' && notes.length > 0),
                 `${name}: MC Next notes`,
             );
         }
@@ -505,5 +508,54 @@ test('sfmcGuideNextUrl is canonical and set exactly for functions Marketing Clou
             `https://sfmc.guide/next/ampscript/functions/${entry.name.toLowerCase()}/`,
             `${entry.name} is in Next but has no canonical sfmcGuideNextUrl`,
         );
+    }
+});
+
+test('Next behaviour fields are consistent', () => {
+    const behaviors = new Set(['same', 'differs', 'untested']);
+    for (const entry of FUNCTIONS) {
+        if (entry.mcnBehavior === undefined) {
+            assert.equal(
+                entry.mcnReturnDescription,
+                undefined,
+                `${entry.name}: mcnReturnDescription without mcnBehavior`,
+            );
+            assert.equal(
+                entry.mcnExample,
+                undefined,
+                `${entry.name}: mcnExample without mcnBehavior`,
+            );
+            continue;
+        }
+        assert.ok(
+            behaviors.has(entry.mcnBehavior),
+            `${entry.name}: unknown mcnBehavior ${entry.mcnBehavior}`,
+        );
+        assert.ok(
+            entry.mcnSince != null,
+            `${entry.name}: mcnBehavior on a function Next does not support`,
+        );
+        if (entry.mcnReturnDescription !== undefined) {
+            assert.ok(
+                entry.mcnReturnDescription.length > 0,
+                `${entry.name}: empty mcnReturnDescription`,
+            );
+            assert.ok(
+                typeof entry.mcnExample === 'string' && entry.mcnExample.length > 0,
+                `${entry.name}: mcnReturnDescription without mcnExample`,
+            );
+        }
+        if (entry.mcnExample !== undefined) {
+            assert.ok(
+                entry.mcnReturnDescription,
+                `${entry.name}: mcnExample without mcnReturnDescription`,
+            );
+        }
+        if (entry.mcnBehavior === 'differs') {
+            assert.ok(
+                entry.mcnReturnDescription || entry.mcnNotes,
+                `${entry.name}: differs but has neither mcnReturnDescription nor mcnNotes`,
+            );
+        }
     }
 });

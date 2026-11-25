@@ -186,7 +186,8 @@ export const CONTENT_FUNCTIONS = [
         handlebarsEquivalent: 'impressionRegion',
         handlebarsExact: false,
         mcnNotes:
-            'In Handlebars, the block helper impressionRegion replaces this function together with EndImpressionRegion: the region name goes on the opening tag and the closing tag ends the region.',
+            'In Handlebars, the block helper impressionRegion replaces this function together with EndImpressionRegion: the region name goes on the opening tag and the closing tag ends the region. A variable as the region name does not abort on Next: SET @r = "dyn-region" BeginImpressionRegion(@r) followed by X rendered "X", where Engagement fails the page.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-begin-impression-region.html',
         guideUrl: 'https://ampscript.guide/beginimpressionregion/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/beginimpressionregion/',
@@ -273,7 +274,13 @@ export const CONTENT_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'jsonPath',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'Malformed JSON with flag 0 renders instead of aborting the page. An empty-string or unset payload with flag 1 made the Next preview fail (HTTP 500) where Engagement returns zero rows; a batch of "{ not json " with the flags true, "true" and "1" made the Next preview fail (HTTP 500).',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'A rowset built from the matched JSON nodes, but values read back differ from Engagement: numbers keep their JSON form (100.0 stays "100.0"), column names must match case exactly, and ordinal or Value reads render "", "true" or "false" instead of the data. A path that matches nothing yields zero rows.',
+        mcnExample:
+            "%%[ SET @rows = BuildRowsetFromJSON('{\"items\":[{\"Price\":100.0}]}', '$.items[*]', 1) SET @price = Field(Row(@rows, 1), 'Price') /* Next: 100.0, Engagement: 100 */ ]%%",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-json.html',
         guideUrl: 'https://ampscript.guide/buildrowsetfromjson/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/buildrowsetfromjson/',
@@ -322,7 +329,13 @@ export const CONTENT_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'buildRowSetFromString',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'With the separator "::", RowCount alone still returned 3, but also reading a field made the Next preview fail (HTTP 500). Field(Row(@rows, 0), 1) written inline renders "true" on Next instead of aborting.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'A rowset with one row per delimited segment; RowCount matches Engagement, but the segment text cannot be read back: Field(row, 1) renders "true" and Field(row, "Value", 0) renders "false". An empty or unset input gives zero rows.',
+        mcnExample:
+            "%%[ SET @rows = BuildRowSetFromString('a,b,c', ',') SET @count = RowCount(@rows) /* 3 */ SET @first = Field(Row(@rows, 1), 1) /* Next: true, Engagement: a */ ]%%",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-string.html',
         guideUrl: 'https://ampscript.guide/buildrowsetfromstring/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/buildrowsetfromstring/',
@@ -359,7 +372,13 @@ export const CONTENT_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'buildRowSetFromXml',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'Saving the CMS email strips the tags from XML written as an AMPscript string literal, so the function receives only the text and returns 0 rows; build the markup at runtime (for example with Char(60) and Char(62)) or read it from data. Malformed XML with the flag "1" made the Next preview fail (HTTP 500) where Engagement returns zero rows.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'A rowset with one row per matched node; RowCount matches Engagement when the XML arrives intact, but the Value, Xml and <attribute>_att columns cannot be read back: Field renders "false" (or "true" by ordinal) instead of the node text. An XPath that matches nothing yields zero rows.',
+        mcnExample:
+            "%%[ SET @xml = Concat(Char(60), 'root', Char(62), Char(60), 'item', Char(62), '1', Char(60), '/item', Char(62), Char(60), '/root', Char(62)) SET @rows = BuildRowSetFromXML(@xml, '/root/item', 1) SET @count = RowCount(@rows) /* 1 */ SET @value = Field(Row(@rows, 1), 'Value', 0) /* Next: false, Engagement: 1 */ ]%%",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-build-rowset-from-xml.html',
         guideUrl: 'https://ampscript.guide/buildrowsetfromxml/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/buildrowsetfromxml/',
@@ -541,7 +560,9 @@ export const CONTENT_FUNCTIONS = [
         supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: null,
-        mcnNotes: null,
+        mcnNotes:
+            'A missing block with errorOnMissingContentBlock 0 does not fall back on Next: the preview failed with HTTP 500 instead of rendering the default content and setting the status variable to -1; a batch with false, "false" and "0" also failed. Rendering a found block was not tested on Next.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-id.html',
         guideUrl: 'https://ampscript.guide/contentblockbyid/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/contentblockbyid/',
@@ -609,7 +630,9 @@ export const CONTENT_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'getContentBlock',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'A missing block with errorOnMissingContentBlock 0 does not fall back on Next: the preview failed with HTTP 500 instead of rendering the default content and setting the status variable to -1; a batch with false, "false" and "0" also failed. Rendering a found block was not tested on Next.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-key.html',
         guideUrl: 'https://ampscript.guide/contentblockbykey/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/contentblockbykey/',
@@ -676,7 +699,9 @@ export const CONTENT_FUNCTIONS = [
         supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: null,
-        mcnNotes: null,
+        mcnNotes:
+            'A missing block with errorOnMissingContentBlock 0 does not fall back on Next: the preview failed with HTTP 500 instead of rendering the default content and setting the status variable to -1; a batch with false, "false" and "0" also failed. Rendering a found block was not tested on Next.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-block-by-name.html',
         guideUrl: 'https://ampscript.guide/contentblockbyname/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/contentblockbyname/',
@@ -824,6 +849,7 @@ export const CONTENT_FUNCTIONS = [
         handlebarsExact: false,
         mcnNotes:
             'In Handlebars, the closing tag of the impressionRegion block helper ends its region; there is no argument for ending every open region at once.',
+        mcnBehavior: 'same',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-content/mc-ampscript-reference-content-end-impression-region.html',
         guideUrl: 'https://ampscript.guide/endimpressionregion/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/endimpressionregion/',

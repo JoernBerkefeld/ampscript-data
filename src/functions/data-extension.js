@@ -12,6 +12,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         handlebarsEquivalent: 'claimRow',
         handlebarsExact: false,
         mcnNotes: null,
+        mcnBehavior: 'untested',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-claim-row.html',
         guideUrl: 'https://ampscript.guide/claimrow/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/claimrow/',
@@ -86,6 +87,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         handlebarsExact: false,
         mcnNotes:
             'Handlebars has no one-call counterpart: claimRow takes named arguments and returns the whole row, so read the wanted column from that row and wrap the call in fallback to supply a default when no row is left.',
+        mcnBehavior: 'untested',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-claim-row-value.html',
         guideUrl: 'https://ampscript.guide/claimrowvalue/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/claimrowvalue/',
@@ -376,7 +378,13 @@ export const DATA_EXTENSION_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'get',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'For a missing column, true, 1 or "true" as third argument render "true" and "1" renders "false" instead of aborting, while falsy flags render "false" instead of "". Field(row, 0) renders "true" instead of aborting. The two-argument form on a missing column renders "" for a JSON-built row but still aborts for a BuildRowSetFromString row.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The stored value only when the column name matches a JSON-built row exactly, case included; reads by ordinal, through Value or with other casing render "true", "false" or "" instead of the data.',
+        mcnExample:
+            "%%[ SET @rows = BuildRowSetFromString('a,b,c', ',') SET @value = Field(Row(@rows, 1), 'Value') /* Next: true, Engagement: a */ ]%%",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-field.html',
         guideUrl: 'https://ampscript.guide/field/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/field/',
@@ -514,6 +522,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         handlebarsExact: false,
         mcnNotes:
             'In MCN, search arguments must be provided in column/value pairs - an odd count causes an error. All filter keys must fully specify the composite primary key.',
+        mcnBehavior: 'untested',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup.html',
         guideUrl: 'https://ampscript.guide/lookup/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lookup/',
@@ -567,6 +576,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
         mcnNotes: null,
+        mcnBehavior: 'untested',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-ordered-rows.html',
         guideUrl: 'https://ampscript.guide/lookuporderedrows/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lookuporderedrows/',
@@ -687,6 +697,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
         mcnNotes: null,
+        mcnBehavior: 'untested',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-rows.html',
         guideUrl: 'https://ampscript.guide/lookuprows/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lookuprows/',
@@ -777,7 +788,9 @@ export const DATA_EXTENSION_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'get',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'The difference shows when reading the row: Field(Row(@rows, 1), 1) on BuildRowSetFromString("North**South**East**West", "**") renders "true" on Next instead of "North". Row(@rows, 0) still aborts when assigned to a variable first, but written inline inside Field it rendered "true".',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-row.html',
         guideUrl: 'https://ampscript.guide/row/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/row/',
@@ -806,6 +819,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         handlebarsEquivalent: 'length',
         handlebarsExact: false,
         mcnNotes: null,
+        mcnBehavior: 'same',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-row-count.html',
         guideUrl: 'https://ampscript.guide/rowcount/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/rowcount/',

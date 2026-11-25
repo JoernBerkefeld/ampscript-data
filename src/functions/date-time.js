@@ -11,7 +11,13 @@ export const DATE_TIME_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'dateAdd',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'Next renders two cases that abort on Engagement: the S (seconds) unit, where adding 30 to 2026-03-04 13:52:07 gives 2026-03-04T13:52:37, and a decimal amount, where 1.5 with D adds one whole day.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The resulting date value, which the other date functions accept directly. Rendered on its own it prints as an ISO 8601 timestamp without offset (yyyy-MM-ddTHH:mm:ss) instead of the US short date with AM/PM.',
+        mcnExample:
+            "%%=DateAdd('2026-01-15', 7, 'D')=%% <!-- Next renders: 2026-01-22T00:00:00 -->",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-add.html',
         guideUrl: 'https://ampscript.guide/dateadd/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/dateadd/',
@@ -56,7 +62,13 @@ export const DATE_TIME_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'dateDiff',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'Next counts complete elapsed units instead of crossed boundaries, so 2026-12-31 23:59 to 2027-01-01 00:00 gives 0 years, months and days where Engagement gives 1 each. The S unit renders seconds (59) where Engagement aborts, and the result fed into Add() prints with a decimal (24.0).',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'A whole number of complete units elapsed between the two dates, truncated toward zero — 23 hours across midnight gives 0 days, and the same gap in reverse gives 0 rather than -1.',
+        mcnExample:
+            "%%=DateDiff('2026-01-10 08:00:00', '2026-01-11 07:00:00', 'D')=%% <!-- Next renders: 0 -->",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-diff.html',
         guideUrl: 'https://ampscript.guide/datediff/',
         minArgs: 3,
@@ -101,7 +113,9 @@ export const DATE_TIME_FUNCTIONS = [
         supportedInEmail: true,
         mcnSince: 67,
         handlebarsEquivalent: null,
-        mcnNotes: null,
+        mcnNotes:
+            'On Next an offset or GMT marker is converted to UTC rather than the account time zone (2026-03-04T09:05:07Z renders 3/4/2026 9:05:07 AM, Engagement 3:05:07 AM), and useUtc has no effect in any spelling. An unreadable string or a Unix timestamp is returned unchanged where Engagement aborts.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-parse.html',
         guideUrl: 'https://ampscript.guide/dateparse/',
         minArgs: 1,
@@ -145,7 +159,12 @@ export const DATE_TIME_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'datePart',
         handlebarsExact: true,
-        mcnNotes: null,
+        mcnNotes:
+            'Only the upper-case codes Y, M, D, H and MI were confirmed to render on Next. monthName made the email fail to render, so the month name is not available. The other long names and lower-case spellings were only tested in batches that also contained monthName, so their status is open. Wrapping the result in Length() also failed.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The requested component as an unpadded number — month and day lose their leading zero and the hour uses the 24-hour clock, so 19:35 gives 19 and midnight gives 0.',
+        mcnExample: "%%=DatePart('2026-11-23 19:35:47', 'H')=%% <!-- Next renders: 19 -->",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-date-part.html',
         guideUrl: 'https://ampscript.guide/datepart/',
         minArgs: 2,
@@ -200,7 +219,12 @@ export const DATE_TIME_FUNCTIONS = [
         handlebarsEquivalent: 'format',
         handlebarsExact: false,
         mcnNotes:
-            'In MCN, uses Java SimpleDateFormat format strings instead of .NET. Omitting dateFormat returns the G standard format (e.g. "5/15/2026 1:23:45 PM").',
+            'Next uses a different date formatter. The .NET standard single-letter formats (such as d, M, D, f, F, g, G, o, r and Y) render as on .NET, but some custom tokens follow Java rules: mm is minutes and MM the month even in dateFormat, zz gives GMT, and a locale code turns D into the day of the year (63 for 4 March). ddd and dddd give the short and full day name (Wed, Wednesday). Omitting dateFormat returns the G standard format (e.g. "5/15/2026 1:23:45 PM"). An empty dateFormat puts a leading space before the time output, and h alone in timeFormat renders where Engagement aborts.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The formatted date. Input that cannot be read as a date, including a bare number such as 20260304, is returned unchanged instead of as an empty string.',
+        mcnExample:
+            "%%=FormatDate('2026-03-04 13:52:07', 'yyyy-MM-dd HH:mm:ss')=%% <!-- Next renders: 2026-03-04 13:52:07 -->",
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-format-date.html',
         guideUrl: 'https://ampscript.guide/formatdate/',
         minArgs: 1,
@@ -326,7 +350,12 @@ export const DATE_TIME_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: 'now',
         handlebarsExact: false,
-        mcnNotes: null,
+        mcnNotes:
+            'Next rejects Now() with any argument when the email is saved (AMPscript syntax error), whatever the spelling of the flag, so persistFormat cannot be used there.',
+        mcnBehavior: 'differs',
+        mcnReturnDescription:
+            'The system date and time as a date value the other date functions accept directly. Rendered on its own it prints as an ISO 8601 timestamp without offset (yyyy-MM-ddTHH:mm:ss).',
+        mcnExample: '%%=Now()=%% <!-- Next renders: e.g. 2026-11-22T15:28:39 -->',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-now.html',
         guideUrl: 'https://ampscript.guide/now/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/now/',
@@ -363,7 +392,8 @@ export const DATE_TIME_FUNCTIONS = [
         mcnSince: 67,
         handlebarsEquivalent: null,
         mcnNotes:
-            'In MCN, returns a locale-formatted string (G standard format, e.g. "5/15/2026 1:23:45 PM") instead of a dateTime object. Cannot be reliably passed to FormatDate() or other date functions in MCN - use FormatDate() directly instead.',
+            'On Next the value renders in the same US short-date form as on Engagement, and DatePart(), FormatDate() and DateDiff() accept it directly. An offset or GMT marker is converted to UTC rather than the account time zone (2026-03-04T09:05:07Z gives 3/4/2026 9:05:07 AM, Engagement 3:05:07 AM), and an unreadable string is returned unchanged where Engagement aborts.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-date-time/mc-ampscript-reference-date-time-string-to-date.html',
         guideUrl: 'https://ampscript.guide/stringtodate/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/stringtodate/',
