@@ -197,7 +197,7 @@ export const STRING_FUNCTIONS = [
         supportedInCloudPage: true,
         supportedInEmail: true,
         mcnSince: 67,
-        handlebarsEquivalent: 'properCase',
+        handlebarsEquivalent: 'propercase',
         handlebarsExact: true,
         mcnNotes:
             'A boolean renders as its text on Next: ProperCase(true) gives "True" where Engagement gives an empty string. A word starting with the German sharp s is capitalised to "SS" (ProperCase of "ßtrasse" gives "SStrasse", 8 characters) where Engagement keeps "ß".',

@@ -272,7 +272,7 @@ export const CONTENT_FUNCTIONS = [
         supportedInCloudPage: true,
         supportedInEmail: true,
         mcnSince: 67,
-        handlebarsEquivalent: 'jsonPath',
+        handlebarsEquivalent: 'jsonpath',
         handlebarsExact: false,
         mcnNotes:
             'Malformed JSON with flag 0 renders instead of aborting the page. An empty-string or unset payload with flag 1 made the Next preview fail (HTTP 500) where Engagement returns zero rows; a batch of "{ not json " with the flags true, "true" and "1" made the Next preview fail (HTTP 500).',
