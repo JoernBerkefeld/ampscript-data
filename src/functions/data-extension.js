@@ -521,8 +521,8 @@ export const DATA_EXTENSION_FUNCTIONS = [
         handlebarsEquivalent: 'queryFirst',
         handlebarsExact: false,
         mcnNotes:
-            'In MCN, search arguments must be provided in column/value pairs - an odd count causes an error. All filter keys must fully specify the composite primary key.',
-        mcnBehavior: 'untested',
+            'In MCN, search arguments must be provided in column/value pairs - an odd count causes an error. Tested in a Next email on a marketing object: filters on the key field and on non-key number and boolean fields return the field of the matching record, and a number key accepts the value as a string or a number.',
+        mcnBehavior: 'same',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup.html',
         guideUrl: 'https://ampscript.guide/lookup/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lookup/',
@@ -698,7 +698,7 @@ export const DATA_EXTENSION_FUNCTIONS = [
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
         mcnNotes:
-            'Tested in a Next email on a marketing object: filters on the key field and on a non-key field return the matching rows, and no match gives RowCount 0.',
+            'Tested in a Next email on a marketing object: filters on the key field and on a non-key field return the matching rows, and no match gives RowCount 0. A number key accepts the value as a string or a number. In a test where the filter matched two records, only one row was returned. When the same field appears in two pairs, only the last pair is used.',
         mcnBehavior: 'same',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-rows.html',
         guideUrl: 'https://ampscript.guide/lookuprows/',
