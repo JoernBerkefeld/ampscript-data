@@ -559,3 +559,10 @@ test('Next behaviour fields are consistent', () => {
         }
     }
 });
+
+test('data lookups record their live Next results', () => {
+    assert.equal(functionLookup.get('lookuprows').mcnBehavior, 'same');
+    assert.equal(functionLookup.get('lookuporderedrows').mcnBehavior, 'differs');
+    assert.match(functionLookup.get('lookuporderedrows').mcnNotes, /HTTP 500/);
+    assert.match(functionLookup.get('retrievesalesforceobjects').mcnNotes, /LIKE/);
+});

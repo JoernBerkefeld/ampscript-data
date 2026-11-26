@@ -119,7 +119,7 @@ export const SALES_SERVICE_CLOUD_FUNCTIONS = [
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
         mcnNotes:
-            'On Next, Empty() over a rowset with no matching records returns false (Engagement True); test RowCount(@rows) == 0 instead.',
+            'On Next, Empty() over a rowset with no matching records returns false (Engagement True); test RowCount(@rows) == 0 instead. The operators =, !=, >, >=, < and <= passed as literal strings work, several field/operator/value triplets are combined with AND, and a date compared with = accepts "yyyy-MM-dd". LIKE matches the value anywhere in the field and ignores % wildcards. An operator built with Char() fails: Char(60) made the preview fail with HTTP 500, and Concat(Char(60),"=") was rejected at publish with HTTP 400.',
         mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-salesforce/mc-ampscript-reference-salesforce-retrieve-objects.html',
         guideUrl: 'https://ampscript.guide/retrievesalesforceobjects/',

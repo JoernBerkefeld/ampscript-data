@@ -575,8 +575,9 @@ export const DATA_EXTENSION_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
-        mcnNotes: null,
-        mcnBehavior: 'untested',
+        mcnNotes:
+            'In a Next email every tested call on a marketing object made the preview fail with HTTP 500: row counts 0, 1 and 5, sorting with ASC, DESC, lowercase desc or no direction, and filters on key and non-key fields. LookupRows with the same filters works.',
+        mcnBehavior: 'differs',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-ordered-rows.html',
         guideUrl: 'https://ampscript.guide/lookuporderedrows/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lookuporderedrows/',
@@ -696,8 +697,9 @@ export const DATA_EXTENSION_FUNCTIONS = [
         mcnSince: 68,
         handlebarsEquivalent: 'query',
         handlebarsExact: false,
-        mcnNotes: null,
-        mcnBehavior: 'untested',
+        mcnNotes:
+            'Tested in a Next email on a marketing object: filters on the key field and on a non-key field return the matching rows, and no match gives RowCount 0.',
+        mcnBehavior: 'same',
         docUrl: 'https://developer.salesforce.com/docs/marketing/marketing-cloud-ampscript/references/mc-ampscript-data-extension/mc-ampscript-reference-data-extension-lookup-rows.html',
         guideUrl: 'https://ampscript.guide/lookuprows/',
         sfmcGuideUrl: 'https://sfmc.guide/engagement/ampscript/functions/lookuprows/',
